@@ -3,7 +3,7 @@
     <div class="sub-container">
       <v-card class="mx-auto" max-width="600">
         <v-img
-          src="https://www.1stformationsblog.co.uk/wp-content/uploads/2020/09/Charity-Image.png"
+          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
           height="200px"
         ></v-img>
 
