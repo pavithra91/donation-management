@@ -198,6 +198,9 @@
 </template>
 
 <script>
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from '@/firebase'
+
 export default {
   data: () => ({
     valid: true,
@@ -259,9 +262,9 @@ export default {
               // get error message from body or default to response statusText
             }
 
+            uploadimg(this.headerImage)
+
             // Redirect to page
-            localStorage.setItem("user_token", resdata.data.token);
-            localStorage.setItem("user_name", resdata.data.userName);
             this.$router.push("/Campaign-Dashboard");
           })
           .catch((error) => {
@@ -270,6 +273,50 @@ export default {
           });
       }
     },
+
+    uploadimg(selectedFile){
+            const storage2 = getStorage();
+
+      console.log(this.selectedFile);
+
+      const storageRef = ref(storage2, 'CampaignImages/' + this.id);
+      const metadata = {
+        contentType: 'image/jpeg'
+      };
+
+      uploadBytes(storageRef, selectedFile, metadata).then((snapshot) => {
+        getDownloadURL(storageRef)
+          .then((url) => {
+            this.imgSrc = url;
+            var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: this.id,
+        imgPath: url
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/user/updateUserProfileImage", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+        });
+
+          });
+      });
+    }
   },
   computed: {
     dateRangeText() {

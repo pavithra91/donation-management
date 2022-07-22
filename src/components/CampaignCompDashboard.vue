@@ -3,7 +3,7 @@
      <div v-for="campaign in campaignlist" :key="campaign.id">
     <v-layout row>
       <v-flex md-8>     
-        <v-img class="white--text align-end mb-9" height="200px" src="https://cdn.vox-cdn.com/thumbor/OTaHOVtIR6t8L0doPD-Kq6XYqeA=/0x0:1754x1241/1200x800/filters:focal(737x481:1017x761)/cdn.vox-cdn.com/uploads/chorus_image/image/68040475/GettyImages_1060748862.0.jpg">
+        <v-img class="white--text align-end mb-9" height="200px" :src=campaign.headerImg>
           <v-row>            
               <v-col lg="9">
                 <v-card-title>

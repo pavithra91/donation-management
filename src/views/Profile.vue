@@ -3,16 +3,16 @@
     <div class="sub-container">
       <div class="main-title">User Profile</div>
       <v-form ref="form" v-model="valid" lazy-validation>
-
         <v-container class="lighten-5 mb-6">
           <v-row>
             <v-col></v-col>
             <v-col>
               <div class="profileImage: text-center">
-                <v-img class="pa-7 secondary rounded-circle d-inline-block" height="200" width="200"
-                  src="https://flyclipart.com/thumb2/person-icon-165630.png" @click="handleFileImport()"></v-img>
-                <input ref="uploader" class="d-none" type="file" @change="onFileChanged()">
+                <v-img class="pa-7 secondary rounded-circle d-inline-block" height="200" width="200" :src=imgSrc
+                  @click="$refs.fileInput.click()"></v-img>
               </div>
+
+              <input type="file" @change="onFileSelected" ref="fileInput" style="display: none;">
             </v-col>
             <v-col> </v-col>
           </v-row>
@@ -22,18 +22,18 @@
             <v-col>
               <div>
                 <v-row>
-                  <v-col>{{minPoints}} </v-col>
+                  <v-col>{{ minPoints }} </v-col>
                   <v-col></v-col>
                   <v-col>
-                    <div class="text-right">{{maxPoints}}
+                    <div class="text-right">{{ maxPoints }}
                     </div>
-                    </v-col>
+                  </v-col>
                 </v-row>
                 <v-progress-linear value="75" height="8" color="#09cc7f"></v-progress-linear>
               </div>
               <br />
               <div class="text-center font-weight-medium">
-                {{donationLevel}}
+                {{ donationLevel }}
               </div>
             </v-col>
             <v-col> </v-col>
@@ -63,17 +63,12 @@
                   {{ role }}
                 </v-chip>
 
-<v-chip
-      class="ma-2"
-      color="primary"
-      outlined
-      pill @click="editAccount()"
-    >
-      Edit Profile
-      <v-icon right>
-        mdi-account-outline
-      </v-icon>
-    </v-chip>
+                <v-chip class="ma-2" color="primary" outlined pill @click="editAccount()">
+                  Edit Profile
+                  <v-icon right>
+                    mdi-account-outline
+                  </v-icon>
+                </v-chip>
               </div>
             </v-col>
             <v-col> </v-col>
@@ -89,12 +84,12 @@
                   <v-card-title>Badges</v-card-title>
 
                   <v-row>
-                    <v-col v-for="badge in badges" :key="badge.id" cols="3" >
+                    <v-col v-for="badge in badges" :key="badge.id" cols="3">
                       <v-img height="80" width="80" :src="require(`../assets/img/badges/${badge.imageUrl}`)"></v-img>
                       <div class="text-left font-weight-medium" style="padding-left: 15px;">
-                        {{badge.badgeName}}
-                      </div>      
-                    </v-col>              
+                        {{ badge.badgeName }}
+                      </div>
+                    </v-col>
                   </v-row>
 
                 </v-card>
@@ -111,11 +106,15 @@
 
 
 <script>
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from '@/firebase'
 
 export default {
   data() {
+    let id = localStorage.getItem("user_token")
     return {
       valid: true,
+      id:id,
       firstName: "",
       firstNameRules: [v => !!v || 'First Name required'],
       lastName: "",
@@ -131,9 +130,10 @@ export default {
 
       badges: [],
 
-      minPoints:1500,
-      maxPoints:2000,
-      userPoints:75,
+      minPoints: 1500,
+      maxPoints: 2000,
+      userPoints: 75,
+      imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png"
     }
   },
   mounted() {
@@ -176,6 +176,7 @@ export default {
           this.role = resdata.data.role;
           this.accStatus = resdata.data.accStatus;
           this.donationLevel = resdata.data.donationLevel;
+          this.imgSrc = resdata.data.profileImg;
         })
         .catch((error) => {
           this.errorMessage = error;
@@ -186,37 +187,66 @@ export default {
     }
 
 
-fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=lqblyRwIeylJjL6V8Chj')
-            .then(async (response) => {
-          const resdata = await response.json()
-          this.badges = resdata.data
+    fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=lqblyRwIeylJjL6V8Chj')
+      .then(async (response) => {
+        const resdata = await response.json()
+        this.badges = resdata.data
 
-          })
-          .catch(err => console.log(err.message))  
+      })
+      .catch(err => console.log(err.message))
 
   },
 
   methods: {
 
-editAccount(){
-  this.$router.push("/EditProfile");
-},
-
-    handleFileImport() {
-      this.isSelecting = true;
-
-      // After obtaining the focus when closing the FilePicker, return the button state to normal
-      window.addEventListener('focus', () => {
-        this.isSelecting = false
-      }, { once: true });
-
-      // Trigger click on the FileInput
-      this.$refs.uploader.click();
+    editAccount() {
+      this.$router.push("/EditProfile");
     },
-    onFileChanged(e) {
-      this.selectedFile = e.target.files[0];
 
-      // Do whatever you need with the file, liek reading it with FileReader
+    onFileSelected(event) {
+
+      this.selectedFile = event.target.files[0];
+      const storage2 = getStorage();
+
+      console.log(this.selectedFile);
+
+      const storageRef = ref(storage2, 'ProfileImg/' + this.id);
+      const metadata = {
+        contentType: 'image/jpeg'
+      };
+
+      uploadBytes(storageRef, this.selectedFile, metadata).then((snapshot) => {
+        getDownloadURL(storageRef)
+          .then((url) => {
+            this.imgSrc = url;
+            var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: this.id,
+        imgPath: url
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/user/updateUserProfileImage", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+        });
+
+          });
+      });
     },
   }
 };
