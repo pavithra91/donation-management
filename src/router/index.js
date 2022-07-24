@@ -57,6 +57,12 @@ const routes = [
     name: 'Campaign',
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/Campaign.vue')
+  },
+  {
+    path: '/Watchlist',
+    name: 'Watchlist',
+    props: true,
+    component: () => import(/* webpackChunkName: "about" */ '../views/Watchlist.vue')
   }
 ]
 

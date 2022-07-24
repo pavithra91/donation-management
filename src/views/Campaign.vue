@@ -9,7 +9,7 @@
 
         <v-container>
 
-<CampaignTemp />
+<CampaignTemp :massage="massage" />
 
         </v-container>
 
@@ -31,7 +31,8 @@ export default {
     props: ['id'],
     data() {
         return {
-            campaign: null
+            campaign: null,
+            massage: null
         }
     },
     mounted() {
@@ -40,6 +41,8 @@ export default {
           const resdata = await response.json()
 
           this.campaign = resdata.data
+
+          this.massage = resdata.data
 
           })
           .catch(err => console.log(err.message))   

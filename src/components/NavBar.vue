@@ -59,6 +59,7 @@ export default {
                 userName: localStorage.getItem("user_name"),
                 items: [
                 { title: 'Profile' }, 
+                { title: 'Watchlist' }, 
                 { title: 'Log Out'  }
       ]
             }
@@ -73,6 +74,10 @@ export default {
         {
             this.$router.push('/Profile');
         }
+        //else if(name=="Watchlist")
+       // {
+       //     this.$router.push('/Watchlist');
+       // }
         else
         {
             localStorage.setItem("user_token", "");

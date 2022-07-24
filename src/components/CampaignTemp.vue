@@ -64,7 +64,7 @@
             <v-col style="margin-left: 200px; padding: 5px;">
                 <v-row>
                     <v-col>
-                        Created {{ campaignDate }}
+                        Created {{ campaignDate }} 
                     </v-col>
                     <v-col>
                         <v-icon>fa-solid fa-tag</v-icon>
@@ -112,6 +112,10 @@
             <v-tab-item :key="1" value="Story">
                 <v-card flat>
                     <v-card-text>Story</v-card-text>
+
+<div v-html="longDesc"></div>
+                  <!--  {{massage.campaignDescription}}-->
+                    
                 </v-card>
             </v-tab-item>
             <v-tab-item :key="2" value="FAQ">
@@ -153,6 +157,7 @@
 
 <script>
 export default {
+    props: ['massage'],
     data() {
         return {
             noOfDonations: 1095,
@@ -160,8 +165,13 @@ export default {
             campaignDate: "2022-07-22",
             tags: ['Medical'],
             tab: null,
+            longDesc: "",
       }
     },
+    mounted(){
+        this.longDesc = this.massage.campaignDescription;
+        console.log(this.massage);
+    }
 }
 </script>
 

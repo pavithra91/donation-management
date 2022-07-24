@@ -19,7 +19,7 @@
                   <v-btn text class="v-goal">
                     Goal : {{ campaign.goalAmount }}
                   </v-btn>
-                  <v-icon @click="addWatchlist">mdi-heart</v-icon>
+                  <v-icon @click="addWatchlist" color="#fc0339">mdi-heart</v-icon>
                 </v-card-title>
               </v-col>
           </v-row>
@@ -49,24 +49,9 @@ campaignlist: []
 
   mounted() {
 
-    var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+      var campaignlist = []
 
-      var raw = JSON.stringify({
-        id: "APNZn4jjhEvTLE9CQW8Z",
-      });
-
-var requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-     // var campaignlist = []
-
-      fetch("http://localhost:3000/api/campaign/getCampaigns", requestOptions)
+      fetch("http://localhost:3000/api/campaign/getWatchlist?id=lqblyRwIeylJjL6V8Chj")
       .then(async (response) => {
           const resdata = await response.json()
 
