@@ -63,6 +63,12 @@ const routes = [
     name: 'Watchlist',
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/Watchlist.vue')
+  },
+  {
+    path: '/Donate',
+    name: 'Donate',
+    props: true,
+    component: () => import(/* webpackChunkName: "about" */ '../views/Donate.vue')
   }
 ]
 
