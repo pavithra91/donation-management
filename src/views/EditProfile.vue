@@ -44,7 +44,7 @@
                   Account Status {{ accStatus }}
                 </v-chip>
 
-                                <v-chip class="ma-2" color="red" text-color="white" v-if="accStatus == 'Pending'">
+                <v-chip class="ma-2" color="red" text-color="white" v-if="accStatus == 'Pending'">
                   Account Status {{ accStatus }}
                 </v-chip>
 
@@ -52,17 +52,13 @@
                   {{ role }}
                 </v-chip>
 
-                <v-chip
-      class="ma-2"
-      color="primary"
-      outlined
-      pill @click="backToProfile()" >
-            <v-icon left>
-       mdi-arrow-left
-      </v-icon>
-      Back
+                <v-chip class="ma-2" color="primary" outlined pill @click="backToProfile()">
+                  <v-icon left>
+                    mdi-arrow-left
+                  </v-icon>
+                  Back
 
-    </v-chip>
+                </v-chip>
 
               </div>
             </v-col>
@@ -102,7 +98,7 @@
 
 
 
-         <v-container>
+        <v-container>
           <v-row>
             <v-col cols="3">
             </v-col>
@@ -129,11 +125,9 @@
             <v-col cols="6">
               <div class="text-center" v-if="role == 'Campaign Manager' && accStatus == 'Pending'">
                 <div class="text-center">
-                                  <v-file-input
-                    v-model="DocVerification"
-                    :rules="DocVerificationRules"
-                    label="Upload NIC (Both sides) / Drivers License / Passport Image"
-                  ></v-file-input> </div>
+                  <v-file-input v-model="DocVerification" :rules="DocVerificationRules"
+                    label="Upload NIC (Both sides) / Drivers License / Passport Image"></v-file-input>
+                </div>
               </div>
             </v-col>
             <v-col cols="3">
@@ -161,11 +155,8 @@
             </v-col>
             <v-col cols="6">
               <div class="text-center">
-                                  <v-file-input
-                    v-model="addressVerification"
-                    :rules="addressVerificationRules"
-                    label="Upload Address Verification Document"
-                  ></v-file-input> 
+                <v-file-input v-model="addressVerification" :rules="addressVerificationRules"
+                  label="Upload Address Verification Document"></v-file-input>
               </div>
             </v-col>
             <v-col cols="3">
@@ -263,9 +254,9 @@ export default {
   },
   methods: {
 
-backToProfile(){
-  this.$router.push("/Profile");
-},
+    backToProfile() {
+      this.$router.push("/Profile");
+    },
 
     handleFileImport() {
       this.isSelecting = true;

@@ -27,12 +27,18 @@
             <v-row>
               <v-col cols="12" md="3"> </v-col>
               <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="password"
-                  :rules="passwordRules"
-                  label="Password"
-                  required
-                ></v-text-field>
+
+
+<v-text-field
+            v-model="password"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"      
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            label="Password"
+            @click:append="show1 = !show1"
+          ></v-text-field>
+
+                
               </v-col>
             </v-row>
 
@@ -92,6 +98,8 @@ export default {
   data: () => ({
     valid: true,
     name: "",
+    password: "",
+    show1: false,
     passwordRules: [(v) => !!v || "Password is required"],
     email: "",
     emailRules: [

@@ -39,11 +39,7 @@ export default {
     return {
       id: "",
 campaignlist: []
-     // campaignlist: [
-    //    { campaignName: "Campaign 1", id: 1, goalAmount: 2000 },
-    //    { campaignName: "Campaign 2", id: 2, goalAmount: 5000 },
-    //    { campaignName: "Campaign 3", id: 3, goalAmount: 8000 }
-    //  ]
+
     }
   },
 

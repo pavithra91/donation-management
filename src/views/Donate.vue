@@ -1,149 +1,158 @@
 <template>
- <div class="main-container">
+  <div class="main-container">
     <div class="sub-container">
       <div class="main-title"></div>
 
-<v-row>
-    <v-col>
+      <v-row>
+        <v-col>
 
-    </v-col>
-    <v-col>
- <v-stepper v-model="e1">
-    <v-stepper-header>
-      <v-stepper-step
-        :complete="e1 > 1"
-        step="1"
-      >
-        Donation Amount
-      </v-stepper-step>
+        </v-col>
+        <v-col>
+          <v-stepper v-model="e1">
+            <v-stepper-header>
+              <v-stepper-step :complete="e1 > 1" step="1">
+                Donation Amount
+              </v-stepper-step>
 
-      <v-divider></v-divider>
+              <v-divider></v-divider>
 
-      <v-stepper-step
-        :complete="e1 > 2"
-        step="2"
-      >
-        Name of step 2
-      </v-stepper-step>
+              <v-stepper-step :complete="e1 > 2" step="2">
+                Add a Message
+              </v-stepper-step>
 
-      <v-divider></v-divider>
+              <v-divider></v-divider>
 
-      <v-stepper-step step="3">
-        Name of step 3
-      </v-stepper-step>
-    </v-stepper-header>
+              <v-stepper-step step="3">
+                Your payment method
+              </v-stepper-step>
+            </v-stepper-header>
 
-    <v-stepper-items>
-      <v-stepper-content step="1">
-        <v-card
-          class="mb-12"
-          color="#FAF9F6"
-          height="200px"
-        >
-        
-        <v-row align-content="center"
-        justify="center">
-        <v-col cols="2"></v-col>
-            <v-col style="margin-top: 20px;">
-                <v-btn-toggle
-          v-model="toggle_exclusive"
-          mandatory
-        >
-          <v-btn>
-            100 LKR
-          </v-btn>
-          <v-btn>
-            500 LKR
-          </v-btn>
-          <v-btn>
-            1000 LKR
-          </v-btn>
-          <v-btn>
-            5000 LKR
-          </v-btn>
-        </v-btn-toggle>
-            </v-col>
-        </v-row>
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <v-card class="mb-12" color="#FAF9F6" height="200px">
 
-        <v-row>
-            <v-col cols="2"></v-col>
-            <v-col>
-                <v-text-field prefix="LKR" value="100" class="text-h4"></v-text-field>
-            </v-col>
-            <v-col cols="2"></v-col>
-        </v-row>
+                  <v-row align-content="center" justify="center">
+                    <v-col cols="2"></v-col>
+                    <v-col style="margin-top: 20px;">
+                      <v-btn-toggle v-model="toggle_exclusive" mandatory>
+                        <v-btn value="100">
+                          100 LKR
+                        </v-btn>
+                        <v-btn value="500">
+                          500 LKR
+                        </v-btn>
+                        <v-btn value="1000">
+                          1000 LKR
+                        </v-btn>
+                        <v-btn value="5000">
+                          5000 LKR
+                        </v-btn>
+                      </v-btn-toggle>
+                    </v-col>
+                  </v-row>
 
-        </v-card>
+                  <v-row>
+                    <v-col cols="2"></v-col>
+                    <v-col>
+                      <v-text-field prefix="LKR" :value="toggle_exclusive" class="text-h4" outlined></v-text-field>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                  </v-row>
 
-        <v-btn
-          color="primary"
-          @click="e1 = 2"
-        >
-          Continue
-        </v-btn>
+                </v-card>
 
-        <v-btn text >
-          Cancel
-        </v-btn>
-      </v-stepper-content>
+                <v-btn color="primary" @click="e1 = 2">
+                  Continue
+                </v-btn>
 
-      <v-stepper-content step="2">
-        <v-card
-          class="mb-12"
-          color="#FAF9F6"
-          height="200px"
-        ></v-card>
+                <v-btn text>
+                  Cancel
+                </v-btn>
+              </v-stepper-content>
 
-        <v-btn
-          color="primary"
-          @click="e1 = 3"
-        >
-          Continue
-        </v-btn>
+              <v-stepper-content step="2">
+                <v-card class="mb-12" color="#FAF9F6" height="350px">
+                  <v-row>
+                    <v-col cols="2"></v-col>
+                    <v-col>
+                      Name to appear on page (optional)
+                      <v-text-field placeholder="e.g. Jhon Smith" outlined class="text-h6"></v-text-field>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                  </v-row>
 
-        <v-btn text @click="e1 = 1">
-          Back
-        </v-btn>
-      </v-stepper-content>
+                  <v-row style="padding-top: 0;">
+                    <v-col cols="2"></v-col>
+                    <v-col>
+                      Add a public message (optional)
+                      <v-textarea outlined placeholder="Message"></v-textarea>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                  </v-row>
+                </v-card>
 
-      <v-stepper-content step="3">
-        <v-card
-          class="mb-12"
-          color="#FAF9F6"
-          height="200px"
-        ></v-card>
+                <v-btn color="primary" @click="e1 = 3">
+                  Continue
+                </v-btn>
 
-        <v-btn
-          color="primary"
-          @click="e1 = 1"
-        >
-          Continue
-        </v-btn>
+                <v-btn text @click="e1 = 1">
+                  Back
+                </v-btn>
+              </v-stepper-content>
 
-        <v-btn text @click="e1 = 2">
-          Back
-        </v-btn>
-      </v-stepper-content>
-    </v-stepper-items>
-  </v-stepper>
-    </v-col>
-    <v-col></v-col>
-</v-row>
-      
+              <v-stepper-content step="3">
+                <v-card class="mb-12" color="#FAF9F6" height="200px">
+                  <v-row style="padding-top: 50px;">
+                    <v-col cols="2"></v-col>
+                    <v-col>
+                      <v-btn class="ma-2" height="50px" outlined color="indigo">
+                        <v-row>
+                          <v-col style="padding-right: 5px;">
+                            <i class='fab fa-cc-visa fa-2x'></i>
+                          </v-col>
+                          <v-col style="padding-left: 0px;">
+                            <i class='fab fa-cc-mastercard fa-2x'></i>
+                          </v-col>
+                          <v-col>
+                            <div style="margin-top: 6px;">Credit or Debit Card </div>
+                          </v-col>
+                        </v-row>
+                      </v-btn>
 
-      </div>
- </div>
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                  </v-row>
+                  
+                </v-card>
+
+
+
+                <v-btn text @click="e1 = 2">
+                  Back
+                </v-btn>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </v-col>
+        <v-col></v-col>
+      </v-row>
+
+
+    </div>
+  </div>
 </template>
 
 
 <script>
-  export default {
-    data () {
-      return {
-        e1: 1,
-      }
-    },
-  }
+
+export default {
+  data() {
+    return {
+      e1: 1,
+      toggle_exclusive: 0
+    }
+  },
+}
 </script>
 
 <style scoped>
@@ -154,6 +163,7 @@
 .topfund-container {
   padding-top: 10px;
 }
+
 .main-title {
   padding-top: 100px;
   padding-bottom: 60px;
