@@ -42,6 +42,25 @@
   </v-card>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+
+    }
+  },
+  mounted(){
+    fetch('http://localhost:3000/api/campaign/getTopFundRaisers')
+      .then(async (response) => {
+        const resdata = await response.json()
+        this.badges = resdata.data
+
+      })
+      .catch(err => console.log(err.message))
+  }
+}
+</script>
+
 <style scoped>
 .progress{
     margin-left: 20px;

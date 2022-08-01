@@ -78,6 +78,20 @@
             <v-col cols="6" md="4">
               <v-row>
                 <v-col cols="6" md="5">
+                  <input type="file" @change="onMainFileSelected" ref="fileInput" />
+                </v-col>
+                <v-spacer></v-spacer>
+
+              </v-row>
+            </v-col>
+            <v-col cols="6" md="4"> </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" md="4"> </v-col>
+            <v-col cols="6" md="4">
+              <v-row>
+                <v-col cols="6" md="5">
                   <v-text-field v-model="city" :rules="cityRules" label="City" required></v-text-field>
                 </v-col>
                 <v-spacer></v-spacer>
@@ -143,7 +157,10 @@ export default {
     VueEditor
   },
   data: () => ({
+    mainImgSrc: "",
+    headerImgSrc: "",
     selectedFile: null,
+    MainImgselectedFile: null,
     valid: true,
     campaignName: "",
     campaignNameRules: [(v) => !!v || "Campaign Name required"],
@@ -199,33 +216,42 @@ export default {
             // check for error response
             if (!response.ok) {
               console.log("response Failed");
-              // get error message from body or default to response statusText
             }
-
-            debugger;
 
             var campaignid = resdata.data;
 
             const storage2 = getStorage();
-
-            console.log(this.selectedFile);
 
             const storageRef = ref(storage2, 'CampaignImages/' + campaignid + '/header.jpg');
             const metadata = {
               contentType: 'image/jpeg'
             };
 
+
             uploadBytes(storageRef, this.selectedFile, metadata).then((snapshot) => {
               getDownloadURL(storageRef)
                 .then((url) => {
-                  this.imgSrc = url;
-                  var myHeaders = new Headers();
+                  this.imgSrc = url;          
+                  this.headerImgSrc = url;
+                });
+            });
+
+            const storageRef2 = ref(storage2, 'CampaignImages/' + campaignid + '/main.jpg');
+            uploadBytes(storageRef2, this.MainImgselectedFile, metadata).then((snapshot) => {
+              getDownloadURL(storageRef2)
+                .then((url) => {
+                  this.mainImgSrc = url;
+
+debugger;
+            var myHeaders = new Headers();
                   myHeaders.append("Content-Type", "application/json");
 
                   var raw = JSON.stringify({
                     id: campaignid,
-                    imgPath: url
+                    imgPath: this.headerImgSrc,
+                    mainImgSrc: this.mainImgSrc
                   });
+                  debugger;
 
                   var requestOptions = {
                     method: "POST",
@@ -238,14 +264,21 @@ export default {
                   fetch("http://localhost:3000/api/campaign/updateCampaignImage", requestOptions)
                     .then(async (response) => {
                       const resdata = await response.json();
-
+console.log(resdata)
                       // check for error response
                       if (!response.ok) {
-                        // get error message from body or default to response statusText
+                        console.log("Ok")
+                      }
+                      else
+                      {
+                        console.log("Not Ok")
                       }
                     });
+
                 });
             });
+
+
 
             // Redirect to page
             //this.$router.push("/Campaign-Dashboard");
@@ -262,27 +295,15 @@ export default {
       // NOTE: Your key could be different such as:
       // formData.append('file', file)
 
-      const storage2 = getStorage();
-
-      //    console.log(file);
-
-      const storageRef = ref(storage2, 'CampaignImages/other/' + file.name);
-      const metadata = {
-        contentType: 'image/jpeg'
-      };
-
-      uploadBytes(storageRef, file, metadata).then((snapshot) => {
-        getDownloadURL(storageRef)
-          .then((url) => {
-            this.imgSrc = url;
-            Editor.insertEmbed(cursorLocation, "image", url);
-            resetUploader();
-          })
-      });
+      
     },
     onFileSelected(event) {
         this.selectedFile = event.target.files[0];
         console.log(this.selectedFile);
+    },
+    onMainFileSelected(event) {
+        this.MainImgselectedFile = event.target.files[0];
+        console.log(this.MainImgselectedFile);
     }
   },
   computed: {
