@@ -54,18 +54,18 @@
                   <v-row>
                     <v-col cols="2"></v-col>
                     <v-col>
-                      <v-text-field prefix="LKR" :value="toggle_exclusive" class="text-h4" outlined></v-text-field>
+                      <v-text-field v-model="toggle_exclusive" prefix="LKR" :value="toggle_exclusive" class="text-h4" outlined></v-text-field>
                     </v-col>
                     <v-col cols="2"></v-col>
                   </v-row>
 
                 </v-card>
 
-                <v-btn color="primary" @click="e1 = 2">
+                <v-btn color="primary" style="margin-right: 10px;" @click="e1 = 2">
                   Continue
                 </v-btn>
 
-                <v-btn text>
+                <v-btn text outlined>
                   Cancel
                 </v-btn>
               </v-stepper-content>
@@ -74,9 +74,9 @@
                 <v-card class="mb-12" color="#FAF9F6" height="350px">
                   <v-row>
                     <v-col cols="2"></v-col>
-                    <v-col>
+                    <v-col style="padding-top: 20px;">
                       Name to appear on page (optional)
-                      <v-text-field placeholder="e.g. Jhon Smith" outlined class="text-h6"></v-text-field>
+                      <v-text-field v-model="displayName" placeholder="e.g. Jhon Smith" outlined class="text-h6"></v-text-field>
                     </v-col>
                     <v-col cols="2"></v-col>
                   </v-row>
@@ -85,17 +85,17 @@
                     <v-col cols="2"></v-col>
                     <v-col>
                       Add a public message (optional)
-                      <v-textarea outlined placeholder="Message"></v-textarea>
+                      <v-textarea v-model="message" outlined placeholder="Message"></v-textarea>
                     </v-col>
                     <v-col cols="2"></v-col>
                   </v-row>
                 </v-card>
 
-                <v-btn color="primary" @click="e1 = 3">
+                <v-btn color="primary" style="margin-right: 10px;" @click="e1 = 3">
                   Continue
                 </v-btn>
 
-                <v-btn text @click="e1 = 1">
+                <v-btn text outlined @click="e1 = 1">
                   Back
                 </v-btn>
               </v-stepper-content>
@@ -105,7 +105,7 @@
                   <v-row style="padding-top: 50px;">
                     <v-col cols="2"></v-col>
                     <v-col>
-                      <v-btn class="ma-2" height="50px" outlined color="indigo">
+                      <v-btn class="ma-2" height="50px" outlined color="indigo" @click="makeDonation">
                         <v-row>
                           <v-col style="padding-right: 5px;">
                             <i class='fab fa-cc-visa fa-2x'></i>
@@ -122,12 +122,10 @@
                     </v-col>
                     <v-col cols="2"></v-col>
                   </v-row>
-                  
+
                 </v-card>
 
-
-
-                <v-btn text @click="e1 = 2">
+                <v-btn text outlined @click="e1 = 2">
                   Back
                 </v-btn>
               </v-stepper-content>
@@ -146,12 +144,57 @@
 <script>
 
 export default {
+  props: ['id'],
   data() {
     return {
       e1: 1,
-      toggle_exclusive: 0
+      toggle_exclusive: 0,
+      displayName: "",
+      amount: 0,
+      message: ""
     }
   },
+  methods: {
+    makeDonation() { 
+
+
+var myHeaders = new Headers();
+debugger;
+      myHeaders.append("Content-Type", "application/json");
+
+    console.log(this.id);
+
+      var raw = JSON.stringify({
+        campaignId: this.id,
+        name: this.displayName,
+        amount: Number(this.toggle_exclusive),
+        message: this.message,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/payment/donate", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+          console.log(resdata.data.status);
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+    }
+  }
 }
 </script>
 

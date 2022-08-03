@@ -48,8 +48,14 @@ campaignlist: []
     var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
+      if (localStorage.getItem("user_name") == "undefined") {
+      this.$router.push("/SignIn");
+    } else if (localStorage.getItem("user_name") != "") {
+      this.id = localStorage.getItem("user_token");
+    }
+
       var raw = JSON.stringify({
-        id: "APNZn4jjhEvTLE9CQW8Z",
+        id: this.id,
       });
 
 var requestOptions = {

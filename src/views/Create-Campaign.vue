@@ -233,10 +233,10 @@ export default {
                 .then((url) => {
                   this.imgSrc = url;          
                   this.headerImgSrc = url;
-                });
-            });
 
-            const storageRef2 = ref(storage2, 'CampaignImages/' + campaignid + '/main.jpg');
+
+
+const storageRef2 = ref(storage2, 'CampaignImages/' + campaignid + '/main.jpg');
             uploadBytes(storageRef2, this.MainImgselectedFile, metadata).then((snapshot) => {
               getDownloadURL(storageRef2)
                 .then((url) => {
@@ -273,15 +273,23 @@ console.log(resdata)
                       {
                         console.log("Not Ok")
                       }
+
+                                  // Redirect to page
+            this.$router.push("/Campaign-Dashboard");
                     });
 
                 });
             });
 
 
+                });
+            });
 
-            // Redirect to page
-            //this.$router.push("/Campaign-Dashboard");
+            
+
+
+
+
           })
           .catch((error) => {
             this.errorMessage = error;

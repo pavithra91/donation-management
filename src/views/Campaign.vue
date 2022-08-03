@@ -9,43 +9,274 @@
 
         <v-container>
 
-<CampaignTemp :massage="massage" />
+            <v-container>
+                <v-row>
+                    <v-col style="margin-left: 200px; padding-top: 0;">
+                        <v-img :src=campaign.mainImg width="730" height="411">
+                        </v-img>
+                    </v-col>
+                    <v-col>
+                        <v-card style="margin-left: 10px">
+                            <v-row>
+                                <v-col cols="md-3" class="d-flex justify-center" style="padding-right: 0px;">
+                                    <div class="Title">{{ campaign.raiedAmount }} </div>
+                                </v-col>
+                                <v-col style="
+    padding-left: 0px;
+">
+                                    <div style="margin-top: 12px; margin-left:0px"> RS raised of {{ campaign.goalAmount }}
+                                        Rs Goal</div>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="9" style="padding-left: 38px;">
+                                    <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
+                                    </v-progress-linear>
+                                </v-col>
+                                <v-col cols="1">
+
+                                </v-col>
+
+                            </v-row>
+
+                            <br />
+
+                            <div class="noOfDonations">{{ noOfDonations }}</div>
+                            <div class="noOfDonationstxt">donations</div>
+
+                            <v-row>
+                                <v-col>
+                                    <v-btn style="margin-left: 30px; margin-top: 30px" x-large color="success" dark
+                                        width="400px" @click="makeDonation">Donate</v-btn>
+                                </v-col>
+                            </v-row>
+
+                            <v-row>
+                                <v-col>
+                                    <v-btn outlined style="margin-left: 30px; margin-top: 10px" x-large>
+                                        <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Watchlist
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+
+
+                        </v-card>
+
+                    </v-col>
+                    <v-col cols="2"></v-col>
+                </v-row>
+
+
+                <v-row>
+                    <v-col style="margin-left: 200px;">
+                        <v-row>
+                            <v-col cols="1">
+                                <v-icon>fa-solid fa-user</v-icon>
+                            </v-col>
+                            <v-col cols="8"> {{ organizerName }} is Organizing the Campaign</v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col></v-col>
+                    <v-col cols="2"></v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col style="margin-left: 200px;">
+                        <v-row>
+                            <v-divider></v-divider>
+                        </v-row>
+                    </v-col>
+                    <v-col></v-col>
+                    <v-col cols="1"></v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col style="margin-left: 200px; padding: 5px;">
+                        <v-row>
+                            <v-col>
+                                Created {{ campaignDate }}
+                            </v-col>
+                            <v-col>
+                                <v-icon>fa-solid fa-tag</v-icon>
+                                {{ tags }}
+
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-divider></v-divider>
+                        </v-row>
+                    </v-col>
+                    <v-col>
+
+                    </v-col>
+                    <v-col cols="1"></v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col style="margin-left: 200px;">
+
+
+
+
+                        <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
+                            <v-tab href="#Story">
+                                Story
+                            </v-tab>
+                            <v-tab href="#FAQ">
+                                FAQ
+                            </v-tab>
+                            <v-tab href="#Updates">
+                                Updates
+                            </v-tab>
+                            <v-tab href="#Comments">
+                                Comments
+                            </v-tab>
+                        </v-tabs>
+
+                        <v-tabs-items v-model="tab">
+                            <v-tab-item :key="1" value="Story">
+                                <v-card flat>
+                                    <v-card-text></v-card-text>
+
+                                    <div v-html="campaign.campaignDescription"></div>
+                                    <!--  {{massage.campaignDescription}}-->
+
+                                </v-card>
+                            </v-tab-item>
+                            <v-tab-item :key="2" value="FAQ">
+                                <v-card flat>
+
+                                    <v-expansion-panels multiple style="margin-top: 20px;">
+                                        <v-expansion-panel v-for="faqitem in FAQ" :key="faqitem.id">
+                                            <v-expansion-panel-header>{{ faqitem.quesqtion }}</v-expansion-panel-header>
+                                            <v-expansion-panel-content>
+                                                {{ faqitem.answer }}
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
+
+                                    </v-expansion-panels>
+
+                                </v-card>
+                            </v-tab-item>
+                            <v-tab-item :key="3" value="Updates">
+                                <v-card flat>
+                                    <v-card-text>Updates</v-card-text>
+                                </v-card>
+                            </v-tab-item>
+                            <v-tab-item :key="4" value="Comments">
+                                <v-card flat style="margin-top: 20px;">
+                                    <div v-for="comment in comments" :key="comment.id">
+                                        <v-row>
+                                            <v-col cols="2">
+                                                <div>
+                                                    <v-img :src=comment.profileImg width="50" height="50">
+                                                    </v-img>
+                                                </div>
+                                            </v-col>
+                                            <v-col>
+                                                <strong> {{ comment.name }}</strong>
+                                                <br />
+                                                {{ comment.comment }}
+                                            </v-col>
+                                        </v-row>
+                                    </div>
+                                </v-card>
+                            </v-tab-item>
+                        </v-tabs-items>
+
+                    </v-col>
+                    <v-col>
+                    </v-col>
+                    <v-col cols="1">
+                    </v-col>
+                </v-row>
+
+
+
+
+
+
+            </v-container>
 
         </v-container>
 
     </div>
 
-    
+
 </template>
 
 <script>
 
-import CampaignTemp from '@/components/CampaignTemp.vue'
+//import CampaignTemp from '@/components/CampaignTemp.vue'
 
 
 export default {
     name: 'Campaign',
     components: {
-      CampaignTemp
+        //  CampaignTemp
     },
     props: ['id'],
     data() {
         return {
             campaign: null,
-            massage: null
+            noOfDonations: 1095,
+            prgoessVal: 0,
+            organizerName: "Pavithra Jayasundara",
+            campaignDate: "2022-07-22",
+            tags: ['Medical'],
+            tab: null,
+            comments: [],
+            FAQ: [],
+            updates: [],
+            mainImg: "",
         }
     },
     mounted() {
         fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
             .then(async (response) => {
-          const resdata = await response.json()
+                const resdata = await response.json()
 
-          this.campaign = resdata.data
+                this.campaign = resdata.data
 
-          this.massage = resdata.data
+                this.massage = resdata.data
 
-          })
-          .catch(err => console.log(err.message))   
+            })
+            .catch(err => console.log(err.message));
+
+        fetch('http://localhost:3000/api/campaign/getCampaignDetails?id=' + this.id)
+            .then(async (response) => {
+                const resdata = await response.json()
+
+                //  console.log(resdata.data);
+
+                if (resdata.data[0] != null) {
+                    this.comments = resdata.data[0];
+                    //     console.log(this.comments);
+                }
+                if (resdata.data[1] != null) {
+                    this.FAQ = resdata.data[1];
+                    //    console.log(this.FAQ);
+                }
+                if (resdata.data[2] != null) {
+                    this.updates = resdata.data[2];
+                    //    console.log(this.updates);
+                }
+            })
+            .catch(err => console.log(err.message));
+    },
+    methods: {
+        makeDonation() {
+            this.$router.push({
+                name: 'Donate',
+                params: { id: this.id }
+            });
+        }
+    },
+    computed: {
+        calccampaignProgress() {
+            return this.prgoessVal = (this.campaign.raiedAmount / this.campaign.goalAmount) * 100;
+        }
+
     }
 }
 </script>
@@ -53,10 +284,28 @@ export default {
 
 <style scoped>
 .main-title {
-  padding-top: 100px;
-  padding-bottom: 60px;
-  font-size: 40px;
-  font-weight: bold;
-  margin-left: 28%;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 28%;
+}
+
+.Title {
+    color: #4caf50;
+    font-size: xx-large;
+
+}
+
+.noOfDonations {
+    color: #656969;
+    font-size: xx-large;
+    margin-left: 30px;
+}
+
+.noOfDonationstxt {
+    color: #656969;
+    font-size: medium;
+    margin-left: 30px;
 }
 </style>

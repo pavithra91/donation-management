@@ -55,6 +55,7 @@ const routes = [
   {
     path: '/Campaign-Dashboard',
     name: 'Campaign-Dashboard',
+    props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/Campaign-Dashboard.vue')
   },
   {
@@ -70,9 +71,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Watchlist.vue')
   },
   {
-    path: '/Donate',
+    path: '/Donate/:id',
     name: 'Donate',
-    props: true,
+    props: true, 
     component: () => import(/* webpackChunkName: "about" */ '../views/Donate.vue')
   }
 ]
