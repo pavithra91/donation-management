@@ -2,13 +2,13 @@
     <nav>
         <v-toolbar>
             <v-toolbar-title>
-            <v-img :src="require('../assets/img/logo/logo.png')" class="my-3" contain height="50" />
+            <router-link to="/Home"><v-img :src="require('../assets/img/logo/logo.png')" class="my-3" contain height="50" /></router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
             <v-toolbar-items>
-                <v-btn text><router-link to="/">Home</router-link></v-btn>
+                <v-btn text><router-link to="/Home">Home</router-link></v-btn>
             </v-toolbar-items>
             <v-toolbar-items>
                  <v-btn text>About</v-btn>

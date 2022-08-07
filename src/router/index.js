@@ -53,6 +53,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/EditProfile.vue')
   },
   {
+    path: '/Settings',
+    name: 'Settings',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue')
+  },
+  {
+    path: '/Reports',
+    name: 'Reports',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Reports.vue')
+  },
+  {
     path: '/Campaign-Dashboard',
     name: 'Campaign-Dashboard',
     props: true,

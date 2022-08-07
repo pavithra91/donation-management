@@ -29,7 +29,7 @@
 
             <v-stepper-items>
               <v-stepper-content step="1">
-                <v-card class="mb-12" color="#FAF9F6" height="200px">
+                <v-card class="mb-12" color="#FAF9F6" height="300px">
 
                   <v-row align-content="center" justify="center">
                     <v-col cols="2"></v-col>
@@ -54,9 +54,19 @@
                   <v-row>
                     <v-col cols="2"></v-col>
                     <v-col>
-                      <v-text-field v-model="toggle_exclusive" prefix="LKR" :value="toggle_exclusive" class="text-h4" outlined></v-text-field>
+                      <v-text-field v-model="toggle_exclusive" prefix="LKR" :value="toggle_exclusive" class="text-h4"
+                        outlined></v-text-field>
                     </v-col>
                     <v-col cols="2"></v-col>
+                  </v-row>
+                  <v-row style="margin-top: 0px; padding-top: 0px;">
+                    <v-col cols="2">
+                    </v-col>
+                    <v-col>
+                      <v-checkbox v-model="anonymous" label="Make Donation Anonymous" color="success" value="Make Donation Anonymous"></v-checkbox>
+                    </v-col>
+                    <v-col cols="2">
+                    </v-col>
                   </v-row>
 
                 </v-card>
@@ -76,7 +86,8 @@
                     <v-col cols="2"></v-col>
                     <v-col style="padding-top: 20px;">
                       Name to appear on page (optional)
-                      <v-text-field v-model="displayName" placeholder="e.g. Jhon Smith" outlined class="text-h6"></v-text-field>
+                      <v-text-field v-model="displayName" placeholder="e.g. Jhon Smith" outlined class="text-h6">
+                      </v-text-field>
                     </v-col>
                     <v-col cols="2"></v-col>
                   </v-row>
@@ -147,6 +158,8 @@ export default {
   props: ['id'],
   data() {
     return {
+      userId: null,
+      anonymous: false,
       e1: 1,
       toggle_exclusive: 0,
       displayName: "",
@@ -155,20 +168,29 @@ export default {
     }
   },
   methods: {
-    makeDonation() { 
+    makeDonation() {
+      debugger;
 
+if(!this.anonymous){
+  if (localStorage.getItem("user_name") == "undefined") {
+      this.$router.push("/SignIn");
+    } else if (localStorage.getItem("user_name") != "") {
+      this.userId = localStorage.getItem("user_token");
+    }
+}
 
-var myHeaders = new Headers();
-debugger;
+      var myHeaders = new Headers();
+      debugger;
       myHeaders.append("Content-Type", "application/json");
 
-    console.log(this.id);
+      console.log(this.id);
 
       var raw = JSON.stringify({
         campaignId: this.id,
         name: this.displayName,
         amount: Number(this.toggle_exclusive),
         message: this.message,
+        userId: this.userId,
       });
 
       var requestOptions = {

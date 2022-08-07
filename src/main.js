@@ -7,10 +7,13 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
+import VueSocialSharing from 'vue-social-sharing'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon) // Register component globally
 library.add(fas) // Include needed icons
 library.add(fab)
+
+Vue.use(VueSocialSharing);
 
 Vue.config.productionTip = false
 
