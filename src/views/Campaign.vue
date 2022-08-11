@@ -17,33 +17,46 @@
                     </v-col>
                     <v-col>
                         <v-card style="margin-left: 10px">
-                            <v-row>
-                                <v-col cols="md-3" class="d-flex justify-center" style="padding-right: 0px;">
+                            <v-row style="margin-bottom: 0px; padding-bottom: 0px;">
+                                <v-col cols="md-7" class="d-flex justify-center" style="padding-right: 0px;">
                                     <div class="Title">{{ campaign.raiedAmount }} </div>
-                                </v-col>
-                                <v-col style="
-    padding-left: 0px;
-">
-                                    <div style="margin-top: 12px; margin-left:0px"> RS raised of {{ campaign.goalAmount
-                                    }}
-                                        Rs Goal</div>
+                                    <div style="padding-left: 10px; padding-top: 35px; font-weight: bold;">RAISED (USD)
+                                    </div>
                                 </v-col>
                             </v-row>
-                            <v-row>
-                                <v-col cols="9" style="padding-left: 38px;">
+                            <v-row style="margin: 0; padding: 0;">
+                                <v-col cols="11" style="padding-left: 38px;">
                                     <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                                     </v-progress-linear>
                                 </v-col>
                                 <v-col cols="1">
-
                                 </v-col>
-
+                            </v-row>
+                            <v-row style="margin: 0; padding: 0;">
+                                <v-col style="margin: 0; padding: 0; padding-left: 35px;"><span
+                                        style="font-weight: bold;">Goal: </span> <span>LKR
+                                        {{ campaign.goalAmount }}</span> </v-col>
                             </v-row>
 
                             <br />
 
-                            <div class="noOfDonations">{{ noOfDonations }}</div>
-                            <div class="noOfDonationstxt">donations</div>
+                            <v-row>
+                                <v-col cols="4">
+                                    <div class="noOfDonations">{{ noOfDonations }}</div>
+                                </v-col>
+                                <v-col>
+
+                                    <v-chip class="ma-2" color="teal" text-color="white">
+                                        <v-avatar left>
+                                            <v-icon> mdi-shield-check</v-icon>
+                                        </v-avatar>
+                                        Verified Campaign
+                                    </v-chip>
+                                </v-col>
+                            </v-row>
+
+
+                            <div class="noOfDonationstxt">DONORS</div>
 
                             <v-row>
                                 <v-col>
@@ -54,7 +67,11 @@
 
                             <v-row>
                                 <v-col>
-                                    <v-btn outlined style="margin-left: 30px; margin-top: 10px" x-large>
+                                    <v-btn v-if="role == 'Admin' || role == 'Staff'" outlined
+                                        style="margin-left: 30px; margin-top: 10px" x-large>
+                                        <v-icon style="margin-right: 10px;"> mdi-check-bold</v-icon> Approve
+                                    </v-btn>
+                                    <v-btn v-if="role == 'Donor'" outlined style="margin-left: 30px; margin-top: 10px" x-large>
                                         <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Watchlist
                                     </v-btn>
                                 </v-col>
@@ -63,8 +80,11 @@
                                     <div class="text-center">
                                         <v-dialog v-model="dialog" width="550">
                                             <template v-slot:activator="{ on, attrs }">
-
-                                                <v-btn outlined v-bind="attrs" v-on="on"
+<v-btn v-if="role == 'Admin' || role == 'Staff'" outlined
+                                        style="margin-left: 30px; margin-top: 10px" x-large>
+                                        <v-icon style="margin-right: 10px;">mdi-trash-can-outline</v-icon> Reject
+                                    </v-btn>
+                                                <v-btn v-if="role == 'Donor'" outlined v-bind="attrs" v-on="on"
                                                     style="margin-left: 30px; margin-top: 10px" x-large>
                                                     <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Share
                                                 </v-btn>
@@ -230,8 +250,6 @@
                     <v-col style="margin-left: 200px;">
 
 
-
-
                         <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
                             <v-tab href="#Story">
                                 Story
@@ -305,13 +323,7 @@
                     </v-col>
                 </v-row>
 
-
-
-
-
-
             </v-container>
-
         </v-container>
 
     </div>
@@ -344,10 +356,12 @@ export default {
             comments: [],
             FAQ: [],
             updates: [],
-            mainImg: ""
+            mainImg: "",
+            role: "",
         }
     },
     mounted() {
+        this.role = localStorage.getItem("role");
         this.currenturl = window.location.origin + this.$router.currentRoute.fullPath;
         fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
             .then(async (response) => {
@@ -406,26 +420,29 @@ export default {
 .main-title {
     padding-top: 100px;
     padding-bottom: 60px;
-    font-size: 40px;
+    font-size: 50px;
     font-weight: bold;
     margin-left: 28%;
 }
 
 .Title {
     color: #4caf50;
-    font-size: xx-large;
+    font-size: 50px;
 
 }
 
 .noOfDonations {
-    color: #656969;
+    color: black;
     font-size: xx-large;
     margin-left: 30px;
+    font-weight: bold;
 }
 
 .noOfDonationstxt {
     color: #656969;
     font-size: medium;
     margin-left: 30px;
+    font-weight: bold;
+    padding-left: 5px;
 }
 </style>

@@ -20,19 +20,19 @@
                         </v-list-item-icon>
                         <v-list-item-title class="title">Campaign Request</v-list-item-title>
                     </v-list-item>
-                                        <v-list-item @click="toggleComponentThree">
+                                 <!--    <v-list-item @click="toggleComponentThree">
                         <v-list-item-icon>
                             <i class="fa fa-list fa-2x"></i>
                         </v-list-item-icon>
                         <v-list-item-title class="title">Transaction List</v-list-item-title>
-                    </v-list-item>
+                    </v-list-item>-->   
                 </v-list>
             </v-navigation-drawer>
 
 
             <v-container style="margin-left: 0px;">
                 <CampaignOrganizerRequestComp v-if="showCampaignOrganizerRequestComp" />
-                <CampaignRequesrComp v-if="showCampaignRequesrComp" />
+                <CampaignRequestComp v-if="showCampaignRequestComp" />
             </v-container>
 
         </v-container>
@@ -44,27 +44,27 @@
 
 <script>
 import CampaignOrganizerRequestComp from '@/components/CampaignOrganizerRequestComp.vue'
-import CampaignRequesrComp from '@/components/CampaignRequesrComp.vue'
+import CampaignRequestComp from '@/components/CampaignRequestComp.vue'
 export default {
     name: 'Settings',
     components: {
         CampaignOrganizerRequestComp,
-        CampaignRequesrComp
+        CampaignRequestComp
     },
 
     data() {
         return {
             showCampaignOrganizerRequestComp: false,
-            showCampaignRequesrComp: false
+            showCampaignRequestComp: false
         };
     },
     methods: {
     toggleComponentOne () {
       this.showCampaignOrganizerRequestComp = !this.showCampaignOrganizerRequestComp;
-      this.showCampaignRequesrComp = false;
+      this.showCampaignRequestComp = false;
     },
     toggleComponentTwo () {
-      this.showCampaignRequesrComp = !this.showCampaignRequesrComp;
+      this.showCampaignRequestComp = !this.showCampaignRequestComp;
       this.showCampaignOrganizerRequestComp = false;
     },
 

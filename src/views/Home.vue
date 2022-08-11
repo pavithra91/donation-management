@@ -43,7 +43,7 @@
           <v-spacer></v-spacer>
           <v-col>
             <div style="padding-left: 10px">
-             <v-img :src="require('../assets/img/icons/icon_vertical_ medical.svg')" width="100" height="100" />
+              <v-img :src="require('../assets/img/icons/icon_vertical_ medical.svg')" width="100" height="100" />
             </div>
             <div>
               <v-btn plain style="padding: 0; margin: 0; color: black;">Medical & Health</v-btn>
@@ -165,7 +165,55 @@
           </v-col>
           <v-spacer></v-spacer>
         </v-row>
+      </v-layout>
+    </div>
 
+
+    <div>
+      <v-layout style="margin-top: 100px;margin-bottom: 100px;">
+        <v-row>
+          <v-col cols="2"></v-col>
+          <v-col>
+            <v-row>
+              <v-col cols="4" style="margin-left: 30px;">
+                <v-img src="../assets/img/icons/pc_optimized.png" width="100px" height="100px"></v-img>
+              </v-col>
+              <v-col>
+                <v-row  style="margin-top: 5px;">
+                  <span style="font-weight: bold; font-size: 20px;">Create</span>
+                </v-row>
+                <v-row>Anyone can start a Charity campaign for FREE.</v-row>            
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col>
+                        <v-row>
+              <v-col cols="4" style="margin-left: 30px;">
+                <v-img src="../assets/img/icons/megaphone-2_optimized.png" width="100px" height="100px"></v-img>
+              </v-col>
+              <v-col>
+                <v-row  style="margin-top: 5px;">
+                  <span style="font-weight: bold; font-size: 20px;">Share</span>
+                </v-row>
+                <v-row>Easily share your campaign and reach more people.</v-row>            
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col>
+                                    <v-row>
+              <v-col cols="4"  style="margin-left: 30px;">
+                <v-img src="../assets/img/icons/wallet_optimized.png" width="100px" height="100px"></v-img>
+              </v-col>
+              <v-col>
+                <v-row  style="margin-top: 5px;">
+                  <span style="font-weight: bold; font-size: 20px;">Share</span>
+                </v-row>
+                <v-row>Receive and access your money right away.</v-row>            
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="2"></v-col>
+        </v-row>
       </v-layout>
     </div>
   </div>
@@ -192,6 +240,7 @@ export default {
 
 .category-container {
   background: #c1dad5;
+  padding-bottom: 80px;
 }
 
 .category-icon-div {

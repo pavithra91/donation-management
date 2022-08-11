@@ -1,60 +1,51 @@
 <template>
-  <div id="app">
-    <vue-editor
-      id="editor"
-      useCustomImageHandler
-      @image-added="handleImageAdded"
-      v-model="htmlForEditor"
-    >
-    </vue-editor>
+  <form>
+    <label>Campaign Name</label>
+    <input type="text" />
 
-      <v-btn @click="handleSavingContent()"> Save </v-btn>
-  </div>
+  </form>
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import storage from '@/firebase'
-export default {
-  components: {
-    VueEditor
-  },
 
-  data() {
-    return {
-      //content: "<h3>Initial Content</h3>",
-      htmlForEditor: "<h3>Initial Content</h3>"
-    };
-  },
-
-  methods: {
-    handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-      // An example of using FormData
-      // NOTE: Your key could be different such as:
-      // formData.append('file', file)
-
-const storage2 = getStorage();
-
-      console.log(file);
-
-      const storageRef = ref(storage2, 'CampaignImages/o2NbDwMnNhLjBeIYzghi/' + file.name);
-      const metadata = {
-        contentType: 'image/jpeg'
-      };
-
-      uploadBytes(storageRef, file, metadata).then((snapshot) => {
-        getDownloadURL(storageRef)
-          .then((url) => {
-            this.imgSrc = url;
-            Editor.insertEmbed(cursorLocation, "image", url);
-            resetUploader();
-          })
-      });
-    },
-    handleSavingContent() {
-      console.log(this.htmlForEditor);
-    }
+export default ({
+data(){
+  return{
+    campaignName: "",
+    campaignNameRules: [(v) => !!v || "Campaign Name required"],
   }
-};
+}
+})
 </script>
+
+
+
+<style scoped>
+form{
+max-width: 420px;
+margin: 30px auto;
+background: white;
+text-align: left;
+padding: 40px;
+border-radius: 10px;  
+}
+
+label{
+  color: #aaa;
+  display: inline-block;
+  margin: 25px 0 15px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+input{
+  display: block;
+  padding: 10px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  color: #555;
+}
+</style>

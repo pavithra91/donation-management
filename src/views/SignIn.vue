@@ -138,6 +138,7 @@ export default {
           // Redirect to page
           localStorage.setItem("user_token", resdata.data.token);
           localStorage.setItem("user_name", resdata.data.userName);
+          localStorage.setItem("role", resdata.data.role);
           this.$router.push('/Home');
         })
         .catch((error) => {

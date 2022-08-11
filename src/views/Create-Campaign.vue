@@ -47,14 +47,6 @@
               <v-col cols="6" md="4">
                 <vue-editor id="editor" useCustomImageHandler @image-added="handleImageAdded" v-model="longDescription">
                 </vue-editor>
-                <!--  <v-textarea
-                  v-model="longDescription"
-                  :rules="longDescriptionRules"
-                  name="input-7-1"
-                  label="Description"
-                  value=""
-                  hint="Description of the Campaign"
-                ></v-textarea> -->
               </v-col>
             </v-row>
           </v-row>
@@ -85,6 +77,22 @@
               </v-row>
             </v-col>
             <v-col cols="6" md="4"> </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6" md="4"> </v-col>
+              <v-col cols="6" md="4">
+                            <v-textarea
+                            counter
+                            outlined
+                  v-model="shortDescription"
+                  :rules="shortDescriptionRules"
+                  name="input-7-1"
+                  label="Short Description"
+                  value=""
+                  hint="Short Description about the Campaign"
+                ></v-textarea> 
+                </v-col>
           </v-row>
 
           <v-row>
@@ -169,7 +177,9 @@ export default {
       (v) => !!v || "Goal Amount required",
       (v) => v >= 500 || "Amount should be above 500 LKR",
     ],
-    longDescription: "<h3>Initial Content</h3>",
+    longDescription: "",
+    shortDescription: "",
+    shortDescriptionRules: [v => v.length <= 25 || 'Max 250 characters'],
     headerImage: "",
     headerImageRules: [(v) => !!v || "File is required"],
     selected: "",
@@ -195,6 +205,7 @@ export default {
           campaignStartDate: this.date[0],
           campaignEndDate: this.date[1],
           campaignDescription: this.longDescription,
+          shortDescription: this.shortDescription,
           city: this.city,
           province: this.province,
           goal: this.goal,
@@ -242,7 +253,6 @@ const storageRef2 = ref(storage2, 'CampaignImages/' + campaignid + '/main.jpg');
                 .then((url) => {
                   this.mainImgSrc = url;
 
-debugger;
             var myHeaders = new Headers();
                   myHeaders.append("Content-Type", "application/json");
 
@@ -251,7 +261,6 @@ debugger;
                     imgPath: this.headerImgSrc,
                     mainImgSrc: this.mainImgSrc
                   });
-                  debugger;
 
                   var requestOptions = {
                     method: "POST",
