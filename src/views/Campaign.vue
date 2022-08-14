@@ -1,91 +1,86 @@
 <template>
-    <div class="main-container">
-        <div class="sub-container" v-if="campaign">
-            <div class="main-title"> {{ campaign.campaignName }}</div>
-        </div>
-        <div class="sub-container" v-else>
-            No Data Found
-        </div>
+    <v-container>
+        <v-row>
+            <v-col md="10" offset-md="1">
+                <v-alert prominent type="success">
+                    <v-row>
+                        <v-col class="grow my-4">
+                            Approve campaign for {{ campaign.campaignName }}.
+                        </v-col>
+                        <v-col class="shrink d-flex justify-center align-center">
+                            <v-col>
+                                <v-btn color="teal">Arrove</v-btn>
+                            </v-col>
+                            <v-col>
+                                <v-btn color="error">Reject</v-btn>
+                            </v-col>
+                        </v-col>
+                    </v-row>
+                </v-alert>
 
-        <v-container>
-
-            <v-container>
                 <v-row>
-                    <v-col style="margin-left: 200px; padding-top: 0;">
-                        <v-img :src=campaign.mainImg width="730" height="411">
+                    <v-col>
+                        <label v-if="campaign" class="text-h3 font-weight-bold">{{ campaign.campaignName }}</label>
+                        <label v-else class="text-h3">Campaign Title</label>
+                    </v-col>
+                </v-row>
+
+
+                <v-row>
+                    <v-col md="8">
+                        <v-img :src=campaign.mainImg width="100%" height="30rem" contain>
                         </v-img>
                     </v-col>
+
                     <v-col>
-                        <v-card style="margin-left: 10px">
-                            <v-row style="margin-bottom: 0px; padding-bottom: 0px;">
-                                <v-col cols="md-7" class="d-flex justify-center" style="padding-right: 0px;">
-                                    <div class="Title">{{ campaign.raiedAmount }} </div>
-                                    <div style="padding-left: 10px; padding-top: 35px; font-weight: bold;">RAISED (USD)
-                                    </div>
-                                </v-col>
-                            </v-row>
-                            <v-row style="margin: 0; padding: 0;">
-                                <v-col cols="11" style="padding-left: 38px;">
-                                    <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
-                                    </v-progress-linear>
-                                </v-col>
-                                <v-col cols="1">
-                                </v-col>
-                            </v-row>
-                            <v-row style="margin: 0; padding: 0;">
-                                <v-col style="margin: 0; padding: 0; padding-left: 35px;"><span
-                                        style="font-weight: bold;">Goal: </span> <span>LKR
-                                        {{ campaign.goalAmount }}</span> </v-col>
-                            </v-row>
+                        <v-card class="pa-3">
+                            <v-card-text>
+                                <v-row>
+                                    <v-col md="8">
+                                        <label class="Title">{{ campaign.raiedAmount }}</label>
+                                        <label class="ml-2 font-weight-bold text-h6">(LKR) RAISED </label>
+                                    </v-col>
+                                </v-row>
 
-                            <br />
+                                <v-row>
+                                    <v-col md="8">
+                                        <label class="font-weight-bold text-h3 d-block">{{ noOfDonations }}</label>
+                                        <label class="font-weight-bold text-h6 d-block">DONORS</label>
+                                        <v-chip class="ma-2" color="teal" text-color="white">
+                                            <v-avatar left>
+                                                <v-icon> mdi-shield-check</v-icon>
+                                            </v-avatar>
+                                            Verified Campaign
+                                        </v-chip>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col md="12" class="pa-3">
+                                        <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
+                                        </v-progress-linear>
+                                        <label class="font-weight-bold text-h6">Goal:</label>
+                                        <label class="text-h6">LKR {{ campaign.goalAmount }}</label>
+                                    </v-col>
+                                </v-row>
 
-                            <v-row>
-                                <v-col cols="4">
-                                    <div class="noOfDonations">{{ noOfDonations }}</div>
-                                </v-col>
-                                <v-col>
+                                <v-row class="d-flex justify-center">
+                                    <v-col>
+                                        <v-btn x-large color="success" dark width="400px" @click="makeDonation">Donate
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
 
-                                    <v-chip class="ma-2" color="teal" text-color="white">
-                                        <v-avatar left>
-                                            <v-icon> mdi-shield-check</v-icon>
-                                        </v-avatar>
-                                        Verified Campaign
-                                    </v-chip>
-                                </v-col>
-                            </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-btn outlined x-large>
+                                            <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Watchlist
+                                        </v-btn>
+                                    </v-col>
 
-
-                            <div class="noOfDonationstxt">DONORS</div>
-
-                            <v-row>
-                                <v-col>
-                                    <v-btn style="margin-left: 30px; margin-top: 30px" x-large color="success" dark
-                                        width="400px" @click="makeDonation">Donate</v-btn>
-                                </v-col>
-                            </v-row>
-
-                            <v-row>
-                                <v-col>
-                                    <v-btn v-if="role == 'Admin' || role == 'Staff'" outlined
-                                        style="margin-left: 30px; margin-top: 10px" x-large>
-                                        <v-icon style="margin-right: 10px;"> mdi-check-bold</v-icon> Approve
-                                    </v-btn>
-                                    <v-btn v-if="role == 'Donor'" outlined style="margin-left: 30px; margin-top: 10px" x-large>
-                                        <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Watchlist
-                                    </v-btn>
-                                </v-col>
-                                <v-col>
-
-                                    <div class="text-center">
+                                    <v-col>
                                         <v-dialog v-model="dialog" width="550">
                                             <template v-slot:activator="{ on, attrs }">
-<v-btn v-if="role == 'Admin' || role == 'Staff'" outlined
-                                        style="margin-left: 30px; margin-top: 10px" x-large>
-                                        <v-icon style="margin-right: 10px;">mdi-trash-can-outline</v-icon> Reject
-                                    </v-btn>
-                                                <v-btn v-if="role == 'Donor'" outlined v-bind="attrs" v-on="on"
-                                                    style="margin-left: 30px; margin-top: 10px" x-large>
+                                                <v-btn outlined v-bind="attrs" v-on="on" x-large>
                                                     <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Share
                                                 </v-btn>
                                             </template>
@@ -160,8 +155,6 @@
                                                         </v-col>
                                                     </v-row>
 
-
-
                                                 </v-card-text>
 
                                                 <v-divider style="margin-left: 20px; margin-right: 20px;"></v-divider>
@@ -170,7 +163,8 @@
                                                     <v-col
                                                         style="margin-left: 30px; margin-right: 10px; margin-top: 30px;">
                                                         <v-text-field v-model="currenturl" outlined label="Copy link"
-                                                            :value="currenturl"></v-text-field>
+                                                            :value="currenturl">
+                                                        </v-text-field>
 
                                                     </v-col>
                                                     <v-col cols="2" style="margin-right: 30px; margin-top: 40px;">
@@ -189,67 +183,15 @@
                                                 </v-card-actions>
                                             </v-card>
                                         </v-dialog>
-                                    </div>
-
-                                </v-col>
-                            </v-row>
-
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
                         </v-card>
-
                     </v-col>
-                    <v-col cols="2"></v-col>
-                </v-row>
-
-
-                <v-row>
-                    <v-col style="margin-left: 200px;">
-                        <v-row>
-                            <v-col cols="1">
-                                <v-icon>fa-solid fa-user</v-icon>
-                            </v-col>
-                            <v-col cols="8"> {{ organizerName }} is Organizing the Campaign</v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col></v-col>
-                    <v-col cols="2"></v-col>
                 </v-row>
 
                 <v-row>
-                    <v-col style="margin-left: 200px;">
-                        <v-row>
-                            <v-divider></v-divider>
-                        </v-row>
-                    </v-col>
-                    <v-col></v-col>
-                    <v-col cols="1"></v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col style="margin-left: 200px; padding: 5px;">
-                        <v-row>
-                            <v-col>
-                                Created {{ campaignDate }}
-                            </v-col>
-                            <v-col>
-                                <v-icon>fa-solid fa-tag</v-icon>
-                                {{ tags }}
-
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-divider></v-divider>
-                        </v-row>
-                    </v-col>
-                    <v-col>
-
-                    </v-col>
-                    <v-col cols="1"></v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col style="margin-left: 200px;">
-
-
+                    <v-col md="8">
                         <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
                             <v-tab href="#Story">
                                 Story
@@ -270,8 +212,7 @@
                                 <v-card flat>
                                     <v-card-text></v-card-text>
 
-                                    <div v-html="campaign.campaignDescription"></div>
-                                    <!--  {{massage.campaignDescription}}-->
+                                    <div class="pa-1" v-html="campaign.campaignDescription"></div>
 
                                 </v-card>
                             </v-tab-item>
@@ -315,41 +256,89 @@
                                 </v-card>
                             </v-tab-item>
                         </v-tabs-items>
+                    </v-col>
 
-                    </v-col>
-                    <v-col>
-                    </v-col>
-                    <v-col cols="1">
+                    <v-col class="my-4">
+                        <v-card>
+                            <v-row>
+                                <v-col offset-xl="1" md="3">
+                                    <v-img :src=organizer.profileImg width="100" height="100"></v-img>
+                                </v-col>
+                                <v-col>
+                                    <v-row>
+                                        <v-col md="10">
+                                            <label>
+                                                {{ organizer.firstName }} {{ organizer.lastName }}
+                                            </label>
+                                        </v-col>
+                                        <v-col>
+                                            <v-dialog v-model="dialogs" width="500">
+                                                <template v-slot:activator="{ on, attr }">
+
+                                                    <v-icon>fa-solid fa-envelope</v-icon>
+                                                    <v-btn text v-bind="attr" v-on="on">
+                                                        Contact
+                                                    </v-btn>
+                                                </template>
+
+                                                <v-card>
+                                                    <v-card-title class="text-h5 grey lighten-2">
+                                                        Contact {{ organizer.firstName }} {{ organizer.lastName }}
+                                                    </v-card-title>
+
+                                                    <v-card-text>
+                                                        <v-textarea class="pa-3 my-5" outlined label="Message">
+                                                        </v-textarea>
+                                                    </v-card-text>
+
+                                                    <v-divider></v-divider>
+
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn color="primary" text @click="dialogs = false">
+                                                            Send
+                                                        </v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+
+                                        </v-col>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </v-card>
                     </v-col>
                 </v-row>
-
-            </v-container>
-        </v-container>
-
-    </div>
+            </v-col>
+        </v-row>
 
 
+
+
+
+
+
+
+    </v-container>
 </template>
 
 <script>
-
-//import CampaignTemp from '@/components/CampaignTemp.vue'
-
-
 export default {
-    name: 'Campaign',
+    name: 'About',
     components: {
         //  CampaignTemp
     },
     props: ['id'],
     data() {
         return {
+            organizer: null,
             currenturl: "test",
             dialog: false,
+            dialogs: false,
             campaign: null,
             noOfDonations: 1095,
             prgoessVal: 0,
-            organizerName: "Pavithra Jayasundara",
+            organizerId: "",
             campaignDate: "2022-07-22",
             tags: ['Medical'],
             tab: null,
@@ -369,7 +358,40 @@ export default {
 
                 this.campaign = resdata.data
 
-                this.massage = resdata.data
+                this.organizerId = resdata.data.createdBy
+                //console.log("Organizer Name " + this.organizerName)
+
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+
+                var raw = JSON.stringify({
+                    id: this.organizerId,
+                });
+
+                var requestOptions = {
+                    method: "POST",
+                    mode: "cors",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow",
+                };
+
+                fetch("http://localhost:3000/api/user/getUser", requestOptions)
+                    .then(async (response) => {
+                        const resdata = await response.json();
+
+                        // check for error response
+                        if (!response.ok) {
+                            console.log("Error");
+                        }
+
+                        //this.userData = resdata.data;
+                        this.organizer = resdata.data;
+                    })
+                    .catch((error) => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
 
             })
             .catch(err => console.log(err.message));
@@ -394,6 +416,8 @@ export default {
                 }
             })
             .catch(err => console.log(err.message));
+
+
     },
     methods: {
         makeDonation() {
@@ -415,34 +439,15 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .main-title {
-    padding-top: 100px;
-    padding-bottom: 60px;
     font-size: 50px;
     font-weight: bold;
-    margin-left: 28%;
 }
 
 .Title {
     color: #4caf50;
     font-size: 50px;
 
-}
-
-.noOfDonations {
-    color: black;
-    font-size: xx-large;
-    margin-left: 30px;
-    font-weight: bold;
-}
-
-.noOfDonationstxt {
-    color: #656969;
-    font-size: medium;
-    margin-left: 30px;
-    font-weight: bold;
-    padding-left: 5px;
 }
 </style>

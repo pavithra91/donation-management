@@ -1,51 +1,401 @@
 <template>
-  <form>
-    <label>Campaign Name</label>
-    <input type="text" />
+  <v-container>
+    <v-alert outlined type="success" text :value="alert">
+      Email Send Successfully!
+    </v-alert>
+    <v-row class="my-5">
+      <v-col md="3">
+        <v-img height="300" width="300" :src=imgSrc @click="$refs.fileInput.click()"></v-img>
+        <input type="file" @change="onFileSelected" ref="fileInput" style="display: none;" />
+      </v-col>
+      <v-col md="9">
+        <v-col><label class="text-h4">Pavithra Bhagya Jayasundara</label>
+        </v-col>
 
-  </form>
+        <v-col>
+          <v-icon>fa-solid fa-location-dot</v-icon>
+          <label class="pa-3">Location</label>
+        </v-col>
+        <v-col md="10">
+          <label class="pa-3">{{ donationLevel }}</label>
+
+          <v-col md="6">
+            <v-progress-linear value="20" height="8" color="#09cc7f"></v-progress-linear>
+            <label>{{ minPoints }}</label>
+            <label class="float-right">{{ maxPoints }} </label>
+          </v-col>
+
+          <v-col md="6">
+            <v-chip color="red" text-color="white" v-if="role == 'Administrator'">
+              {{ role }}
+            </v-chip>
+            <v-chip class="mx-3" color="primary" text-color="white" v-if="role == 'Campaign Manager'">
+              {{ role }}
+            </v-chip>
+
+            <v-chip class="mx-3" color="green" text-color="white" v-if="accStatus == 'Verified'">
+              Account Status {{ accStatus }}
+            </v-chip>
+
+            <v-chip color="red" text-color="white" v-if="accStatus == 'Pending'">
+              Account Status {{ accStatus }}
+            </v-chip>
+
+            <v-chip class="mx-3" color="green" text-color="white" v-if="role == 'Donor'">
+              {{ role }}
+            </v-chip>
+          </v-col>
+
+
+          <v-col md="6">
+            <v-dialog v-model="dialog" width="500">
+              <template v-slot:activator="{ on, attr }">
+
+                <v-icon>fa-solid fa-envelope</v-icon>
+                <v-btn text v-bind="attr" v-on="on">
+                  Contact
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-card-title class="text-h5 grey lighten-2">
+                  Contact
+                </v-card-title>
+                <v-card-text class="my-5">
+                  <v-text-field v-model="senderName" outlined label="Name">
+                  </v-text-field>
+                  <v-text-field v-model="senderEmail" outlined label="Email">
+                  </v-text-field>
+                  <v-textarea v-model="senderMessage" outlined label="Message">
+                  </v-textarea>
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" text @click="dialog = false">
+                    Back
+                  </v-btn>
+                  <v-btn color="primary" text @click="sendEmail">
+                    Send
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <!-- <v-btn class="float-right">Report User</v-btn>-->
+          </v-col>
+
+
+
+          <v-col md="12">
+            <v-col md="6">
+              <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
+                <v-tab href="#Badges">
+                  Badges
+                </v-tab>
+                <v-tab href="#Donations">
+                  Donations
+                </v-tab>
+                <v-tab href="#About">
+                  About
+                </v-tab>
+                <v-tabs-slider color="success"></v-tabs-slider>
+              </v-tabs>
+            </v-col>
+
+          <v-col md="12">
+            <v-tabs-items v-model="tab">
+              <v-tab-item :key="1" value="Badges">
+                <v-card>
+                  <v-row>
+                    <v-col md="2" v-for="badge in badges" :key="badge.id">
+                      <v-col>
+                        <v-tooltip bottom color="success">
+                          <template v-slot:activator="{ on, attrs }">
+                            <div class="pa-4">
+                              <v-img class="pa-3" v-bind="attrs" v-on="on" height="80" width="80"
+                                :src="require(`../assets/img/badges/${badge.imageUrl}`)"></v-img>
+                            </div>
+                            <div class=" text-center font-weight-medium">
+                              {{ badge.badgeName }}
+                            </div>
+                          </template>
+                          <span>{{ badge.badgeDescription }}</span>
+                        </v-tooltip>
+                      </v-col>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-tab-item>
+
+              <v-tab-item :key="2" value="Donations">
+                <v-row class="pa-8">
+                  <v-col>
+                    <label>Your Recent Donation Details are displyed here</label>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col class="d-block">
+                    <v-card>
+                      <v-card-title>Donation to SOS Village</v-card-title>
+                    </v-card>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col class="d-block">
+                    <v-card>
+                      <v-card-title>Donation to SOS Village</v-card-title>
+                    </v-card>
+                  </v-col>
+                </v-row>
+
+              </v-tab-item>
+              <v-tab-item :key="3" value="About">
+                <DonorEdit :profile="profile" />
+              </v-tab-item>
+            </v-tabs-items>
+          </v-col>
+
+
+          </v-col>
+        </v-col>
+      </v-col>
+      <v-col>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from '@/firebase'
+import DonorEdit from "@/components/layouts/DonorEdit.vue";
 
-export default ({
-data(){
-  return{
-    campaignName: "",
-    campaignNameRules: [(v) => !!v || "Campaign Name required"],
+export default {
+  components: {
+    DonorEdit
+  },
+  data() {
+    let id = localStorage.getItem("user_token")
+    return {
+      profile: null,
+      alert: false,
+      tab: null,
+      senderName: "",
+      senderEmail: "",
+      senderMessage: "",
+      valid: true,
+      dialog: false,
+      id: id,
+      firstName: "",
+      firstNameRules: [v => !!v || 'First Name required'],
+      lastName: "",
+      lastNameRules: [v => !!v || 'Last Name required'],
+      email: "",
+      address: "",
+      nic: "",
+      phone: "",
+      phoneNameRules: [v => !!v || 'First Name required'],
+      role: "",
+      accStatus: "",
+      donationLevel: "",
+
+      badges: [],
+
+      minPoints: 1500,
+      maxPoints: 2000,
+      userPoints: 75,
+      imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png"
+    }
+  },
+  mounted() {
+    if (localStorage.getItem("user_name") == "undefined") {
+      this.$router.push("/SignIn");
+    } else if (localStorage.getItem("user_name") != "") {
+      let id = localStorage.getItem("user_token");
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: this.id,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/user/getUser", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+          console.log(resdata.data.accStatus);
+          //this.userData = resdata.data;
+          this.firstName = resdata.data.firstName;
+          this.lastName = resdata.data.lastName;
+          this.email = resdata.data.email;
+          this.nic = resdata.data.nic;
+          this.address = resdata.data.address;
+          this.phone = resdata.data.phone;
+          this.role = resdata.data.role;
+          this.accStatus = resdata.data.accStatus;
+          this.donationLevel = resdata.data.donationLevel;
+          this.imgSrc = resdata.data.profileImg;
+
+          this.profile = resdata.data;
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+    } else {
+      this.$router.push("/EditProfile");
+    }
+
+
+    fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=' + this.id)
+      .then(async (response) => {
+        const resdata = await response.json()
+        this.badges = resdata.data
+
+      })
+      .catch(err => console.log(err.message))
+
+  },
+
+  methods: {
+    sendEmail() {
+      try {
+        console.log("Message coming");
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+          id: this.id,
+          senderSubject: 'You have Email from : ' + this.senderName,
+          senderName: this.senderName,
+          senderEmail: this.senderEmail,
+          senderMessage: this.senderMessage,
+        });
+
+        var requestOptions = {
+          method: "POST",
+          mode: "cors",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch("http://localhost:3000/api/misc/sendEmail", requestOptions)
+          .then(async (response) => {
+            const resdata = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+              // get error message from body or default to response statusText
+            }
+            console.log("Email Send");
+
+            this.dialog = true;
+
+            setTimeout(() => {
+              this.alert = false
+            }, 4000)
+          })
+          .catch((error) => {
+            this.errorMessage = error;
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        console.log({ error })
+      }
+      // Reset form field
+      this.senderName = ''
+      this.senderEmail = ''
+      this.senderMessage = ''
+
+    },
+
+    editAccount() {
+      this.$router.push("/EditProfile");
+    },
+
+    onFileSelected(event) {
+
+      this.selectedFile = event.target.files[0];
+      const storage2 = getStorage();
+
+      console.log(this.selectedFile);
+
+      const storageRef = ref(storage2, 'ProfileImg/' + this.id);
+      const metadata = {
+        contentType: 'image/jpeg'
+      };
+
+      uploadBytes(storageRef, this.selectedFile, metadata).then((snapshot) => {
+        getDownloadURL(storageRef)
+          .then((url) => {
+            this.imgSrc = url;
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+              id: this.id,
+              imgPath: url
+            });
+
+            var requestOptions = {
+              method: "POST",
+              mode: "cors",
+              headers: myHeaders,
+              body: raw,
+              redirect: "follow",
+            };
+
+            fetch("http://localhost:3000/api/user/updateUserProfileImage", requestOptions)
+              .then(async (response) => {
+                const resdata = await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                  // get error message from body or default to response statusText
+                }
+              });
+
+          });
+      });
+    },
   }
-}
-})
+};
 </script>
 
 
 
 <style scoped>
-form{
-max-width: 420px;
-margin: 30px auto;
-background: white;
-text-align: left;
-padding: 40px;
-border-radius: 10px;  
+.main-container {
+  background: #fbf8f6;
 }
 
-label{
-  color: #aaa;
-  display: inline-block;
-  margin: 25px 0 15px;
-  font-size: 15px;
-  letter-spacing: 1px;
+.main-container {
+  margin-top: 80px;
+  background: #ffffff;
+}
+
+.main-title {
+  color: #072366;
+  font-size: 40px;
   font-weight: bold;
-}
-
-input{
-  display: block;
-  padding: 10px 6px;
-  width: 100%;
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 1px solid #ddd;
-  color: #555;
 }
 </style>
