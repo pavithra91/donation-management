@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-alert outlined type="success" text :value="alert">
-      Email Send Successfully!
+      {{ alertMessage }}
     </v-alert>
     <v-row class="my-5">
       <v-col md="3">
@@ -154,7 +154,7 @@
 
               </v-tab-item>
               <v-tab-item :key="3" value="About">
-                <DonorEdit :profile="profile" />
+                <DonorEdit :profile="profile" @message="getResponse" />
               </v-tab-item>
             </v-tabs-items>
           </v-col>
@@ -183,6 +183,7 @@ export default {
     return {
       profile: null,
       alert: false,
+      alertMessage: "",
       tab: null,
       senderName: "",
       senderEmail: "",
@@ -275,6 +276,14 @@ export default {
   },
 
   methods: {
+
+    getResponse(value) {
+      this.alert = true;
+      this.alertMessage = value;
+      setTimeout(() => {
+              this.alert = false
+            }, 4000)
+   },
     sendEmail() {
       try {
         console.log("Message coming");
@@ -308,8 +317,9 @@ export default {
             }
             console.log("Email Send");
 
-            this.dialog = true;
+            this.dialog = false;
 
+            this.alertMessage = "Email has Send to User";
             setTimeout(() => {
               this.alert = false
             }, 4000)
@@ -326,10 +336,6 @@ export default {
       this.senderEmail = ''
       this.senderMessage = ''
 
-    },
-
-    editAccount() {
-      this.$router.push("/EditProfile");
     },
 
     onFileSelected(event) {

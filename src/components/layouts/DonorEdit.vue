@@ -171,15 +171,45 @@ export default {
         }
     },
     mounted() {
-        //this.dialogbox =  false
-        //this.firstName = profile.firstName
-        //  this.firstNameRules = [v => !!v || 'First Name required']
-        //  this.lastNameRules =  [v => !!v || 'Last Name required']
-        //  this.phoneNameRules = [v => !!v || 'First Name required']
+
     },
     methods: {
         save() {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
+            var raw = JSON.stringify({
+                id: this.profile.id,
+                firstName: this.profile.firstName,
+                lastName: this.profile.lastName,
+                phone: this.profile.phone,
+                address: this.profile.address,
+            });
+
+            var requestOptions = {
+                method: "POST",
+                mode: "cors",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+            };
+
+            fetch("http://localhost:3000/api/user/updateUserDetails", requestOptions)
+                .then(async (response) => {
+                    const resdata = await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response statusText
+                    }
+                    this.$emit('message', "Profile Update Successfully");
+
+                    this.dialogbox = false
+                })
+                .catch((error) => {
+                    this.errorMessage = error;
+                    console.error("There was an error!", error);
+                });
         }
     }
 }

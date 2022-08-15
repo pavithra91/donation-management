@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row>
-            <v-col md="10" offset-md="1">
+            <v-col md="10" lg="8" offset-md="1" offset-lg="2">
                 <v-alert prominent type="success">
                     <v-row>
                         <v-col class="grow my-4">
@@ -27,12 +27,12 @@
 
 
                 <v-row>
-                    <v-col md="8">
+                    <v-col md="6">
                         <v-img :src=campaign.mainImg width="100%" height="30rem" contain>
                         </v-img>
                     </v-col>
 
-                    <v-col>
+                    <v-col md="6">
                         <v-card class="pa-3">
                             <v-card-text>
                                 <v-row>
@@ -55,7 +55,7 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col md="12" class="pa-3">
+                                    <v-col md="9" class="pa-3">
                                         <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                                         </v-progress-linear>
                                         <label class="font-weight-bold text-h6">Goal:</label>
@@ -63,21 +63,21 @@
                                     </v-col>
                                 </v-row>
 
-                                <v-row class="d-flex justify-center">
-                                    <v-col>
-                                        <v-btn x-large color="success" dark width="400px" @click="makeDonation">Donate
+                                <v-row >
+                                    <v-col md="6" lg="6" >
+                                        <v-btn x-large color="success" dark width="410px" @click="makeDonation">Donate
                                         </v-btn>
                                     </v-col>
                                 </v-row>
 
                                 <v-row>
-                                    <v-col>
+                                    <v-col md="6" lg="6">
                                         <v-btn outlined x-large>
                                             <v-icon style="margin-right: 10px;">mdi-heart</v-icon> Watchlist
                                         </v-btn>
                                     </v-col>
 
-                                    <v-col>
+                                    <v-col md="6" lg="6">
                                         <v-dialog v-model="dialog" width="550">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-btn outlined v-bind="attrs" v-on="on" x-large>
@@ -191,7 +191,7 @@
                 </v-row>
 
                 <v-row>
-                    <v-col md="8">
+                    <v-col md="7" lg="8">
                         <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
                             <v-tab href="#Story">
                                 Story
@@ -258,17 +258,17 @@
                         </v-tabs-items>
                     </v-col>
 
-                    <v-col class="my-4">
+                    <v-col md="5" lg="4" class="my-4">
                         <v-card>
                             <v-row>
-                                <v-col offset-xl="1" md="3">
-                                    <v-img :src=organizer.profileImg width="100" height="100"></v-img>
+                                <v-col offset-xl="1" md="5" lg="3">
+                                   <v-img :src=organizer.profileImg width="100" height="100"></v-img>
                                 </v-col>
                                 <v-col>
                                     <v-row>
                                         <v-col md="10">
                                             <label>
-                                                {{ organizer.firstName }} {{ organizer.lastName }}
+                                            <router-link to="/About">     {{ organizer.firstName }} {{ organizer.lastName }}</router-link>
                                             </label>
                                         </v-col>
                                         <v-col>
