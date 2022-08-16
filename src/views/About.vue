@@ -104,60 +104,60 @@
               </v-tabs>
             </v-col>
 
-          <v-col md="12">
-            <v-tabs-items v-model="tab">
-              <v-tab-item :key="1" value="Badges">
-                <v-card>
-                  <v-row>
-                    <v-col md="2" v-for="badge in badges" :key="badge.id">
-                      <v-col>
-                        <v-tooltip bottom color="success">
-                          <template v-slot:activator="{ on, attrs }">
-                            <div class="pa-4">
-                              <v-img class="pa-3" v-bind="attrs" v-on="on" height="80" width="80"
-                                :src="require(`../assets/img/badges/${badge.imageUrl}`)"></v-img>
-                            </div>
-                            <div class=" text-center font-weight-medium">
-                              {{ badge.badgeName }}
-                            </div>
-                          </template>
-                          <span>{{ badge.badgeDescription }}</span>
-                        </v-tooltip>
+            <v-col md="12">
+              <v-tabs-items v-model="tab">
+                <v-tab-item :key="1" value="Badges">
+                  <v-card>
+                    <v-row>
+                      <v-col md="2" v-for="badge in badges" :key="badge.id">
+                        <v-col>
+                          <v-tooltip bottom color="success">
+                            <template v-slot:activator="{ on, attrs }">
+                              <div class="pa-4">
+                                <v-img class="pa-3" v-bind="attrs" v-on="on" height="80" width="80"
+                                  :src="require(`../assets/img/badges/${badge.imageUrl}`)"></v-img>
+                              </div>
+                              <div class=" text-center font-weight-medium">
+                                {{ badge.badgeName }}
+                              </div>
+                            </template>
+                            <span>{{ badge.badgeDescription }}</span>
+                          </v-tooltip>
+                        </v-col>
                       </v-col>
+                    </v-row>
+                  </v-card>
+                </v-tab-item>
+
+                <v-tab-item :key="2" value="Donations">
+                  <v-row class="pa-8">
+                    <v-col>
+                      <label>Your Recent Donation Details are displyed here</label>
                     </v-col>
                   </v-row>
-                </v-card>
-              </v-tab-item>
 
-              <v-tab-item :key="2" value="Donations">
-                <v-row class="pa-8">
-                  <v-col>
-                    <label>Your Recent Donation Details are displyed here</label>
-                  </v-col>
-                </v-row>
+                  <v-row>
+                    <v-col class="d-block">
+                      <v-card>
+                        <v-card-title>Donation to SOS Village</v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
 
-                <v-row>
-                  <v-col class="d-block">
-                    <v-card>
-                      <v-card-title>Donation to SOS Village</v-card-title>
-                    </v-card>
-                  </v-col>
-                </v-row>
+                  <v-row>
+                    <v-col class="d-block">
+                      <v-card>
+                        <v-card-title>Donation to SOS Village</v-card-title>
+                      </v-card>
+                    </v-col>
+                  </v-row>
 
-                <v-row>
-                  <v-col class="d-block">
-                    <v-card>
-                      <v-card-title>Donation to SOS Village</v-card-title>
-                    </v-card>
-                  </v-col>
-                </v-row>
-
-              </v-tab-item>
-              <v-tab-item :key="3" value="About">
-                <DonorEdit :profile="profile" @message="getResponse" />
-              </v-tab-item>
-            </v-tabs-items>
-          </v-col>
+                </v-tab-item>
+                <v-tab-item :key="3" value="About">
+                  <DonorEdit :profile="profile" @message="getResponse" />
+                </v-tab-item>
+              </v-tabs-items>
+            </v-col>
 
 
           </v-col>
@@ -191,15 +191,6 @@ export default {
       valid: true,
       dialog: false,
       id: id,
-      firstName: "",
-      firstNameRules: [v => !!v || 'First Name required'],
-      lastName: "",
-      lastNameRules: [v => !!v || 'Last Name required'],
-      email: "",
-      address: "",
-      nic: "",
-      phone: "",
-      phoneNameRules: [v => !!v || 'First Name required'],
       role: "",
       accStatus: "",
       donationLevel: "",
@@ -243,12 +234,6 @@ export default {
           }
           console.log(resdata.data.accStatus);
           //this.userData = resdata.data;
-          this.firstName = resdata.data.firstName;
-          this.lastName = resdata.data.lastName;
-          this.email = resdata.data.email;
-          this.nic = resdata.data.nic;
-          this.address = resdata.data.address;
-          this.phone = resdata.data.phone;
           this.role = resdata.data.role;
           this.accStatus = resdata.data.accStatus;
           this.donationLevel = resdata.data.donationLevel;
@@ -281,9 +266,9 @@ export default {
       this.alert = true;
       this.alertMessage = value;
       setTimeout(() => {
-              this.alert = false
-            }, 4000)
-   },
+        this.alert = false
+      }, 4000)
+    },
     sendEmail() {
       try {
         console.log("Message coming");
@@ -386,22 +371,3 @@ export default {
   }
 };
 </script>
-
-
-
-<style scoped>
-.main-container {
-  background: #fbf8f6;
-}
-
-.main-container {
-  margin-top: 80px;
-  background: #ffffff;
-}
-
-.main-title {
-  color: #072366;
-  font-size: 40px;
-  font-weight: bold;
-}
-</style>

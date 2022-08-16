@@ -175,11 +175,14 @@ export default {
     },
     methods: {
         save() {
+
+            let id = localStorage.getItem("user_token");
+
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
-                id: this.profile.id,
+                id: id,
                 firstName: this.profile.firstName,
                 lastName: this.profile.lastName,
                 phone: this.profile.phone,
