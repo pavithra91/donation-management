@@ -31,26 +31,26 @@
             </v-chip>
             <v-chip class="mx-3" color="primary" text-color="white" v-if="role == 'Campaign Manager'">
               <v-avatar left>
-                                                <v-icon> mdi-shield-crown</v-icon>
-                                            </v-avatar>{{ role }}
+                <v-icon> mdi-shield-crown</v-icon>
+              </v-avatar>{{ role }}
             </v-chip>
 
             <v-chip class="mx-3" color="green" text-color="white" v-if="accStatus == 'Verified'">
-             <v-avatar left>
-                                                <v-icon> mdi-shield-check</v-icon>
-                                            </v-avatar> Account Status {{ accStatus }}
+              <v-avatar left>
+                <v-icon> mdi-shield-check</v-icon>
+              </v-avatar> Account Status {{ accStatus }}
             </v-chip>
 
             <v-chip color="red" text-color="white" v-if="accStatus == 'Pending'">
-             <v-avatar left>
-                                                <v-icon> mdi-shield-alert</v-icon>
-                                            </v-avatar> Account Status {{ accStatus }}
+              <v-avatar left>
+                <v-icon> mdi-shield-alert</v-icon>
+              </v-avatar> Account Status {{ accStatus }}
             </v-chip>
 
             <v-chip class="mx-3" color="green" text-color="white" v-if="role == 'Donor'">
-                         <v-avatar left>
-                                                <v-icon> mdi-shield-account</v-icon>
-                                            </v-avatar>  {{ role }}
+              <v-avatar left>
+                <v-icon> mdi-shield-account</v-icon>
+              </v-avatar> {{ role }}
             </v-chip>
           </v-col>
 
