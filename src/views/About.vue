@@ -1,373 +1,121 @@
 <template>
   <v-container>
-    <v-alert outlined type="success" text :value="alert">
-      {{ alertMessage }}
-    </v-alert>
-    <v-row class="my-5">
-      <v-col md="3">
-        <v-img height="300" width="300" :src=imgSrc @click="$refs.fileInput.click()"></v-img>
-        <input type="file" @change="onFileSelected" ref="fileInput" style="display: none;" />
-      </v-col>
-      <v-col md="9">
-        <v-col><label class="text-h4">Pavithra Bhagya Jayasundara</label>
-        </v-col>
-
-        <v-col>
-          <v-icon>fa-solid fa-location-dot</v-icon>
-          <label class="pa-3">Location</label>
-        </v-col>
-        <v-col md="10">
-          <label class="pa-3">{{ donationLevel }}</label>
-
-          <v-col md="6">
-            <v-progress-linear value="20" height="8" color="#09cc7f"></v-progress-linear>
-            <label>{{ minPoints }}</label>
-            <label class="float-right">{{ maxPoints }} </label>
+    <v-row>
+      <v-col md="10" lg="8" offset-md="1" offset-lg="2">
+        <v-row>
+          <v-col>
+            <label class="text-h3 font-weight-bold">Create Campaign</label>
           </v-col>
+        </v-row>
 
-          <v-col md="6">
-            <v-chip color="red" text-color="white" v-if="role == 'Administrator'">
-              {{ role }}
-            </v-chip>
-            <v-chip class="mx-3" color="primary" text-color="white" v-if="role == 'Campaign Manager'">
-              {{ role }}
-            </v-chip>
-
-            <v-chip class="mx-3" color="green" text-color="white" v-if="accStatus == 'Verified'">
-              Account Status {{ accStatus }}
-            </v-chip>
-
-            <v-chip color="red" text-color="white" v-if="accStatus == 'Pending'">
-              Account Status {{ accStatus }}
-            </v-chip>
-
-            <v-chip class="mx-3" color="green" text-color="white" v-if="role == 'Donor'">
-              {{ role }}
-            </v-chip>
+        <v-row>
+          <v-col md="7" sm="12">
+            <v-text-field v-model="campaignName" :rules="campaignNameRules" label="Campaign Name" required>
+            </v-text-field>
           </v-col>
+        </v-row>
 
-
-          <v-col md="6">
-            <v-dialog v-model="dialog" width="500">
-              <template v-slot:activator="{ on, attr }">
-
-                <v-icon>fa-solid fa-envelope</v-icon>
-                <v-btn text v-bind="attr" v-on="on">
-                  Contact
-                </v-btn>
+        <v-row>
+          <v-col md="6" sm="12">
+            <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="dateRangeText" label="Campaign Period" prepend-icon="mdi-calendar" readonly
+                  v-bind="attrs" v-on="on"></v-text-field>
               </template>
-
-              <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
-                  Contact
-                </v-card-title>
-                <v-card-text class="my-5">
-                  <v-text-field v-model="senderName" outlined label="Name">
-                  </v-text-field>
-                  <v-text-field v-model="senderEmail" outlined label="Email">
-                  </v-text-field>
-                  <v-textarea v-model="senderMessage" outlined label="Message">
-                  </v-textarea>
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="dialog = false">
-                    Back
-                  </v-btn>
-                  <v-btn color="primary" text @click="sendEmail">
-                    Send
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
+              <v-date-picker v-model="date" range>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="modal = false">
+                  Cancel
+                </v-btn>
+                <v-btn text color="primary" @click="$refs.dialog.save(date)">
+                  OK
+                </v-btn>
+              </v-date-picker>
             </v-dialog>
-            <!-- <v-btn class="float-right">Report User</v-btn>-->
           </v-col>
-
-
-
-          <v-col md="12">
-            <v-col md="6">
-              <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-                <v-tab href="#Badges">
-                  Badges
-                </v-tab>
-                <v-tab href="#Donations">
-                  Donations
-                </v-tab>
-                <v-tab href="#About">
-                  About
-                </v-tab>
-                <v-tabs-slider color="success"></v-tabs-slider>
-              </v-tabs>
-            </v-col>
-
-            <v-col md="12">
-              <v-tabs-items v-model="tab">
-                <v-tab-item :key="1" value="Badges">
-                  <v-card>
-                    <v-row>
-                      <v-col md="2" v-for="badge in badges" :key="badge.id">
-                        <v-col>
-                          <v-tooltip bottom color="success">
-                            <template v-slot:activator="{ on, attrs }">
-                              <div class="pa-4">
-                                <v-img class="pa-3" v-bind="attrs" v-on="on" height="80" width="80"
-                                  :src="require(`../assets/img/badges/${badge.imageUrl}`)"></v-img>
-                              </div>
-                              <div class=" text-center font-weight-medium">
-                                {{ badge.badgeName }}
-                              </div>
-                            </template>
-                            <span>{{ badge.badgeDescription }}</span>
-                          </v-tooltip>
-                        </v-col>
-                      </v-col>
-                    </v-row>
-                  </v-card>
-                </v-tab-item>
-
-                <v-tab-item :key="2" value="Donations">
-                  <v-row class="pa-8">
-                    <v-col>
-                      <label>Your Recent Donation Details are displyed here</label>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col class="d-block">
-                      <v-card>
-                        <v-card-title>Donation to SOS Village</v-card-title>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col class="d-block">
-                      <v-card>
-                        <v-card-title>Donation to SOS Village</v-card-title>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-
-                </v-tab-item>
-                <v-tab-item :key="3" value="About">
-                  <DonorEdit :profile="profile" @message="getResponse" />
-                </v-tab-item>
-              </v-tabs-items>
-            </v-col>
-
-
+          <v-spacer></v-spacer>
+          <v-col md="5" sm="12">
+            <v-text-field v-model="goal" :rules="goalRules" label="Goal" suffix="LKR"></v-text-field>
           </v-col>
-        </v-col>
-      </v-col>
-      <v-col>
+        </v-row>
+
+        <v-row>
+          <v-col md="3" sm="12">
+            <v-text-field v-model="city" :rules="cityRules" label="City" required></v-text-field>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col md="3" sm="12">
+            <v-select :items="proviceList" v-model="province" label="Province" :rules="provinceRules"></v-select>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col md="3" sm="12">
+            <v-select :items="categoryItems" label="Category" :rules="categoryRules"></v-select>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <v-textarea counter outlined v-model="shortDescription" :rules="shortDescriptionRules" name="input-7-1"
+              label="Short Description" value="" hint="Short Description about the Campaign"></v-textarea>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <vue-editor id="editor" useCustomImageHandler @image-added="handleImageAdded" v-model="longDescription">
+            </vue-editor>
+          </v-col>
+        </v-row>
+        
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import storage from '@/firebase'
-import DonorEdit from "@/components/layouts/DonorEdit.vue";
-
+import storage from '@/firebase';
 export default {
   components: {
-    DonorEdit
+    VueEditor
   },
   data() {
-    let id = localStorage.getItem("user_token")
     return {
-      profile: null,
-      alert: false,
-      alertMessage: "",
-      tab: null,
-      senderName: "",
-      senderEmail: "",
-      senderMessage: "",
-      valid: true,
-      dialog: false,
-      id: id,
-      role: "",
-      accStatus: "",
-      donationLevel: "",
-
-      badges: [],
-
-      minPoints: 1500,
-      maxPoints: 2000,
-      userPoints: 75,
-      imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png"
+      modal: false,
+      categoryItems: ['Medical & Health', 'Memorials & Funerals', 'NonProfit/Charity', 'Schools & Education', 'Pets & Animals', 'Disaster Relief', 'Clubs & Community', 'Sports & Teams', 'Creative Projects', 'Events', 'Kids & Family', 'LGBT'],
+      categoryRules: [(v) => !!v || "Please select Category"],
+      campaignName: "",
+      campaignNameRules: [(v) => !!v || "Campaign Name required"],
+      date: [new Date().toISOString().substr(0, 10)],
+      goal: "",
+      goalRules: [
+        (v) => !!v || "Goal Amount required",
+        (v) => v >= 500 || "Amount should be above 500 LKR",
+      ],
+      city: "",
+      cityRules: [(v) => !!v || "City Name Name required"],
+      province: "",
+      proviceList: ['Western Province', 'Southern Province', 'Central Province', 'Eastern Province', 'Northern Province', 'North Western Province', 'North Central Province', 'Sabaragamuwa Province', 'Uva Province',],
+      provinceRules: [(v) => !!v || "Please select Province"],
+      shortDescription: "",
+      shortDescriptionRules: [v => v.length <= 25 || 'Max 250 characters'],
+      longDescription: "",
     }
   },
-  mounted() {
-    if (localStorage.getItem("user_name") == "undefined") {
-      this.$router.push("/SignIn");
-    } else if (localStorage.getItem("user_name") != "") {
-      let id = localStorage.getItem("user_token");
-
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        id: this.id,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch("http://localhost:3000/api/user/getUser", requestOptions)
-        .then(async (response) => {
-          const resdata = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response statusText
-          }
-          console.log(resdata.data.accStatus);
-          //this.userData = resdata.data;
-          this.role = resdata.data.role;
-          this.accStatus = resdata.data.accStatus;
-          this.donationLevel = resdata.data.donationLevel;
-          this.imgSrc = resdata.data.profileImg;
-
-          this.profile = resdata.data;
-        })
-        .catch((error) => {
-          this.errorMessage = error;
-          console.error("There was an error!", error);
-        });
-    } else {
-      this.$router.push("/EditProfile");
-    }
-
-
-    fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=' + this.id)
-      .then(async (response) => {
-        const resdata = await response.json()
-        this.badges = resdata.data
-
-      })
-      .catch(err => console.log(err.message))
-
-  },
-
   methods: {
+    handleImageAdded: function (file, Editor, cursorLocation, resetUploader) {
+      // An example of using FormData
+      // NOTE: Your key could be different such as:
+      // formData.append('file', file)
 
-    getResponse(value) {
-      this.alert = true;
-      this.alertMessage = value;
-      setTimeout(() => {
-        this.alert = false
-      }, 4000)
-    },
-    sendEmail() {
-      try {
-        console.log("Message coming");
-
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-          id: this.id,
-          senderSubject: 'You have Email from : ' + this.senderName,
-          senderName: this.senderName,
-          senderEmail: this.senderEmail,
-          senderMessage: this.senderMessage,
-        });
-
-        var requestOptions = {
-          method: "POST",
-          mode: "cors",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow",
-        };
-
-        fetch("http://localhost:3000/api/misc/sendEmail", requestOptions)
-          .then(async (response) => {
-            const resdata = await response.json();
-
-            // check for error response
-            if (!response.ok) {
-              // get error message from body or default to response statusText
-            }
-            console.log("Email Send");
-
-            this.dialog = false;
-
-            this.alertMessage = "Email has Send to User";
-            setTimeout(() => {
-              this.alert = false
-            }, 4000)
-          })
-          .catch((error) => {
-            this.errorMessage = error;
-            console.error("There was an error!", error);
-          });
-      } catch (error) {
-        console.log({ error })
-      }
-      // Reset form field
-      this.senderName = ''
-      this.senderEmail = ''
-      this.senderMessage = ''
 
     },
-
-    onFileSelected(event) {
-
-      this.selectedFile = event.target.files[0];
-      const storage2 = getStorage();
-
-      console.log(this.selectedFile);
-
-      const storageRef = ref(storage2, 'ProfileImg/' + this.id);
-      const metadata = {
-        contentType: 'image/jpeg'
-      };
-
-      uploadBytes(storageRef, this.selectedFile, metadata).then((snapshot) => {
-        getDownloadURL(storageRef)
-          .then((url) => {
-            this.imgSrc = url;
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-              id: this.id,
-              imgPath: url
-            });
-
-            var requestOptions = {
-              method: "POST",
-              mode: "cors",
-              headers: myHeaders,
-              body: raw,
-              redirect: "follow",
-            };
-
-            fetch("http://localhost:3000/api/user/updateUserProfileImage", requestOptions)
-              .then(async (response) => {
-                const resdata = await response.json();
-
-                // check for error response
-                if (!response.ok) {
-                  // get error message from body or default to response statusText
-                }
-              });
-
-          });
-      });
+  },
+  computed: {
+    dateRangeText() {
+      return this.date.join(" ~ ");
     },
   }
-};
+}
 </script>

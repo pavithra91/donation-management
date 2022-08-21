@@ -85,6 +85,12 @@ const routes = [
     name: 'Donate',
     props: true, 
     component: () => import(/* webpackChunkName: "about" */ '../views/Donate.vue')
+  },
+  {
+    path: '/Search/:category',
+    name: 'Search',
+    props: true, 
+    component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue')
   }
 ]
 
