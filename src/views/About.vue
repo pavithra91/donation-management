@@ -127,6 +127,7 @@ export default {
   },
   data() {
     return {
+      valid: true,
       modal: false,
       categoryItems: ['Medical & Health', 'Memorials & Funerals', 'NonProfit/Charity', 'Schools & Education', 'Pets & Animals', 'Disaster Relief', 'Clubs & Community', 'Sports & Teams', 'Creative Projects', 'Events', 'Kids & Family', 'LGBT'],
       categoryRules: [(v) => !!v || "Please select Category"],
@@ -144,7 +145,7 @@ export default {
       proviceList: ['Western Province', 'Southern Province', 'Central Province', 'Eastern Province', 'Northern Province', 'North Western Province', 'North Central Province', 'Sabaragamuwa Province', 'Uva Province',],
       provinceRules: [(v) => !!v || "Please select Province"],
       shortDescription: "",
-      shortDescriptionRules: [v => v.length <= 25 || 'Max 250 characters'],
+      shortDescriptionRules: [v => v.length <= 250 || 'Max 250 characters'],
       longDescription: "",
       supportDocrules: [
         value => !value || value.size < 2000000 || 'Document size should be less than 2 MB!',
