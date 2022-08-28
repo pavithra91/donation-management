@@ -2,21 +2,76 @@
     <v-container>
         <v-row>
             <v-col md="10" lg="8" offset-md="1" offset-lg="2">
-                <v-alert prominent type="success">
+                <v-alert prominent type="success"
+                    v-if="(role == 'Admin' || role == 'Staff') && (campaign.campaignStatus == 'Request')">
                     <v-row>
                         <v-col class="grow my-4">
-                            Approve campaign for {{ campaign.campaignName }}.
+                            Approve campaign for {{ campaign.campaignName }}
                         </v-col>
                         <v-col class="shrink d-flex justify-center align-center">
                             <v-col>
-                                <v-btn color="teal">Arrove</v-btn>
+                                <v-btn color="teal" @click="approveCampaign(1)">Arrove</v-btn>
                             </v-col>
                             <v-col>
-                                <v-btn color="error">Reject</v-btn>
+                                <v-dialog v-model="rejectDialog" width="500">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn color="error" v-bind="attrs" v-on="on">
+                                            Reject</v-btn>
+                                    </template>
+
+                                    <v-card>
+                                        <v-card-title class="text-h5 grey lighten-2">
+                                            Privacy Policy
+                                        </v-card-title>
+
+                                        <v-card-text>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                        </v-card-text>
+
+                                        <v-divider></v-divider>
+
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn color="primary" text @click="rejectDialog = false">
+                                                I accept
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+
                             </v-col>
                         </v-col>
                     </v-row>
                 </v-alert>
+
+                <v-row v-else>
+                    <v-col></v-col>
+                </v-row>
+
+                <v-alert prominent type="success" v-if="role == 'Campaign Manager'">
+                    <v-row>
+                        <v-col class="grow my-4">
+                            Edit campaign for {{ campaign.campaignName }}.
+                        </v-col>
+                        <v-col class="shrink d-flex justify-center align-center">
+                            <v-col>
+                                <v-btn color="teal">Edit</v-btn>
+                            </v-col>
+                            <v-col>
+                                <v-btn color="error">Cancel</v-btn>
+                            </v-col>
+                        </v-col>
+                    </v-row>
+                </v-alert>
+
+                <v-row v-else>
+                    <v-col></v-col>
+                </v-row>
 
                 <v-row>
                     <v-col>
@@ -58,13 +113,13 @@
                                     <v-col md="9" class="pa-3">
                                         <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                                         </v-progress-linear>
-                                        <label class="font-weight-bold text-h6">Goal:</label>
-                                        <label class="text-h6">LKR {{ campaign.goalAmount }}</label>
+                                        <label class="font-weight-bold text-h6">Goal: </label>
+                                        <label class="text-h6">LKR {{ campaign.goalAmount.toLocaleString() }}</label>
                                     </v-col>
                                 </v-row>
 
-                                <v-row >
-                                    <v-col md="6" lg="6" >
+                                <v-row>
+                                    <v-col md="6" lg="6">
                                         <v-btn x-large color="success" dark width="410px" @click="makeDonation">Donate
                                         </v-btn>
                                     </v-col>
@@ -262,13 +317,15 @@
                         <v-card>
                             <v-row>
                                 <v-col offset-xl="1" md="5" lg="3">
-                                   <v-img :src=organizer.profileImg width="100" height="100"></v-img>
+                                    <v-img :src=organizer.profileImg width="100" height="100"></v-img>
                                 </v-col>
                                 <v-col>
                                     <v-row>
                                         <v-col md="10">
                                             <label>
-                                            <router-link to="/About">     {{ organizer.firstName }} {{ organizer.lastName }}</router-link>
+                                                <router-link to="/About"> {{ organizer.firstName }} {{
+                                                        organizer.lastName
+                                                }}</router-link>
                                             </label>
                                         </v-col>
                                         <v-col>
@@ -335,6 +392,7 @@ export default {
             currenturl: "test",
             dialog: false,
             dialogs: false,
+            rejectDialog: false,
             campaign: null,
             noOfDonations: 1095,
             prgoessVal: 0,
@@ -345,7 +403,7 @@ export default {
             comments: [],
             FAQ: [],
             updates: [],
-            mainImg: "",
+            mainImg: "../assets/img/main/noImg.jpg",
             role: "",
         }
     },
@@ -428,6 +486,46 @@ export default {
         },
         copyText() {
             navigator.clipboard.writeText(this.currenturl);
+        },
+        approveCampaign(e) {
+            var status = "";
+            if (e == 1) {
+                status = "Approved"
+            }
+            else {
+                status = "Rejected"
+            }
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                id: this.id,
+            });
+
+            var requestOptions = {
+                method: "POST",
+                mode: "cors",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+            };
+
+            fetch("http://localhost:3000/api/campaign/approveRejectCampaign", requestOptions)
+                .then(async (response) => {
+                    const resdata = await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        console.log("Error");
+                    }
+
+                    //this.userData = resdata.data;
+                    this.organizer = resdata.data;
+                })
+                .catch((error) => {
+                    this.errorMessage = error;
+                    console.error("There was an error!", error);
+                });
         }
     },
     computed: {
