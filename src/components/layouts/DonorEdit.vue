@@ -159,8 +159,7 @@ import { METHODS } from 'http';
 
 export default {
     name: "DonorEdit",
-    props: ["profile"],
-
+    props: ["profile", "accessLevel"],
     data() {
         return {
             valid: true,

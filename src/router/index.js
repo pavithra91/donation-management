@@ -43,8 +43,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Create-Campaign.vue')
   },
   {
-    path: '/Profile',
+    path: '/Profile/:id',
     name: 'Profile',
+    props:true,
     component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue')
   },
   {

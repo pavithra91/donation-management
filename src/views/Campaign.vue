@@ -9,42 +9,51 @@
                             Approve campaign for {{ campaign.campaignName }}
                         </v-col>
                         <v-col class="shrink d-flex justify-center align-center">
-                            <v-col>
-                                <v-btn color="teal" @click="approveCampaign(1)">Arrove</v-btn>
-                            </v-col>
-                            <v-col>
-                                <v-dialog v-model="rejectDialog" width="500">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn color="error" v-bind="attrs" v-on="on">
-                                            Reject</v-btn>
-                                    </template>
+                            <v-dialog v-model="rejectDialog" width="500">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-col>
+                                        <v-btn color="teal" v-bind="attrs" v-on="on">Approve</v-btn>
+                                    </v-col>
 
-                                    <v-card>
-                                        <v-card-title class="text-h5 grey lighten-2">
-                                            Privacy Policy
-                                        </v-card-title>
+                                    <v-btn color="error" v-bind="attrs" v-on="on">
+                                        Reject</v-btn>
+                                </template>
 
-                                        <v-card-text>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </v-card-text>
+                                <v-card>
+                                    <v-card-title class="text-h5 grey lighten-2">
+                                        Comment
+                                    </v-card-title>
 
-                                        <v-divider></v-divider>
+                                    <v-card-text>
+                                        <v-row class="my-5">
+                                            <v-col>
+                                                <v-textarea counter outlined v-model="comment" :rules="commentRules"
+                                                    name="input-7-1" label="Comment" value=""
+                                                    hint="Approve or Reject Comment">
+                                                </v-textarea>
+                                            </v-col>
+                                        </v-row>
 
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn color="primary" text @click="rejectDialog = false">
-                                                I accept
-                                            </v-btn>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-dialog>
+                                    </v-card-text>
 
-                            </v-col>
+                                    <v-divider></v-divider>
+
+                                    <v-card-actions>
+
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="primary" text @click="approveCampaign(1)">
+                                            Approve
+                                        </v-btn>
+                                        <v-btn color="primary" text @click="approveCampaign(2)">
+                                            Reject
+                                        </v-btn>
+                                        <v-btn color="primary" text @click="rejectDialog = false">
+                                            Cancel
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+
                         </v-col>
                     </v-row>
                 </v-alert>
@@ -323,7 +332,7 @@
                                     <v-row>
                                         <v-col md="10">
                                             <label>
-                                                <router-link to="/About"> {{ organizer.firstName }} {{
+                                                <router-link :to="{ path: '/Search?category='+'2'}"> {{ organizer.firstName }} {{
                                                         organizer.lastName
                                                 }}</router-link>
                                             </label>
@@ -368,14 +377,6 @@
                 </v-row>
             </v-col>
         </v-row>
-
-
-
-
-
-
-
-
     </v-container>
 </template>
 
@@ -405,6 +406,8 @@ export default {
             updates: [],
             mainImg: "../assets/img/main/noImg.jpg",
             role: "",
+            comment: "",
+            commentRules: [(v) => !!v || "Comment Required"],
         }
     },
     mounted() {
@@ -475,7 +478,6 @@ export default {
             })
             .catch(err => console.log(err.message));
 
-
     },
     methods: {
         makeDonation() {
@@ -488,18 +490,30 @@ export default {
             navigator.clipboard.writeText(this.currenturl);
         },
         approveCampaign(e) {
+            var userId = "";
+            if (localStorage.getItem("user_name") == "undefined") {
+                this.$router.push("/SignIn");
+            } else if (localStorage.getItem("user_name") != "") {
+                userId = localStorage.getItem("user_token");
+            }
             var status = "";
             if (e == 1) {
-                status = "Approved"
+                status = "Approved";
             }
             else {
-                status = "Rejected"
+                status = "Rejected";
             }
+
+            console.log(userId);
+
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
+                userId: userId,
                 id: this.id,
+                reqStatus: status,
+                reqComment: this.comment,
             });
 
             var requestOptions = {
@@ -510,7 +524,7 @@ export default {
                 redirect: "follow",
             };
 
-            fetch("http://localhost:3000/api/campaign/approveRejectCampaign", requestOptions)
+            fetch("http://localhost:3000/api/campaign/UpdateCampaignStatus", requestOptions)
                 .then(async (response) => {
                     const resdata = await response.json();
 
@@ -519,8 +533,8 @@ export default {
                         console.log("Error");
                     }
 
-                    //this.userData = resdata.data;
-                    this.organizer = resdata.data;
+                    this.rejectDialog = false;
+
                 })
                 .catch((error) => {
                     this.errorMessage = error;

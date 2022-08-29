@@ -162,7 +162,7 @@
 
                 </v-tab-item>
                 <v-tab-item :key="3" value="About">
-                  <DonorEdit :profile="profile" @message="getResponse" />
+                  <DonorEdit :profile="profile" :accessLevel="accessLevel" @message="getResponse" />
                 </v-tab-item>
               </v-tabs-items>
             </v-col>
@@ -186,8 +186,8 @@ export default {
   components: {
     DonorEdit
   },
+  props: ['id'],
   data() {
-    let id = localStorage.getItem("user_token")
     return {
       profile: null,
       alert: false,
@@ -202,6 +202,7 @@ export default {
       role: "",
       accStatus: "",
       donationLevel: "",
+      accessLevel: "",
 
       badges: [],
 
@@ -212,10 +213,19 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.getItem("user_name") == "undefined") {
-      this.$router.push("/SignIn");
-    } else if (localStorage.getItem("user_name") != "") {
-      let id = localStorage.getItem("user_token");
+   // if (localStorage.getItem("user_name") == "undefined") {
+  //    this.$router.push("/SignIn");
+  //  } else if (localStorage.getItem("user_name") != "") {
+
+    debugger;
+     let loginId = localStorage.getItem("user_token");
+
+     if(loginId == this.id){
+      this.accessLevel == "Edit"
+     }
+     else{
+      this.accessLevel == "View"
+     }
 
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -241,7 +251,6 @@ export default {
             // get error message from body or default to response statusText
           }
           console.log(resdata.data.accStatus);
-          //this.userData = resdata.data;
           this.role = resdata.data.role;
           this.accStatus = resdata.data.accStatus;
           this.donationLevel = resdata.data.donationLevel;
@@ -253,9 +262,7 @@ export default {
           this.errorMessage = error;
           console.error("There was an error!", error);
         });
-    } else {
-      this.$router.push("/EditProfile");
-    }
+
 
 
     fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=' + this.id)

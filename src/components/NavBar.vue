@@ -72,7 +72,8 @@ export default {
     logout(name) {
         if(name=="Profile")
         {
-            this.$router.push('/Profile');
+            let id = localStorage.getItem("user_token");
+            this.$router.push('/Profile/' + id);
         }
         //else if(name=="Watchlist")
        // {
