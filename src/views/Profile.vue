@@ -162,7 +162,7 @@
 
                 </v-tab-item>
                 <v-tab-item :key="3" value="About">
-                  <DonorEdit :profile="profile" :accessLevel="accessLevel" @message="getResponse" />
+                  <DonorEdit :profile="profile" :id="id"  @message="getResponse" />
                 </v-tab-item>
               </v-tabs-items>
             </v-col>
@@ -183,6 +183,7 @@ import storage from '@/firebase'
 import DonorEdit from "@/components/layouts/DonorEdit.vue";
 
 export default {
+  name: "profile",
   components: {
     DonorEdit
   },
@@ -198,11 +199,10 @@ export default {
       senderMessage: "",
       valid: true,
       dialog: false,
-      id: id,
+     // id: id,
       role: "",
       accStatus: "",
       donationLevel: "",
-      accessLevel: "",
 
       badges: [],
 
@@ -213,19 +213,9 @@ export default {
     }
   },
   mounted() {
-   // if (localStorage.getItem("user_name") == "undefined") {
-  //    this.$router.push("/SignIn");
-  //  } else if (localStorage.getItem("user_name") != "") {
 
-    debugger;
-     let loginId = localStorage.getItem("user_token");
 
-     if(loginId == this.id){
-      this.accessLevel == "Edit"
-     }
-     else{
-      this.accessLevel == "View"
-     }
+     
 
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");

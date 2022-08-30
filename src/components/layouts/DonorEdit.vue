@@ -6,7 +6,7 @@
             </v-col>
             <v-col>
                 <label class="text-h6">
-                    {{ profile.firstName }} {{ profile.lastName }}
+                    {{ profile.firstName }} {{ profile.lastName }} 
                 </label>
             </v-col>
             <v-col>
@@ -14,7 +14,7 @@
                 <v-dialog v-model="dialogbox" width="800">
                     <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab outlined color="teal">
+                        <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab outlined color="teal" v-if="accessLevel=='Edit'">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                     </template>
@@ -159,9 +159,10 @@ import { METHODS } from 'http';
 
 export default {
     name: "DonorEdit",
-    props: ["profile", "accessLevel"],
+    props: ["profile", "id"],
     data() {
         return {
+            accessLevel: "Edit",
             valid: true,
             dialogbox: false,
             firstNameRules: [v => !!v || 'First Name required'],
@@ -171,6 +172,15 @@ export default {
     },
     mounted() {
 
+        debugger;
+        let loginId = localStorage.getItem("user_token");
+
+     if(loginId == this.id){
+      this.accessLevel = "Edit"
+     }
+     else{
+      this.accessLevel = "View"
+     }
     },
     methods: {
         save() {
