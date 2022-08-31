@@ -149,7 +149,7 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
       password: "",
-      passwordRules: [(v) => !!v || "Please Enter First Name", v => v.length >= 8 || 'Min 8 characters'],
+      passwordRules: [(v) => !!v || "Please Enter Password", v => v.length >= 8 || 'Min 8 characters'],
     };
   },
   methods: {

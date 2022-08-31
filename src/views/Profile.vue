@@ -213,10 +213,6 @@ export default {
     }
   },
   mounted() {
-
-
-     
-
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
