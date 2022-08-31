@@ -1,166 +1,203 @@
 <template>
-<div class="main-container">
-<div class="sub-container">
-    <v-card class="mx-auto" max-width="600" >
-    <v-img
-      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-      height="200px"
-    ></v-img>
-
-<div class="main-title">
-      Sign Up
-</div>
-
-<hr class="line-break" />
-
-
-
-
-<v-form ref="form" v-model="valid" lazy-validation @submit.prevent="formSubmit">
   <v-container>
-      <v-row class="name">
-          <v-col cols="12" md="5" >
-          <v-text-field v-model="firstname" :rules="firstNameRules" label="First name" required></v-text-field>
-          </v-col>
-          <v-col cols="12" md="5" >
-          <v-text-field v-model="lastname" :rules="lastNameRules" label="Last name" required></v-text-field>
-          </v-col>
-      </v-row>
-      <v-row class="email">
-        <v-col cols="12" sm="2" >
-        </v-col>
-        <v-col cols="12" md="8" >
-        <v-text-field v-model="email" :rules="emailRules" label="E-mail" required ></v-text-field>
-    
-        </v-col>
-      </v-row>
-      <v-row class="password">
-        <v-col cols="12" md="2" >
-        </v-col>
-        <v-col cols="12" md="8" >
-    <v-text-field v-model="password" :rules="passwordRules" label="Password" required ></v-text-field>
-        </v-col>
-</v-row>
-<v-row class="usertype">
-    <v-col cols="12" md="3" >
-        Sign Up as?
-    </v-col>
-    <v-col cols="12" md="5" class="usertype-radio" >
-    <v-radio-group v-model="row" row class="usertype-radio">
-      <v-radio label="Donor" value="donor"></v-radio>
-      <v-radio label="Event Organizor" value="organizor" class="radio-item"></v-radio>
-    </v-radio-group>
-    </v-col>
-</v-row>
+    <v-row class="my-10">
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-card class="mx-auto">
+          <v-img
+            src="../assets/img/banner/signup-banner.jpg"
+            height="200px"
+          ></v-img>
 
-<v-row>
-  <v-col cols="12" md="4">
-        </v-col>
-          <v-col cols="1" md="1" >
-        </v-col>
-        <v-col cols="12" md="4" >
-    <v-btn class="mr-3" type="submit" color="success">
-        Resgiter
-      </v-btn>
-    </v-col>
-</v-row>
-      
+          <v-row class="my-5">
+            <v-spacer></v-spacer>
+            <v-col cols="4" class="shrink d-flex justify-center align-center">
+              <label class="main-title">Sign Up</label>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
+
+          <v-divider> </v-divider>
+          <v-row class="my-5"> </v-row>
+
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="firstName"
+                  :rules="firstNameRules"
+                  outlined
+                  dense
+                  label="First Name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-model="lastName"
+                  :rules="lastNameRules"
+                  outlined
+                  dense
+                  label="Last Name"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col cols="8">
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  outlined
+                  dense
+                  label="Email Address"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col cols="8">
+                <v-text-field
+                  v-model="password"
+                  :rules="passwordRules"
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                  name="input-10-1"
+                  label="Password"
+                  outlined
+                  dense
+                  required
+                  @click:append="show1 = !show1"
+                ></v-text-field>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col md="2" lg="2" sm="4" class="my-2">
+                <label>Sign up as? </label>
+              </v-col>
+              <v-col md="4" lg="4" sm="4" class="pa-0">
+                <v-radio-group v-model="radioGroup" mandatory>
+                  <v-radio label="Donor" value="Donor"></v-radio>
+                  <v-radio
+                    label="Campaign Organizor"
+                    value="Campaign Manager"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col class="shrink d-flex justify-center align-center">
+                <v-btn
+                  type="submit"
+                  color="success"
+                  :disabled="!valid"
+                  @click="validate"
+                >
+                  Resgiter
+                </v-btn>
+              </v-col>
+              <v-spacer></v-spacer>
+            </v-row>
+
+            <v-divider class="my-10"></v-divider>
+
+            <v-row>
+              <v-col
+                cols="12"
+                class="shrink d-flex justify-center align-center"
+              >
+                <label
+                  >By continuing, you agree to the Charity terms and acknowledge
+                  receipt of our privacy notice.</label
+                >
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </v-col>
+      <v-spacer></v-spacer>
+    </v-row>
   </v-container>
-  </v-form>
-
-  <hr class="line-break"/>
-  <br />
-
-  </v-card>
-</div>
-</div>
 </template>
-
-<style scoped>
-.main-container{
-    background: #fbf8f6;
-}
-.main-container{
-    margin-top: 80px;
-    background: #ffffff;
-}
-.main-title{
-  margin-left: 41%;
-  margin-top: 20px;
-  color: #072366;
-    font-size: 40px;
-    font-weight: bold;
-}
-.line-break{
-  margin: 20px;
-}
-.main-footer{
-  margin-left: 41%;
-  margin-top: px;
-}
-.name{
-    margin-left: 16%;
-}
-.email{
-    margin-left: 0px;
-}
-.password{
-    margin-left: 0px;
-}
-.usertype{
-    margin-left: 18%;
-}
-.usertype-radio{
-    margin: 10px;
-    padding: 0px;
-}
-.radio-item
-{
-    margin-top: 10px;
-}
-</style>
-
 <script>
-  export default {
-    data: () => ({
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      usertype: '',
-
+export default {
+  data() {
+    return {
+      show1: false,
       valid: true,
-      firstname: '',
-      firstNameRules: [
-        v => !!v || 'First Name required',
-      ],
-      lastname: '',
-      lastNameRules: [
-        v => !!v || 'Last Name required',
-      ],
-      password: '',
-      passwordRules: [
-        v => !!v || 'Password is required',
-      ],
-      email: '',
+      radioGroup: null,
+      firstName: "",
+      firstNameRules: [(v) => !!v || "Please Enter First Name"],
+      lastName: "",
+      lastNameRules: [(v) => !!v || "Please Enter Last Name"],
+      email: "",
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ]
-    }),
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
+      password: "",
+      passwordRules: [(v) => !!v || "Please Enter First Name", v => v.length >= 8 || 'Min 8 characters'],
+    };
+  },
+  methods: {
+    validate() {
+      if (this.$refs.form.validate()) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
 
-    methods: {
-      validate () {
-        this.$refs.form.validate()
-      },
-      formSubmit(){
-          console.log('Firstname', this.firstname)
-          console.log('Last name', this.lastname)
-          console.log('email', this.email)
-          console.log('password', this.password)
-          console.log('firstname', this.usertype)
-          console.log('form submit')
+        var raw = JSON.stringify({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+          role: this.radioGroup,
+        });
+
+        var requestOptions = {
+          method: "POST",
+          mode: "cors",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch("http://localhost:3000/api/user/addUser", requestOptions).then(
+          async (response) => {
+            const resdata = await response.json();
+
+            console.log(resdata);
+            debugger;
+            // check for error response
+            if (!response.ok) {
+              console.log("response Failed");
+            }
+            this.$router.push("/SignIn");
+          }
+        );
+        this.$router.push("/SignIn");
       }
     },
-  }
-</script>
+  },
+};
+</script> 
+
+<style scoped>
+.main-title {
+  color: #072366;
+  font-size: 40px;
+  font-weight: bold;
+}
+</style>
