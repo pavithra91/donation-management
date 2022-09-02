@@ -1,137 +1,71 @@
 <template>
-  <div class="main-container">
-    <div class="sub-container">
-      <v-card class="mx-auto" max-width="600">
-        <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
+  <v-container>
 
-        <div class="main-title">Sign in</div>
+        <v-alert outlined type="success" text :value="alert">
+      {{ alertMessage }}
+    </v-alert>
+    
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-card class="mx-auto">
+          <v-img
+            src="../assets/img/banner/signup-banner.jpg"
+            height="200px"
+          ></v-img>
 
-        <hr class="line-break" />
+          <v-row class="my-5">
+            <v-spacer></v-spacer>
+            <v-col cols="4" class="shrink d-flex justify-center align-center">
+              <label class="main-title">Sign in</label>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
 
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-container>
-            <v-row>
-              <v-col cols="12" md="3"> </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="3"> </v-col>
-              <v-col cols="12" md="6">
+          <v-divider class="mx-10"> </v-divider>
 
+          <v-row class="my-5"> </v-row>
 
-                <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" @click:append="show1 = !show1">
-                </v-text-field>
-
-
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="12" md="4"> </v-col>
-              <v-col cols="1" md="1"> </v-col>
-              <v-col cols="12" md="4">
-                <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-                  Sign In
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-form>
-
-        <hr class="line-break" />
-        <br />
-
-        <div class="main-footer">Forget Password?</div>
-        <br />
-      </v-card>
-    </div>
-  </div>
+          <SignInComp @message="getResponse" />
+        </v-card>
+      </v-col>
+      <v-spacer></v-spacer>
+    </v-row>
+  </v-container>
 </template>
 
-<style scoped>
-.main-container {
-  background: #fbf8f6;
-}
-
-.main-container {
-  margin-top: 80px;
-  background: #ffffff;
-}
-
-.main-title {
-  margin-left: 41%;
-  margin-top: 20px;
-  color: #072366;
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.line-break {
-  margin: 20px;
-}
-
-.main-footer {
-  margin-left: 41%;
-  margin-top: px;
-}
-</style>
-
 <script>
+import SignInComp from "@/components/layouts/SignInComp.vue";
+
 export default {
-  data: () => ({
-    valid: true,
-    name: "",
-    password: "",
-    show1: false,
-    passwordRules: [(v) => !!v || "Password is required"],
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
-  }),
-
+  components: {
+    SignInComp,
+  },
+  data() {
+    return {
+        alert: false,
+        alertMessage: "",
+      currentTab: "SignInComp",
+      tabs: ["SignInComp", "PosForgetPasswordts"],
+    };
+  },
   methods: {
-    validate() {
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        email: "pavidsscst@gmail.com",
-        password: "pass#word1",
-      });
-
-      var requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch("http://localhost:3000/api/user/authenticate", requestOptions)
-        .then(async (response) => {
-          const resdata = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response statusText
-          }
-
-          // Redirect to page
-          localStorage.setItem("user_token", resdata.data.token);
-          localStorage.setItem("user_name", resdata.data.userName);
-          localStorage.setItem("role", resdata.data.role);
-          this.$router.push('/Home');
-        })
-        .catch((error) => {
-          this.errorMessage = error;
-          console.error("There was an error!", error);
-        });
+    getResponse(value) {
+      this.alert = true;
+      this.alertMessage = value;
+      setTimeout(() => {
+        this.alert = false;
+      }, 4000);
     },
   },
 };
 </script>
+
+
+<style scoped>
+.main-title {
+  color: #072366;
+  font-size: 40px;
+  font-weight: bold;
+}
+</style>
