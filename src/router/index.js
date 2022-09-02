@@ -49,9 +49,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue')
   },
   {
-    path: '/EditProfile',
-    name: 'EditProfile',
-    component: () => import(/* webpackChunkName: "about" */ '../views/EditProfile.vue')
+    path: '/ResetPasswrod/:id',
+    name: 'ResetPasswrod',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ResetPasswrod.vue')
   },
   {
     path: '/Settings',

@@ -332,9 +332,11 @@
                                     <v-row>
                                         <v-col md="10">
                                             <label>
-                                                <router-link :to="{ path: '/Search?category='+'2'}"> {{ organizer.firstName }} {{
-                                                        organizer.lastName
-                                                }}</router-link>
+                                                <router-link :to="{ path: '/Search?category=' + '2' }"> {{
+                                                        organizer.firstName
+                                                }} {{
+        organizer.lastName
+}}</router-link>
                                             </label>
                                         </v-col>
                                         <v-col>

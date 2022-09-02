@@ -2,10 +2,7 @@
   <div class="main-container">
     <div class="sub-container">
       <v-card class="mx-auto" max-width="600">
-        <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-          height="200px"
-        ></v-img>
+        <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
 
         <div class="main-title">Sign in</div>
 
@@ -16,12 +13,7 @@
             <v-row>
               <v-col cols="12" md="3"> </v-col>
               <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -29,16 +21,11 @@
               <v-col cols="12" md="6">
 
 
-<v-text-field
-            v-model="password"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"      
-            :type="show1 ? 'text' : 'password'"
-            name="input-10-1"
-            label="Password"
-            @click:append="show1 = !show1"
-          ></v-text-field>
+                <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" @click:append="show1 = !show1">
+                </v-text-field>
 
-                
+
               </v-col>
             </v-row>
 
@@ -46,12 +33,7 @@
               <v-col cols="12" md="4"> </v-col>
               <v-col cols="1" md="1"> </v-col>
               <v-col cols="12" md="4">
-                <v-btn
-                  :disabled="!valid"
-                  color="success"
-                  class="mr-4"
-                  @click="validate"
-                >
+                <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
                   Sign In
                 </v-btn>
               </v-col>
@@ -73,10 +55,12 @@
 .main-container {
   background: #fbf8f6;
 }
+
 .main-container {
   margin-top: 80px;
   background: #ffffff;
 }
+
 .main-title {
   margin-left: 41%;
   margin-top: 20px;
@@ -84,9 +68,11 @@
   font-size: 40px;
   font-weight: bold;
 }
+
 .line-break {
   margin: 20px;
 }
+
 .main-footer {
   margin-left: 41%;
   margin-top: px;

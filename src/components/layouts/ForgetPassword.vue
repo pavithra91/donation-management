@@ -70,6 +70,36 @@ export default {
                 this.eMailSend = false;
                 this.resetInstructions = true;
                 this.btnStatus = true;
+
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+
+                var raw = JSON.stringify({
+                    id: this.id,
+                    email: this.email,
+                });
+
+                var requestOptions = {
+                    method: "POST",
+                    mode: "cors",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow",
+                };
+
+                fetch("http://localhost:3000/api/user/resetPasswordSendLink", requestOptions)
+                    .then(async (response) => {
+                        const resdata = await response.json();
+
+                        // check for error response
+                        if (!response.ok) {
+                            // get error message from body or default to response statusText
+                        }
+                    })
+                    .catch((error) => {
+                        this.errorMessage = error;
+                        console.error("There was an error!", error);
+                    });
             }
 
         },
