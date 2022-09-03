@@ -1,10 +1,9 @@
 <template>
   <v-container>
-
-        <v-alert outlined type="success" text :value="alert">
+    <v-alert outlined type="error" text :value="alert">
       {{ alertMessage }}
     </v-alert>
-    
+
     <v-row>
       <v-spacer></v-spacer>
       <v-col cols="6">
@@ -43,8 +42,8 @@ export default {
   },
   data() {
     return {
-        alert: false,
-        alertMessage: "",
+      alert: false,
+      alertMessage: "",
       currentTab: "SignInComp",
       tabs: ["SignInComp", "PosForgetPasswordts"],
     };

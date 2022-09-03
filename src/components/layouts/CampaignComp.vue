@@ -69,7 +69,6 @@ export default {
         calccampaignProgress() {
             return this.prgoessVal = (this.campaign.raiedAmount / this.campaign.goalAmount) * 100;
         }
-
     }
 }
 </script>

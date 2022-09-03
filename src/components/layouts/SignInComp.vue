@@ -1,5 +1,5 @@
 <template>
-    <v-form ref="form" v-model="valid" lazy-validation>
+<v-container>
         <v-row>
             <v-spacer></v-spacer>
             <v-col cols="5">
@@ -51,7 +51,7 @@
             <v-spacer></v-spacer>
         </v-row>
 
-    </v-form>
+</v-container>
 </template>
 
 <script>
@@ -63,6 +63,7 @@ export default {
     },
     data() {
         return {
+            show1: false,
             valid: true,
             dialog: false,
             email: "",

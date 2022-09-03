@@ -1,18 +1,18 @@
 <template>
-<v-container>
-              <v-row class="my-5">
-            <v-col offset-lg="1">
-                <label class="text-h3">Campaign Dashboard</label>
-            </v-col>
-        </v-row>
-  <v-layout row justify-center>
-    <v-row>
-      <v-col>
-        <CampaignComp :campaign="campaign" />
+  <v-container>
+    <v-row class="my-5">
+      <v-col offset-lg="1">
+        <label class="text-h3">Campaign Dashboard</label>
       </v-col>
     </v-row>
-  </v-layout>
-</v-container>
+    <v-layout row justify-center>
+      <v-row>
+        <v-col>
+          <CampaignComp :campaign="campaign" />
+        </v-col>
+      </v-row>
+    </v-layout>
+  </v-container>
 </template>
 
 

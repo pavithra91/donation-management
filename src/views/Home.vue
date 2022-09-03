@@ -5,8 +5,8 @@
     </v-banner>
     <v-layout row justify-center>
       <v-row class="my-3">
-        <v-col v-for="n in 3" :key="n">
-          <TopFundRaiser />
+        <v-col v-for="campaign in campaignList" :key="campaign.id">
+          <TopFundRaiser :campaign="campaign" />
         </v-col>
       </v-row>
     </v-layout>
@@ -147,6 +147,20 @@ export default {
   components: {
     TopFundRaiser
   },
+  data(){
+    return {
+      campaignList: null
+    }
+  },
+  mounted(){
+    fetch('http://localhost:3000/api/campaign/getTopFundRaisers')
+      .then(async (response) => {
+        const resdata = await response.json()
+        this.campaignList = resdata.data
+
+      })
+      .catch(err => console.log(err.message))
+  }
 }
 </script>
 
