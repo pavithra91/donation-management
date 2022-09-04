@@ -6,7 +6,7 @@
             </v-col>
             <v-col>
                 <label class="text-h6">
-                    {{ profile.firstName }} {{ profile.lastName }} 
+                    {{ profile.firstName }} {{ profile.lastName }}
                 </label>
             </v-col>
             <v-col>
@@ -14,7 +14,8 @@
                 <v-dialog v-model="dialogbox" width="800">
                     <template v-slot:activator="{ on, attrs }">
 
-                        <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab outlined color="teal" v-if="accessLevel=='Edit'">
+                        <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab outlined color="teal"
+                            v-if="accessLevel=='Edit'">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                     </template>
@@ -56,7 +57,7 @@
                                     </v-col>
                                     <v-col>
                                         <div class="text-center">
-                                            <v-text-field v-model="profile.phone" :rules="phoneNameRules" label="phone"
+                                            <v-text-field v-model="profile.phone" :rules="phoneNameRules" label="Phone"
                                                 outlined required></v-text-field>
                                         </div>
                                     </v-col>
@@ -70,11 +71,12 @@
                                         </div>
                                     </v-col>
                                     <v-col>
-
+                                        <div class="text-center">
+                                            <v-text-field v-model="profile.city" :rules="cityRules" label="City"
+                                                outlined></v-text-field>
+                                        </div>
                                     </v-col>
-
                                 </v-row>
-
                                 <v-divider></v-divider>
                             </v-form>
 
@@ -128,6 +130,17 @@
             </v-col>
         </v-row>
 
+        <v-row>
+            <v-col md="2">
+                <label class="text-h6 font-weight-bold">City : </label>
+            </v-col>
+            <v-col>
+                <label class="text-h6">
+                    {{ profile.city }}
+                </label>
+            </v-col>
+        </v-row>
+
         <v-divider class="my-5"></v-divider>
         <v-row>
             <v-col md="2">
@@ -168,6 +181,7 @@ export default {
             firstNameRules: [v => !!v || 'First Name required'],
             lastNameRules: [v => !!v || 'Last Name required'],
             phoneNameRules: [v => !!v || 'First Name required'],
+            cityRules: [v => !!v || 'City required'],
         }
     },
     mounted() {
@@ -196,6 +210,7 @@ export default {
                 lastName: this.profile.lastName,
                 phone: this.profile.phone,
                 address: this.profile.address,
+                city: this.profile.city,
             });
 
             var requestOptions = {

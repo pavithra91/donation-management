@@ -19,7 +19,10 @@
                         <v-col cols="9" class="text-truncate mx-4">
                             {{ item.shortDescription }}
                         </v-col>
-                        <v-btn icon color="grey">
+                        <v-btn icon v-if="watchlist" color="red">
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+                        <v-btn icon v-else color="grey">
                             <v-icon>mdi-heart</v-icon>
                         </v-btn>
                     </v-row>
@@ -52,7 +55,7 @@
 <script>
 export default {
     name: "CampaignComp",
-    props: ["campaign"],
+    props: ["campaign", "watchlist"],
     data() {
         return {
 

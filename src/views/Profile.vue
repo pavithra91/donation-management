@@ -9,18 +9,18 @@
         <input type="file" @change="onFileSelected" ref="fileInput" style="display: none;" />
       </v-col>
       <v-col md="9">
-        <v-col><label class="text-h4">Pavithra Bhagya Jayasundara</label>
+        <v-col><label class="text-h4">{{profile.firstName}} {{profile.lastName}}</label>
         </v-col>
 
         <v-col>
           <v-icon>fa-solid fa-location-dot</v-icon>
-          <label class="pa-3">Location</label>
+          <label class="pa-3">{{profile.city}}</label>
         </v-col>
         <v-col md="10">
           <label class="pa-3">{{ donationLevel }}</label>
 
           <v-col md="6">
-            <v-progress-linear value="20" height="8" color="#09cc7f"></v-progress-linear>
+            <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f"></v-progress-linear>
             <label>{{ minPoints }}</label>
             <label class="float-right">{{ maxPoints }} </label>
           </v-col>
@@ -369,6 +369,12 @@ export default {
           });
       });
     },
-  }
+  },
+  computed: {
+    calccampaignProgress() {
+      debugger;
+      return this.prgoessVal = (this.profile.donationPoints / this.campaign.goalAmount) * 100;
+    },
+  },
 };
 </script>

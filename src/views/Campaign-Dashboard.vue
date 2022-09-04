@@ -8,7 +8,7 @@
     <v-layout row justify-center>
       <v-row>
         <v-col>
-          <CampaignComp :campaign="campaign" />
+          <CampaignComp :campaign="campaign" :watchlist="watchlist" />
         </v-col>
       </v-row>
     </v-layout>
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       campaign: null,
+      watchlist: false,
     };
   },
   mounted() {

@@ -5,7 +5,8 @@
     <v-row class="mt-0">
       <v-col md="11" lg="11" sm="8" class="d-inline-block text-truncate">
         <v-card-title class="my-0">
-          {{ campaign.campaignName }}
+          <router-link :to="{ path: '/Campaign/' + campaign.id}"><label>{{ campaign.campaignName }}</label></router-link>
+          
         </v-card-title>
       </v-col>
     </v-row>
