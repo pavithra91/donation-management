@@ -19,7 +19,7 @@
         <v-col md="10">
           <label class="pa-3">{{ donationLevel }}</label>
 
-          <v-col md="6">
+          <v-col md="6" v-if="role != 'Administrator'">
             <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f"></v-progress-linear>
             <label>{{ minPoints }}</label>
             <label class="float-right">{{ maxPoints }} </label>
@@ -99,10 +99,10 @@
           <v-col md="12">
             <v-col md="6">
               <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-                <v-tab href="#Badges">
+                <v-tab href="#Badges" v-if="role != 'Administrator'">
                   Badges
                 </v-tab>
-                <v-tab href="#Donations">
+                <v-tab href="#Donations" v-if="role != 'Administrator'">
                   Donations
                 </v-tab>
                 <v-tab href="#About">
@@ -114,7 +114,7 @@
 
             <v-col md="12">
               <v-tabs-items v-model="tab">
-                <v-tab-item :key="1" value="Badges">
+                <v-tab-item :key="1" value="Badges" v-if="role != 'Administrator'">
                   <v-card>
                     <v-row>
                       <v-col md="2" v-for="badge in badges" :key="badge.id">
@@ -137,7 +137,7 @@
                   </v-card>
                 </v-tab-item>
 
-                <v-tab-item :key="2" value="Donations">
+                <v-tab-item :key="2" value="Donations" v-if="role != 'Administrator'">
                   <v-row class="pa-8">
                     <v-col>
                       <label>Your Recent Donation Details are displyed here</label>
@@ -174,6 +174,19 @@
       <v-col>
       </v-col>
     </v-row>
+
+    <v-row>
+      <Chat
+        iconColorProp="#e6e6e6"
+        messageOutColorProp="#4d9e93"
+        messageInColorProp="#f1f0f0"
+        messageBackgroundColorProp="#ffffff"
+        :messageListProp="messageList"
+        :initOpenProp="initOpen"
+        @onToggleOpen="handleToggleOpen"
+        @onMessageWasSent="handleMessageReceived"
+      />
+    </v-row>
   </v-container>
 </template>
 
@@ -181,11 +194,14 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from '@/firebase'
 import DonorEdit from "@/components/layouts/DonorEdit.vue";
+import {Chat} from 'vue-chat-widget'
+import incomingMessageSound from '../assets/notification.mp3' // pick an audio file for chat response
 
 export default {
   name: "profile",
   components: {
-    DonorEdit
+    DonorEdit,
+    Chat,
   },
   props: ['id'],
   data() {
@@ -209,10 +225,18 @@ export default {
       minPoints: 1500,
       maxPoints: 2000,
       userPoints: 75,
-      imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png"
+      imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png",
+
+      msg: "",
+      messageList: [],
+      initOpen: false,
+      toggledOpen: false
     }
   },
   mounted() {
+    this.messageList.push({ body: 'Welcome to the chat, I\'m David!', author: 'them' })
+
+
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -369,11 +393,99 @@ export default {
           });
       });
     },
+    // Send message from you
+    handleMessageReceived(message) {
+      this.messageList.push(message)
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: "lqblyRwIeylJjL6V8Chj",
+        msg: message,
+        sender: "you",
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/misc/sendChatMessage", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+    },
+    // Chat toggled open event emitted
+    handleToggleOpen(close) {
+
+        if(this.toggledOpen.name == "open"){
+            this.toggledOpen = close;
+            this.toggledOpen = false;
+            this.messageList = [];
+            return;
+        }
+        else{
+            this.toggledOpen = open
+        }
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: "lqblyRwIeylJjL6V8Chj",
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/misc/getUserChat", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+          console.log(resdata.data);
+
+          resdata.data.forEach(element => {
+            if(element.sender =="you"){
+                this.messageList.push({ body: element.msg.body, author: 'you' })
+            }
+            else{
+                this.messageList.push({ body: element.msg.body, author: 'them' })
+            }
+          });
+
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+
+    },
   },
   computed: {
     calccampaignProgress() {
-      debugger;
-      return this.prgoessVal = (this.profile.donationPoints / this.campaign.goalAmount) * 100;
+      return this.prgoessVal = (this.profile.donationPoints / this.profile.goalAmount) * 100;
     },
   },
 };

@@ -3,7 +3,7 @@
         <v-row>
             <v-col md="10" lg="8" offset-md="1" offset-lg="2">
                 <v-alert prominent type="success"
-                    v-if="(role == 'Admin' || role == 'Staff') && (campaign.campaignStatus == 'Request')">
+                    v-if="(role == 'Administrator' || role == 'Staff') && (campaign.campaignStatus == 'Request')">
                     <v-row>
                         <v-col class="grow my-4">
                             Approve campaign for {{ campaign.campaignName }}
@@ -62,14 +62,16 @@
                     <v-col></v-col>
                 </v-row>
 
-                <v-alert prominent type="success" v-if="role == 'Campaign Manager'">
+                <router-link :to="{ name: 'About', params: { campaignObj: this.campaign } }">Edit</router-link>
+
+                <v-alert prominent type="success" v-if="role =='Campaign Manager'">
                     <v-row>
                         <v-col class="grow my-4">
                             Edit campaign for {{ campaign.campaignName }}.
                         </v-col>
                         <v-col class="shrink d-flex justify-center align-center">
                             <v-col>
-                                <v-btn color="teal">Edit</v-btn>
+                                <router-link :to="{ name: 'About', params: { campaign: this.campaign } }">Edit</router-link>
                             </v-col>
                             <v-col>
                                 <v-btn color="error">Cancel</v-btn>
@@ -92,7 +94,7 @@
 
                 <v-row>
                     <v-col md="6">
-                        <v-img :src=campaign.mainImg width="100%" height="30rem" contain>
+                        <v-img :src=campaign.mainImg width="100%" height="30rem" contain v-if="campaign">
                         </v-img>
                     </v-col>
 
@@ -301,7 +303,7 @@
                                 </v-card>
                             </v-tab-item>
                             <v-tab-item :key="4" value="Comments">
-                                <v-card flat style="margin-top: 20px;">
+                                <v-card flat style="margin-top: 20px;" v-if="!comments.length">
                                     <div v-for="comment in comments" :key="comment.id">
                                         <v-row>
                                             <v-col cols="2">
@@ -390,29 +392,6 @@ export default {
     },
     props: ['id'],
     data() {
-        return {
-            organizer: null,
-            currenturl: "test",
-            dialog: false,
-            dialogs: false,
-            rejectDialog: false,
-            campaign: null,
-            noOfDonations: 1095,
-            prgoessVal: 0,
-            organizerId: "",
-            campaignDate: "2022-07-22",
-            tags: ['Medical'],
-            tab: null,
-            comments: [],
-            FAQ: [],
-            updates: [],
-            mainImg: "../assets/img/main/noImg.jpg",
-            role: "",
-            comment: "",
-            commentRules: [(v) => !!v || "Comment Required"],
-        }
-    },
-    mounted() {
         this.role = localStorage.getItem("role");
         this.currenturl = window.location.origin + this.$router.currentRoute.fullPath;
         fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
@@ -480,6 +459,31 @@ export default {
             })
             .catch(err => console.log(err.message));
 
+        return {
+            organizer: null,
+            currenturl: "test",
+            dialog: false,
+            dialogs: false,
+            rejectDialog: false,
+            campaign: null,
+            noOfDonations: 1095,
+            prgoessVal: 0,
+            organizerId: "",
+            campaignDate: "2022-07-22",
+            tags: ['Medical'],
+            tab: null,
+            comments: [],
+            FAQ: [],
+            updates: [],
+            mainImg: "../assets/img/main/noImg.jpg",
+            role: "",
+            comment: "",
+            commentRules: [(v) => !!v || "Comment Required"],
+        }
+    },
+    mounted() {
+
+
     },
     methods: {
         makeDonation() {
@@ -493,10 +497,12 @@ export default {
         },
         approveCampaign(e) {
             var userId = "";
-            if (localStorage.getItem("user_name") == "undefined") {
-                this.$router.push("/SignIn");
-            } else if (localStorage.getItem("user_name") != "") {
-                userId = localStorage.getItem("user_token");
+
+            if (!this.$session.exists()) {
+                this.$router.push('/SignIn');
+            }
+            else{
+                userId = this.$session.get('user_token');  
             }
             var status = "";
             if (e == 1) {
@@ -536,6 +542,7 @@ export default {
                     }
 
                     this.rejectDialog = false;
+                    window.location.reload();
 
                 })
                 .catch((error) => {

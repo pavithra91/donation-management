@@ -102,10 +102,15 @@ export default {
             this.$emit('message', "Wrong Username or Password");
           }
 
+          this.$session.start();
+          this.$session.set("user_token", resdata.data.token);
+          this.$session.set("user_name", resdata.data.userName);
+          this.$session.set("role", resdata.data.role);
+
           // Redirect to page
-          localStorage.setItem("user_token", resdata.data.token);
-          localStorage.setItem("user_name", resdata.data.userName);
-          localStorage.setItem("role", resdata.data.role);
+         // localStorage.setItem("user_token", resdata.data.token);
+        //  localStorage.setItem("user_name", resdata.data.userName);
+        //  localStorage.setItem("role", resdata.data.role);
           this.$router.push('/Home');
         })
         .catch((error) => {

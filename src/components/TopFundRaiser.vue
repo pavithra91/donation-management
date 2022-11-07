@@ -77,7 +77,6 @@ export default {
   },
   computed: {
     calccampaignProgress() {
-      debugger;
       return this.prgoessVal = (this.campaign.raiedAmount / this.campaign.goalAmount) * 100;
     },
   },
