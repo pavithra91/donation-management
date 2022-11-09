@@ -9,10 +9,10 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import VueSocialSharing from 'vue-social-sharing'
 import VueSession from "vue-session"
+import JsonExcel from "vue-json-excel";
 
 
-
-
+Vue.component("downloadExcel", JsonExcel);
 Vue.component('font-awesome-icon', FontAwesomeIcon) // Register component globally
 library.add(fas) // Include needed icons
 library.add(fab)
