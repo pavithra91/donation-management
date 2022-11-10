@@ -10,6 +10,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import VueSocialSharing from 'vue-social-sharing'
 import VueSession from "vue-session"
 import JsonExcel from "vue-json-excel";
+import EmojiPicker from '@zaichaopan/emoji-picker';
 
 
 Vue.component("downloadExcel", JsonExcel);
@@ -19,6 +20,7 @@ library.add(fab)
 
 Vue.use(VueSocialSharing);
 Vue.use(VueSession)
+Vue.use(EmojiPicker);
 
 Vue.config.productionTip = false
 

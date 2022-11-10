@@ -17,15 +17,7 @@
         ></v-select>
       </v-col>
 
-      <v-col>
-        <v-btn class="success" @click="filter">Filter</v-btn>
-      </v-col>
-
-      <v-col md="1"> </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col md="3">
+      <v-col md="2">
         <v-menu
           ref="FromMenu"
           v-model="FromMenu"
@@ -60,10 +52,8 @@
           </v-date-picker>
         </v-menu>
       </v-col>
-
       <v-spacer></v-spacer>
-
-      <v-col md="3">
+      <v-col md="2">
         <v-menu
           ref="ToMenu"
           v-model="ToMenu"
@@ -92,6 +82,20 @@
           </v-date-picker>
         </v-menu>
       </v-col>
+
+      <v-col>
+        <v-btn class="success" @click="filter">Filter</v-btn>
+      </v-col>
+
+      <v-col md="2"> </v-col>
+    </v-row>
+
+    <v-row>
+
+
+
+
+
 
       <v-spacer></v-spacer>
       <v-col></v-col>

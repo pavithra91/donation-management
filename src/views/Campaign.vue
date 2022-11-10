@@ -64,14 +64,15 @@
 
                 <router-link :to="{ name: 'About', params: { campaignObj: this.campaign } }">Edit</router-link>
 
-                <v-alert prominent type="success" v-if="role =='Campaign Manager'">
+                <v-alert prominent type="success" v-if="role == 'Campaign Manager'">
                     <v-row>
                         <v-col class="grow my-4">
                             Edit campaign for {{ campaign.campaignName }}.
                         </v-col>
                         <v-col class="shrink d-flex justify-center align-center">
                             <v-col>
-                                <router-link :to="{ name: 'About', params: { campaign: this.campaign } }">Edit</router-link>
+                                <router-link :to="{ name: 'About', params: { campaign: this.campaign } }">Edit
+                                </router-link>
                             </v-col>
                             <v-col>
                                 <v-btn color="error">Cancel</v-btn>
@@ -103,7 +104,7 @@
                             <v-card-text>
                                 <v-row>
                                     <v-col md="8">
-                                        <label class="Title">{{ campaign.raiedAmount }}</label>
+                                        <label class="Title" v-if="campaign">{{ campaign.raiedAmount }}</label>
                                         <label class="ml-2 font-weight-bold text-h6">(LKR) RAISED </label>
                                     </v-col>
                                 </v-row>
@@ -125,7 +126,9 @@
                                         <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                                         </v-progress-linear>
                                         <label class="font-weight-bold text-h6">Goal: </label>
-                                        <label class="text-h6">LKR {{ campaign.goalAmount.toLocaleString() }}</label>
+                                        <label class="text-h6" v-if="campaign">LKR {{
+                                                campaign.goalAmount.toLocaleString()
+                                        }}</label>
                                     </v-col>
                                 </v-row>
 
@@ -303,11 +306,11 @@
                                 </v-card>
                             </v-tab-item>
                             <v-tab-item :key="4" value="Comments">
-                                <v-card flat style="margin-top: 20px;" v-if="!comments.length">
+                                <v-card flat style="margin-top: 20px;" v-if="comments">
                                     <div v-for="comment in comments" :key="comment.id">
                                         <v-row>
                                             <v-col cols="2">
-                                                <div>
+                                                <div v-if="comments">
                                                     <v-img :src=comment.profileImg width="50" height="50">
                                                     </v-img>
                                                 </div>
@@ -320,6 +323,24 @@
                                         </v-row>
                                     </div>
                                 </v-card>
+
+                                <div class="my-5">
+                                    <v-row>
+                                        <v-col md="10">
+                                            <emoji-picker @emoji:picked="handleEmojiPicked" :data="data"
+                                                class="textarea-emoji-picker mx-0 my-13" />
+
+                                            <v-textarea v-model="commentbox" outlined name="input-7-4" label="Comment">
+                                            </v-textarea>
+
+                                        </v-col>
+                                        <v-col md="2">
+                                            <v-btn text class="success" @click="postComment">
+                                                Post
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </div>
                             </v-tab-item>
                         </v-tabs-items>
                     </v-col>
@@ -327,13 +348,13 @@
                     <v-col md="5" lg="4" class="my-4">
                         <v-card>
                             <v-row>
-                                <v-col offset-xl="1" md="5" lg="3">
+                                <v-col offset-xl="1" md="5" lg="3" v-if="organizer">
                                     <v-img :src=organizer.profileImg width="100" height="100"></v-img>
                                 </v-col>
                                 <v-col>
                                     <v-row>
                                         <v-col md="10">
-                                            <label>
+                                            <label v-if="organizer">
                                                 <router-link :to="{ path: '/Search?category=' + '2' }"> {{
                                                         organizer.firstName
                                                 }} {{
@@ -352,7 +373,7 @@
                                                 </template>
 
                                                 <v-card>
-                                                    <v-card-title class="text-h5 grey lighten-2">
+                                                    <v-card-title class="text-h5 grey lighten-2" v-if="organizer">
                                                         Contact {{ organizer.firstName }} {{ organizer.lastName }}
                                                     </v-card-title>
 
@@ -385,6 +406,7 @@
 </template>
 
 <script>
+import data from '@zaichaopan/emoji-picker/data/emojis.json';
 export default {
     name: 'About',
     components: {
@@ -392,74 +414,9 @@ export default {
     },
     props: ['id'],
     data() {
-        this.role = localStorage.getItem("role");
-        this.currenturl = window.location.origin + this.$router.currentRoute.fullPath;
-        fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
-            .then(async (response) => {
-                const resdata = await response.json()
-
-                this.campaign = resdata.data
-
-                this.organizerId = resdata.data.createdBy
-                //console.log("Organizer Name " + this.organizerName)
-
-                var myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
-
-                var raw = JSON.stringify({
-                    id: this.organizerId,
-                });
-
-                var requestOptions = {
-                    method: "POST",
-                    mode: "cors",
-                    headers: myHeaders,
-                    body: raw,
-                    redirect: "follow",
-                };
-
-                fetch("http://localhost:3000/api/user/getUser", requestOptions)
-                    .then(async (response) => {
-                        const resdata = await response.json();
-
-                        // check for error response
-                        if (!response.ok) {
-                            console.log("Error");
-                        }
-
-                        //this.userData = resdata.data;
-                        this.organizer = resdata.data;
-                    })
-                    .catch((error) => {
-                        this.errorMessage = error;
-                        console.error("There was an error!", error);
-                    });
-
-            })
-            .catch(err => console.log(err.message));
-
-        fetch('http://localhost:3000/api/campaign/getCampaignDetails?id=' + this.id)
-            .then(async (response) => {
-                const resdata = await response.json()
-
-                //  console.log(resdata.data);
-
-                if (resdata.data[0] != null) {
-                    this.comments = resdata.data[0];
-                    //     console.log(this.comments);
-                }
-                if (resdata.data[1] != null) {
-                    this.FAQ = resdata.data[1];
-                    //    console.log(this.FAQ);
-                }
-                if (resdata.data[2] != null) {
-                    this.updates = resdata.data[2];
-                    //    console.log(this.updates);
-                }
-            })
-            .catch(err => console.log(err.message));
-
         return {
+            commentbox: "",
+            data: data,
             organizer: null,
             currenturl: "test",
             dialog: false,
@@ -479,13 +436,82 @@ export default {
             role: "",
             comment: "",
             commentRules: [(v) => !!v || "Comment Required"],
+            raiedAmount: 0,
+            profileImg: ""
         }
     },
-    mounted() {
-
-
+    created() {
+        this.initialize();
     },
     methods: {
+        initialize() {
+            this.role = localStorage.getItem("role");
+            this.currenturl = window.location.origin + this.$router.currentRoute.fullPath;
+            fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
+                .then(async (response) => {
+                    const resdata = await response.json()
+
+                    this.campaign = resdata.data
+
+                    this.organizerId = resdata.data.createdBy
+                    //console.log("Organizer Name " + this.organizerName)
+
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+
+                    var raw = JSON.stringify({
+                        id: this.organizerId,
+                    });
+
+                    var requestOptions = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: "follow",
+                    };
+
+                    fetch("http://localhost:3000/api/user/getUser", requestOptions)
+                        .then(async (response) => {
+                            const resdata = await response.json();
+
+                            // check for error response
+                            if (!response.ok) {
+                                console.log("Error");
+                            }
+
+                            //this.userData = resdata.data;
+                            this.organizer = resdata.data;
+                        })
+                        .catch((error) => {
+                            this.errorMessage = error;
+                            console.error("There was an error!", error);
+                        });
+
+                })
+                .catch(err => console.log(err.message));
+
+            fetch('http://localhost:3000/api/campaign/getCampaignDetails?id=' + this.id)
+                .then(async (response) => {
+                    const resdata = await response.json()
+
+                    //  console.log(resdata.data);
+
+                    if (resdata.data[0] != null) {
+                        this.comments = resdata.data[0];
+                        console.log(this.comments);
+                    }
+                    if (resdata.data[1] != null) {
+                        this.FAQ = resdata.data[1];
+                        //    console.log(this.FAQ);
+                    }
+                    if (resdata.data[2] != null) {
+                        this.updates = resdata.data[2];
+                        //    console.log(this.updates);
+                    }
+                })
+                .catch(err => console.log(err.message));
+        },
         makeDonation() {
             this.$router.push({
                 name: 'Donate',
@@ -501,8 +527,8 @@ export default {
             if (!this.$session.exists()) {
                 this.$router.push('/SignIn');
             }
-            else{
-                userId = this.$session.get('user_token');  
+            else {
+                userId = this.$session.get('user_token');
             }
             var status = "";
             if (e == 1) {
@@ -549,6 +575,13 @@ export default {
                     this.errorMessage = error;
                     console.error("There was an error!", error);
                 });
+        },
+        handleEmojiPicked(emoji) {
+            // alert("test");
+            this.commentbox += emoji;
+        },
+        postComment(){
+
         }
     },
     computed: {
@@ -571,4 +604,15 @@ export default {
     font-size: 50px;
 
 }
+
+.textarea-emoji-picker {
+    position: absolute;
+    inset-inline-end: 20%;
+    inset-block-end: 0;
+    z-index: 1;
+}
+[contenteditable="true"]:empty:before {
+    content: attr(placeholder);
+    color: grey;
+  }
 </style>

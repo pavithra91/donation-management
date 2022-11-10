@@ -62,6 +62,13 @@
             <v-list-item-title class="sub-title">User Report</v-list-item-title>
           </v-list-item>
 
+          <v-list-item @click="toggleComponentFive">
+            <v-list-item-icon>
+              <i class="fa fa-book fa-2x"></i>
+            </v-list-item-icon>
+            <v-list-item-title class="sub-title">Systems Logs</v-list-item-title>
+          </v-list-item>
+
           <v-divider class="my-5"></v-divider>
 
           <v-list-item class="my-5">
@@ -91,7 +98,7 @@
 
 <script>
 import DashboardComp from "@/components/Reports/DashboardComp.vue";
-import CampaignOrganizerRequestComp from "@/components/CampaignOrganizerRequestComp.vue";
+import CampaignOrganizerRequestComp from "@/components/Reports/CampaignOrganizerRequestComp.vue";
 import CampaignRequestComp from "@/components/Reports/CampaignRequestComp.vue";
 import CampaignComp from "@/components/Reports/CampaignComp.vue";
 import DonationTransactionComp from "@/components/Reports/DonationTransactionComp.vue";

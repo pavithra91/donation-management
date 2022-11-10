@@ -2,7 +2,7 @@
   <v-card flat>
     <v-row>
       <v-col md="2">
-        <v-select :items="campaignStatusList" v-model="CampaignStatusValue" label="Campaign Report"></v-select>
+        <v-select :items="campaignStatusList" v-model="CampaignStatusValue" label="Campaign Status"></v-select>
       </v-col>
 
       <v-spacer></v-spacer>
