@@ -21,7 +21,6 @@
                 <v-btn text>Latest Causes</v-btn>
             </v-toolbar-items>
             <v-toolbar-items v-if="userName">
-
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn v-bind="attrs" v-on="on" text>
@@ -37,7 +36,7 @@
             </v-toolbar-items>
             <v-toolbar-items v-else>
                 <v-btn text>
-                    <router-link :to="{ name: 'SignIn' }">Sign In</router-link>
+                    <router-link :to="{ name: 'SignUp' }">Sign Up</router-link>
                 </v-btn>
             </v-toolbar-items>
             <v-toolbar-items>
@@ -78,10 +77,10 @@ export default {
                 let id = this.$session.get('user_token');
                 this.$router.push('/Profile/' + id);
             }
-            //else if(name=="Watchlist")
-            // {
-            //     this.$router.push('/Watchlist');
-            // }
+            else if(name=="Watchlist")
+             {
+                 this.$router.push('/Watchlist');
+             }
             else {
                 this.$session.destroy();
                 this.$router.go('/SignIn');

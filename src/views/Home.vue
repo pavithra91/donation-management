@@ -3,6 +3,16 @@
     <v-banner>
       <v-img :src="require('../assets/img/banner/1.png')" class="my-2" max-width="100%" max-height="100%" />
     </v-banner>
+
+    <div class="wrapper">
+  <div class="static-txt">Fundraise for...</div>
+  <ul class="dynamic-txts">
+    <li><span>Yourself</span></li>
+    <li><span>Friends</span></li>
+    <li><span>Charity</span></li>
+  </ul>
+</div>
+
     <v-layout row justify-center>
       <v-row class="my-3">
         <v-col v-for="campaign in campaignList" :key="campaign.id">
@@ -181,4 +191,74 @@ export default {
 .category-icon-div {
   padding-top: 50px;
 }
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+.wrapper{
+  display: flex;
+  position: absolute;
+  left:10%; top: 15%;
+
+}
+.wrapper .static-txt{
+  color: #cef5e5;
+  font-size: 60px;
+  font-weight: 400;
+  
+}
+
+.wrapper .dynamic-txts{
+  margin-left: 15px;
+  line-height: 90px;
+  height: 90px;
+  overflow: hidden;
+}
+.dynamic-txts li{
+  list-style:none;
+  color: #4caf50 ;
+  font-size: 60px;
+  font-weight: 500;
+  top:0;
+  position: absolute;
+  
+  animation: slide 12s steps(4)
+  infinite;
+}
+.dynamic-txts li {
+  position: relative;
+}
+
+.dynamic-txts li ::after{
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  border-left: 2px solid #4caf50 ;
+  left:0;
+  animation: typing 3s steps(10)
+  infinite;
+}
+
+@keyframes typing{
+  40%,
+  60%{
+    left: calc(100% + 30px);
+  }
+  100%{
+    left:0;
+  }
+}
+
+@keyframes slide{
+  100%{
+    top: -360px;
+  }
+}
+
 </style>

@@ -106,6 +106,13 @@ export default {
           this.$session.set("user_token", resdata.data.token);
           this.$session.set("user_name", resdata.data.userName);
           this.$session.set("role", resdata.data.role);
+          this.$session.set("fullname", resdata.data.fullname);
+
+          alert(resdata.data.profileImg);
+
+          if(resdata.data.profileImg !=null){
+            this.$session.set("profileImg", resdata.data.profileImg);
+          }
 
           // Redirect to page
          // localStorage.setItem("user_token", resdata.data.token);

@@ -6,14 +6,16 @@
         <router-view/>
       </v-main>
     </v-main>
+    <Footer />
   </v-app>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar'
+import Footer from '@/components/layouts/Footer'
 export default {
   name: 'App',
-  components: {NavBar},
+  components: {NavBar, Footer},
   data: () => ({
     //
   }),

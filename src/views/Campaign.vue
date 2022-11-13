@@ -62,28 +62,7 @@
                     <v-col></v-col>
                 </v-row>
 
-                <router-link :to="{ name: 'About', params: { campaignObj: this.campaign } }">Edit</router-link>
 
-                <v-alert prominent type="success" v-if="role == 'Campaign Manager'">
-                    <v-row>
-                        <v-col class="grow my-4">
-                            Edit campaign for {{ campaign.campaignName }}.
-                        </v-col>
-                        <v-col class="shrink d-flex justify-center align-center">
-                            <v-col>
-                                <router-link :to="{ name: 'About', params: { campaign: this.campaign } }">Edit
-                                </router-link>
-                            </v-col>
-                            <v-col>
-                                <v-btn color="error">Cancel</v-btn>
-                            </v-col>
-                        </v-col>
-                    </v-row>
-                </v-alert>
-
-                <v-row v-else>
-                    <v-col></v-col>
-                </v-row>
 
                 <v-row>
                     <v-col>
@@ -281,6 +260,60 @@
                                 <v-card flat>
                                     <v-card-text></v-card-text>
 
+                                    <v-row v-if="createdby == campaign.createdBy">
+                                        <v-col md="8">
+
+                                        </v-col>
+                                        <v-spacer></v-spacer>
+                                        <v-col>
+                                            <v-dialog v-model="editCampaignStoryDialog" width="850">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab
+                                                        outlined color="teal">
+
+                                                        <v-icon>mdi-pencil</v-icon>
+                                                    </v-btn>
+                                                </template>
+
+                                                <v-card>
+                                                    <v-card-title class="text-h5">
+                                                        <div style="margin: 10px;">Edit Campaign Story</div>
+                                                    </v-card-title>
+
+
+                                                    <v-divider style="margin-left: 20px; margin-right: 20px;">
+                                                    </v-divider>
+
+                                                    <v-card-text style="margin: 10px;">
+                                                        <v-row>
+                                                            <vue-editor id="editor" useCustomImageHandler
+                                                                @image-added="handleImageAdded"
+                                                                v-model="campaign.campaignDescription">
+                                                            </vue-editor>
+                                                        </v-row>
+
+                                                    </v-card-text>
+
+                                                    <v-divider style="margin-left: 20px; margin-right: 20px;">
+                                                    </v-divider>
+
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn color="primary" text @click="updateStory"
+                                                            style="margin-top: 10px;">
+                                                            Save
+                                                        </v-btn>
+                                                        <v-btn color="primary" text
+                                                            @click="editCampaignStoryDialog = false"
+                                                            style="margin-top: 10px;">
+                                                            Close
+                                                        </v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                        </v-col>
+                                    </v-row>
+
                                     <div class="pa-1" v-html="campaign.campaignDescription"></div>
 
                                 </v-card>
@@ -295,14 +328,89 @@
                                                 {{ faqitem.answer }}
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
-
                                     </v-expansion-panels>
+                                    <v-divider class="my-5"></v-divider>
+                                    <v-row v-if="createdby == campaign.createdBy">
+
+                                        <v-col>
+                                            <v-card-text>
+                                                <v-row>
+                                                    <v-row>
+                                                        <v-col cols="12" style="margin: 0; padding: 10px;">
+                                                            <v-text-field v-model="question" :rules="questionRules"
+                                                                label="Question" required dense outlined></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" style="margin: 0; padding: 10px;">
+                                                            <v-textarea dense outlined name="input-7-4" label="Answer"
+                                                                value=""></v-textarea>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-row>
+
+                                            </v-card-text>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row>
+                                        <v-col cols="8">
+                                        </v-col>
+                                        <v-spacer></v-spacer>
+                                        <v-col>
+                                            <v-btn text class="success" @click="postUpdate">
+                                                Post Update
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
 
                                 </v-card>
                             </v-tab-item>
                             <v-tab-item :key="3" value="Updates">
                                 <v-card flat>
-                                    <v-card-text>Updates</v-card-text>
+                                    <v-card-text>
+                                        <v-card flat style="margin-top: 20px;" v-if="comments">
+                                            <div v-for="item in updates" :key="item.id">
+                                                <v-row>
+                                                    <v-col cols="2">
+                                                        <div v-if="updates">
+                                                            <v-img :src=item.profileImg width="50" height="50">
+                                                            </v-img>
+                                                        </div>
+                                                    </v-col>
+                                                    <v-col>
+                                                        <div class="pa-1" v-html="item.update"></div>
+                                                    </v-col>
+                                                </v-row>
+
+                                                <v-divider class="my-5"></v-divider>
+                                            </div>
+                                        </v-card>
+                                    </v-card-text>
+
+                                    <v-row v-if="createdby == campaign.createdBy">
+                                        <v-col>
+                                            <v-card-text style="margin: 5px;">
+                                                <v-row>
+                                                    <v-col>
+                                                        <vue-editor id="UpdateEditor" useCustomImageHandler
+                                                            @image-added="handleImageAdded" v-model="NewUpdate">
+                                                        </vue-editor>
+                                                    </v-col>
+
+                                                </v-row>
+                                            </v-card-text>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row>
+                                        <v-col cols="8">
+                                        </v-col>
+                                        <v-spacer></v-spacer>
+                                        <v-col>
+                                            <v-btn text class="success" @click="postUpdate">
+                                                Post Update
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
                                 </v-card>
                             </v-tab-item>
                             <v-tab-item :key="4" value="Comments">
@@ -407,19 +515,22 @@
 
 <script>
 import data from '@zaichaopan/emoji-picker/data/emojis.json';
+import { VueEditor } from "vue2-editor";
 export default {
     name: 'About',
     components: {
-        //  CampaignTemp
+        VueEditor
     },
     props: ['id'],
     data() {
         return {
+            userId: "",
             commentbox: "",
             data: data,
             organizer: null,
             currenturl: "test",
             dialog: false,
+            editCampaignStoryDialog: false,
             dialogs: false,
             rejectDialog: false,
             campaign: null,
@@ -437,7 +548,10 @@ export default {
             comment: "",
             commentRules: [(v) => !!v || "Comment Required"],
             raiedAmount: 0,
-            profileImg: ""
+            profileImg: "",
+            longDescription: "",
+            createdby: "",
+            NewUpdate: "",
         }
     },
     created() {
@@ -445,13 +559,15 @@ export default {
     },
     methods: {
         initialize() {
-            this.role = localStorage.getItem("role");
+            this.role = this.$session.get('role');
+            this.createdby = this.$session.get('user_token');
             this.currenturl = window.location.origin + this.$router.currentRoute.fullPath;
             fetch('http://localhost:3000/api/campaign/getCampaign?id=' + this.id)
                 .then(async (response) => {
                     const resdata = await response.json()
 
                     this.campaign = resdata.data
+                    this.longDescription = resdata.data.campaignDescription;
 
                     this.organizerId = resdata.data.createdBy
                     //console.log("Organizer Name " + this.organizerName)
@@ -499,7 +615,7 @@ export default {
 
                     if (resdata.data[0] != null) {
                         this.comments = resdata.data[0];
-                        console.log(this.comments);
+                        //console.log(this.comments);
                     }
                     if (resdata.data[1] != null) {
                         this.FAQ = resdata.data[1];
@@ -507,7 +623,7 @@ export default {
                     }
                     if (resdata.data[2] != null) {
                         this.updates = resdata.data[2];
-                        //    console.log(this.updates);
+                        console.log(this.updates);
                     }
                 })
                 .catch(err => console.log(err.message));
@@ -522,13 +638,13 @@ export default {
             navigator.clipboard.writeText(this.currenturl);
         },
         approveCampaign(e) {
-            var userId = "";
+            this.userId = "";
 
             if (!this.$session.exists()) {
                 this.$router.push('/SignIn');
             }
             else {
-                userId = this.$session.get('user_token');
+                this.userId = this.$session.get('user_token');
             }
             var status = "";
             if (e == 1) {
@@ -538,13 +654,13 @@ export default {
                 status = "Rejected";
             }
 
-            console.log(userId);
+            console.log(this.userId);
 
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
-                userId: userId,
+                userId: this.userId,
                 id: this.id,
                 reqStatus: status,
                 reqComment: this.comment,
@@ -580,8 +696,91 @@ export default {
             // alert("test");
             this.commentbox += emoji;
         },
-        postComment(){
+        postComment() {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
+            let profileImg = this.$session.get('profileImg');
+
+            var raw = JSON.stringify({
+                id: this.$session.get('user_token'),
+                campaignId: this.id,
+                comment: this.commentbox,
+                profileImg: profileImg,
+                name: this.$session.get('fullname'),
+            });
+
+            var requestOptions = {
+                method: "POST",
+                mode: "cors",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+            };
+
+            fetch("http://localhost:3000/api/misc/postComment", requestOptions)
+                .then(async (response) => {
+                    const resdata = await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        console.log("Error");
+                    }
+                })
+                .catch((error) => {
+                    this.errorMessage = error;
+                    console.error("There was an error!", error);
+                });
+
+            window.location.reload();
+        },
+
+        handleImageAdded: function (file, Editor, cursorLocation, resetUploader) {
+            // An example of using FormData
+            // NOTE: Your key could be different such as:
+            // formData.append('file', file)
+
+
+        },
+        updateStory() {
+
+        },
+        postUpdate() {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            let profileImg = this.$session.get('profileImg');
+
+            var raw = JSON.stringify({
+                id: this.$session.get('user_token'),
+                campaignId: this.id,
+                update: this.NewUpdate,
+                profileImg: profileImg,
+            });
+
+            var requestOptions = {
+                method: "POST",
+                mode: "cors",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+            };
+
+            fetch("http://localhost:3000/api/misc/postCampaignUpdate", requestOptions)
+                .then(async (response) => {
+                    const resdata = await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        console.log("Error");
+                    }
+                })
+                .catch((error) => {
+                    this.errorMessage = error;
+                    console.error("There was an error!", error);
+                });
+
+            window.location.reload();
         }
     },
     computed: {
@@ -611,8 +810,9 @@ export default {
     inset-block-end: 0;
     z-index: 1;
 }
+
 [contenteditable="true"]:empty:before {
     content: attr(placeholder);
     color: grey;
-  }
+}
 </style>
