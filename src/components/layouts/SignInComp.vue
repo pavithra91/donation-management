@@ -114,11 +114,15 @@ export default {
             this.$session.set("profileImg", resdata.data.profileImg);
           }
 
-          // Redirect to page
-         // localStorage.setItem("user_token", resdata.data.token);
-        //  localStorage.setItem("user_name", resdata.data.userName);
-        //  localStorage.setItem("role", resdata.data.role);
-          this.$router.push('/Home');
+            debugger;
+            if(resdata.data.role=="Donor" || resdata.data.role=="Campaign Manager")
+            {
+                this.$router.push('/Home');
+            }
+            else{
+                this.$router.push('/Reports');
+            }
+
         })
         .catch((error) => {
           this.errorMessage = error;
