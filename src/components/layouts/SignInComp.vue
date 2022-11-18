@@ -115,8 +115,20 @@ export default {
             this.$session.set("profileImg", resdata.data.profileImg);
           }
 
+
           // Redirect to Home Page
           this.$router.push('/Home');
+
+            debugger;
+            if(resdata.data.role=="Donor" || resdata.data.role=="Campaign Manager")
+            {
+                this.$router.push('/Home');
+            }
+            else{
+                this.$router.push('/Reports');
+            }
+
+
         })
         .catch((error) => {
           this.errorMessage = error;
