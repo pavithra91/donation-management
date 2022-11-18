@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="my-5">
       <v-col offset-lg="1">
-        <label class="text-h3">Watchlist</label>
+        <label  class="myFont">Watchlist</label>
       </v-col>
     </v-row>
     <v-layout row justify-center>
@@ -64,3 +64,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600&family=Poppins:wght@600&display=swap');
+
+.myFont {
+  font-size: 2.5rem;
+  font-family: 'Archivo', sans-serif;
+  line-height: 3rem;
+}
+</style>
