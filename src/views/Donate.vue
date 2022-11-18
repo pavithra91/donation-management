@@ -184,7 +184,6 @@ export default {
       displayName: "",
       amount: 0,
       message: "",
-
       paystackkey: "pk_test_57e3d8f5a59bee0cf0481115e30cf89bcbb62183", //paystack public key
       email: "foobar@example.com", // Customer email
       currency: "NGN",
@@ -194,7 +193,6 @@ export default {
     getamount() {
       return parseInt(parseInt(this.toggle_exclusive) * (1 / 0.83) * 100);
     },
-
     reference() {
       let text = "2GDNh8rap1s76uHmFbh4-" + uuidv1();
       return text;
@@ -214,10 +212,7 @@ export default {
         }
 
         var myHeaders = new Headers();
-        debugger;
         myHeaders.append("Content-Type", "application/json");
-
-        console.log(this.id);
 
         var raw = JSON.stringify({
           campaignId: this.id,
@@ -256,7 +251,7 @@ export default {
       console.log("Payment closed");
     },
     makeDonation() {
-      debugger;
+
     },
   },
 };

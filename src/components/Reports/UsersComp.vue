@@ -91,12 +91,6 @@
     </v-row>
 
     <v-row>
-
-
-
-
-
-
       <v-spacer></v-spacer>
       <v-col></v-col>
     </v-row>

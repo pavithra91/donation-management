@@ -1,3 +1,4 @@
+// Import required packages
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -12,10 +13,10 @@ import VueSession from "vue-session"
 import JsonExcel from "vue-json-excel";
 import EmojiPicker from '@zaichaopan/emoji-picker';
 
-
+// Register component globally
 Vue.component("downloadExcel", JsonExcel);
-Vue.component('font-awesome-icon', FontAwesomeIcon) // Register component globally
-library.add(fas) // Include needed icons
+Vue.component('font-awesome-icon', FontAwesomeIcon) 
+library.add(fas)
 library.add(fab)
 
 Vue.use(VueSocialSharing);

@@ -12,9 +12,9 @@
         <v-row>
             <v-spacer></v-spacer>
             <v-col cols="5">
-                <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password"
-                    @click:append="show1 = !show1"></v-text-field>
+                <v-text-field v-model="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="showPassword ? 'text' : 'password'" name="input-10-1" label="Password"
+                    @click:append="showPassword = !showPassword"></v-text-field>
             </v-col>
             <v-spacer></v-spacer>
         </v-row>
@@ -22,7 +22,7 @@
         <v-row>
             <v-spacer></v-spacer>
             <v-col class="shrink d-flex justify-center align-center">
-                <v-btn type="submit" color="success" :disabled="!valid" @click="validate">
+                <v-btn type="submit" color="success" :disabled="!valid" @click="validateUser">
                     Sign In
                 </v-btn>
             </v-col>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+// Import forget password component
 import ForgetPassword from "@/components/layouts/ForgetPassword.vue";
 export default {
     name: "SignInComp",
@@ -63,20 +64,20 @@ export default {
     },
     data() {
         return {
-            show1: false,
+            showPassword: false,
             valid: true,
             dialog: false,
             email: "",
             emailRules: [
                 (v) => !!v || "E-mail is required",
-                (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+                (v) => /.+@.+\..+/.test(v) || "Please enter valid E-mail address",
             ],
             password: "",
             passwordRules: (v) => !!v || "Password is required",
         }
     },
     methods: {
-        validate() {
+    validateUser() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -99,25 +100,22 @@ export default {
 
           // check for error response
           if (!response.ok) {
+            // Pass error message to parent component
             this.$emit('message', "Wrong Username or Password");
           }
 
+          // Create session
           this.$session.start();
           this.$session.set("user_token", resdata.data.token);
           this.$session.set("user_name", resdata.data.userName);
           this.$session.set("role", resdata.data.role);
           this.$session.set("fullname", resdata.data.fullname);
 
-          alert(resdata.data.profileImg);
-
           if(resdata.data.profileImg !=null){
             this.$session.set("profileImg", resdata.data.profileImg);
           }
 
-          // Redirect to page
-         // localStorage.setItem("user_token", resdata.data.token);
-        //  localStorage.setItem("user_name", resdata.data.userName);
-        //  localStorage.setItem("role", resdata.data.role);
+          // Redirect to Home Page
           this.$router.push('/Home');
         })
         .catch((error) => {

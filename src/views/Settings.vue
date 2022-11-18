@@ -41,6 +41,30 @@
           <v-divider class="my-5"></v-divider>
 
           <v-list-item style="margin: 20px">
+            <v-list-item-title style="font-size: xx-large; font-weight: bold"
+              >Logs</v-list-item-title
+            >
+          </v-list-item>
+
+          <v-list-item @click="toggleComponentOne">
+            <v-list-item-icon>
+              <v-icon color="white" small>mdi-lightbulb</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="title">System Logs</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="toggleComponentFive">
+            <v-list-item-icon>
+              <v-icon color="white" small>mdi-lightbulb</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="title"
+              >User Logs</v-list-item-title
+            >
+          </v-list-item>
+
+          <v-divider class="my-5"></v-divider>
+
+          <v-list-item style="margin: 20px">
             <router-link :to="{ name: 'Reports' }"
               ><label>
                 <v-list-item-title
@@ -68,12 +92,15 @@
 import DonationRulesComp from "@/components/DonationRulesComp.vue";
 import ContributionLevelsComp from "@/components/ContributionLevelsComp.vue";
 import DonationBadgesComp from "@/components/DonationBadgesComp.vue";
+
+import UserLogsComp from "@/components/Reports/UserLogsComp.vue";
 export default {
   name: "Settings",
   components: {
     DonationRulesComp,
     ContributionLevelsComp,
     DonationBadgesComp,
+    UserLogsComp,
   },
 
   data() {
@@ -81,6 +108,7 @@ export default {
       showDonationRulesComp: false,
       showContributionLevelsComp: false,
       showDonationBadgesComp: false,
+      showUserLogsComp: false,
     };
   },
   methods: {
@@ -88,16 +116,25 @@ export default {
       this.showDonationRulesComp = !this.showDonationRulesComp;
       this.showContributionLevelsComp = false;
       this.showDonationBadgesComp = false;
+      this.showUserLogsComp = false;
     },
     toggleComponentTwo() {
       this.showContributionLevelsComp = !this.showContributionLevelsComp;
       this.showDonationRulesComp = false;
       this.showDonationBadgesComp = false;
+      this.showUserLogsComp = false;
     },
     toggleComponentThree() {
       this.showDonationBadgesComp = !this.showDonationBadgesComp;
       this.showContributionLevelsComp = false;
       this.showDonationRulesComp = false;
+      this.showUserLogsComp = false;
+    },
+    toggleComponentFive() {
+      this.showUserLogsComp = !this.showUserLogsComp;
+      this.showContributionLevelsComp = false;
+      this.showDonationRulesComp = false;
+      this.showDonationBadgesComp = false;
     },
   },
 };
