@@ -110,6 +110,7 @@ export default {
           this.$session.set("user_name", resdata.data.userName);
           this.$session.set("role", resdata.data.role);
           this.$session.set("fullname", resdata.data.fullname);
+          this.$session.set("ip", this.term);
 
           if(resdata.data.profileImg !=null){
             this.$session.set("profileImg", resdata.data.profileImg);

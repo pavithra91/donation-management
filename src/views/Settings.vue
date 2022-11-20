@@ -46,19 +46,12 @@
             >
           </v-list-item>
 
-          <v-list-item @click="toggleComponentOne">
-            <v-list-item-icon>
-              <v-icon color="white" small>mdi-lightbulb</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="title">System Logs</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="toggleComponentFive">
+          <v-list-item @click="toggleComponentFour">
             <v-list-item-icon>
               <v-icon color="white" small>mdi-lightbulb</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="title"
-              >User Logs</v-list-item-title
+              >System Logs</v-list-item-title
             >
           </v-list-item>
 
@@ -82,6 +75,7 @@
         <DonationRulesComp v-if="showDonationRulesComp" />
         <ContributionLevelsComp v-if="showContributionLevelsComp" />
         <DonationBadgesComp v-if="showDonationBadgesComp" />
+        <SystemLogsComp v-if="showSystemLogsComp" />
       </v-container>
     </v-container>
   </v-container>
@@ -93,14 +87,14 @@ import DonationRulesComp from "@/components/DonationRulesComp.vue";
 import ContributionLevelsComp from "@/components/ContributionLevelsComp.vue";
 import DonationBadgesComp from "@/components/DonationBadgesComp.vue";
 
-import UserLogsComp from "@/components/Reports/UserLogsComp.vue";
+import SystemLogsComp from "@/components/Reports/SystemLogsComp.vue";
 export default {
   name: "Settings",
   components: {
     DonationRulesComp,
     ContributionLevelsComp,
     DonationBadgesComp,
-    UserLogsComp,
+    SystemLogsComp,
   },
 
   data() {
@@ -108,7 +102,7 @@ export default {
       showDonationRulesComp: false,
       showContributionLevelsComp: false,
       showDonationBadgesComp: false,
-      showUserLogsComp: false,
+      showSystemLogsComp: false,
     };
   },
   methods: {
@@ -116,22 +110,22 @@ export default {
       this.showDonationRulesComp = !this.showDonationRulesComp;
       this.showContributionLevelsComp = false;
       this.showDonationBadgesComp = false;
-      this.showUserLogsComp = false;
+      this.showSystemLogsComp = false;
     },
     toggleComponentTwo() {
       this.showContributionLevelsComp = !this.showContributionLevelsComp;
       this.showDonationRulesComp = false;
       this.showDonationBadgesComp = false;
-      this.showUserLogsComp = false;
+      this.showSystemLogsComp = false;
     },
     toggleComponentThree() {
       this.showDonationBadgesComp = !this.showDonationBadgesComp;
       this.showContributionLevelsComp = false;
       this.showDonationRulesComp = false;
-      this.showUserLogsComp = false;
+      this.showSystemLogsComp = false;
     },
-    toggleComponentFive() {
-      this.showUserLogsComp = !this.showUserLogsComp;
+    toggleComponentFour() {
+      this.showSystemLogsComp = !this.showSystemLogsComp;
       this.showContributionLevelsComp = false;
       this.showDonationRulesComp = false;
       this.showDonationBadgesComp = false;
