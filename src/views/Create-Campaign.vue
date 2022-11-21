@@ -233,12 +233,6 @@ export default {
                     const resdata = await response.json();
                     console.log(resdata)
                     // check for error response
-                    if (!response.ok) {
-                      console.log("Ok")
-                    }
-                    else {
-                      console.log("Not Ok")
-                    }
 
                     this.selectedSupportFiles.forEach(element => {
                       var url = this.uploadImageAsPromise(element, campaignid);
@@ -249,6 +243,8 @@ export default {
                   });
               });
             });
+
+
 
           })
           .catch((error) => {

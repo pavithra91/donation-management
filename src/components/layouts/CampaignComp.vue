@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     removeCampaignFromWatchList(item) {
-        debugger;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 

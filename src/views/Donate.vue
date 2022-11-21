@@ -1,7 +1,18 @@
 <template>
   <div class="main-container">
     <div class="sub-container">
-      <div class="main-title"></div>
+      <v-row>
+        <v-col md="10" lg="8" offset-md="1" offset-lg="2">
+          <v-row>
+            <v-col>
+              <label v-if="campaign" class="text-h3 font-weight-bold">{{
+                campaign.campaignName
+              }}</label>
+              <label v-else class="text-h3">Campaign Title</label>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
 
       <v-row>
         <v-col> </v-col>
@@ -171,7 +182,7 @@ export default {
   components: {
     paystack,
   },
-  props: ["id"],
+  props: ["id", "campaign"],
   data() {
     const amt = (1 / 0.83) * 100 * 100;
     console.log(amt.toFixed(2));
@@ -250,9 +261,7 @@ export default {
     close: function () {
       console.log("Payment closed");
     },
-    makeDonation() {
-
-    },
+    makeDonation() {},
   },
 };
 </script>
