@@ -17,9 +17,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
+    path: '/about/:id',
     name: 'About',
-    //props:true,
+    props:true,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -87,6 +87,15 @@ const routes = [
     name: 'Donate',
     props: true, 
     component: () => import(/* webpackChunkName: "about" */ '../views/Donate.vue')
+  },
+  {
+    path: '/payment',
+    name: 'Payment',
+    props:true,
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/Payment.vue')
   },
   {
     path: '/Search/:category',

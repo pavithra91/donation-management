@@ -83,9 +83,9 @@
 
 
 <script>
-import DonationRulesComp from "@/components/DonationRulesComp.vue";
-import ContributionLevelsComp from "@/components/ContributionLevelsComp.vue";
-import DonationBadgesComp from "@/components/DonationBadgesComp.vue";
+import DonationRulesComp from "@/components/settings/DonationRulesComp.vue";
+import ContributionLevelsComp from "@/components/settings/ContributionLevelsComp.vue";
+import DonationBadgesComp from "@/components/settings/DonationBadgesComp.vue";
 
 import SystemLogsComp from "@/components/Reports/SystemLogsComp.vue";
 export default {

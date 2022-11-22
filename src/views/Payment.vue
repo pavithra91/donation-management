@@ -1,14 +1,16 @@
 <template>
   <v-container>
-    {{ id.trxref }}
+    {{ campaign.id }}
   </v-container>
 </template>
  
 <script>
 export default {
-  props: ["id"],
+  props: ["id", "campaign", "name", "amount", "message", "trxref", "donationMode"],
   data() {
-    return {};
+    return {
+        userId: "",
+    };
   },
   created() {
      debugger;
@@ -23,13 +25,13 @@ export default {
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
-          campaignId: this.id,
-          name: this.displayName,
-          amount: Number(this.toggle_exclusive),
+          campaignId: this.campaign.id,
+          amount: this.amount,
+          name: this.name,
           message: this.message,
+          trxref: this.trxref,
           userId: this.userId,
-          trxref: id.trxref,
-          donationMode: donationMode,
+          donationMode: this.donationMode,
         });
 
         var requestOptions = {
@@ -43,13 +45,12 @@ export default {
         fetch("http://localhost:3000/api/payment/donate", requestOptions)
           .then(async (response) => {
             const resdata = await response.json();
+
             // check for error response
             if (!response.ok) {
               // get error message from body or default to response statusText
             }
-            debugger;
-
-            this.alert = true;
+                this.$router.push('/Campaign/' + this.campaign.id);
           })
           .catch((error) => {
             this.errorMessage = error;

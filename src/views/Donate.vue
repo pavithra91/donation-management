@@ -15,6 +15,14 @@
       </v-row>
 
       <v-row>
+        <v-col>
+          <v-alert v-model="alert" border="top" color="red lighten-2" dark>
+            I'm an alert with a top border and red color
+          </v-alert>
+        </v-col>
+      </v-row>
+
+      <v-row>
         <v-col> </v-col>
         <v-col>
           <v-stepper v-model="e1">
@@ -185,7 +193,7 @@ export default {
   props: ["id", "campaign"],
   data() {
     const amt = (1 / 0.83) * 100 * 100;
-    console.log(amt.toFixed(2));
+    // console.log(amt.toFixed(2));
 
     return {
       userId: null,
@@ -198,6 +206,8 @@ export default {
       paystackkey: "pk_test_57e3d8f5a59bee0cf0481115e30cf89bcbb62183", //paystack public key
       email: "foobar@example.com", // Customer email
       currency: "NGN",
+      alert: false,
+      paymentResponse: null,
     };
   },
   computed: {
@@ -212,16 +222,27 @@ export default {
   methods: {
     callback: function (response) {
       console.log(response);
+      if (response.message == "Approved" && response.status == "success") {
+        this.$router.push({
+          name: "Payment",
+          params: { id: response, campaign: this.campaign, name: this.displayName, amount: Number(this.toggle_exclusive), message : this.message, trxref : response.trxref, donationMode: this.anonymous },
+        });
+      }
+    },
+    close: function () {
+      console.log("Payment closed");
+    },
 
+/*    makeDonation(response) {
       if (response.message == "Approved" && response.status == "success") {
         if (!this.anonymous) {
           if (!this.$session.exists()) {
             this.$router.push("/SignIn");
           } else {
-            this.userId = this.$session.get("user_name");
+            this.userId = this.$session.get("user_token");
           }
         }
-
+        debugger;
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -232,6 +253,7 @@ export default {
           message: this.message,
           userId: this.userId,
           trxref: response.trxref,
+          donationMode: anonymous,
         });
 
         var requestOptions = {
@@ -241,7 +263,7 @@ export default {
           body: raw,
           redirect: "follow",
         };
-
+        debugger;
         fetch("http://localhost:3000/api/payment/donate", requestOptions)
           .then(async (response) => {
             const resdata = await response.json();
@@ -250,18 +272,25 @@ export default {
             if (!response.ok) {
               // get error message from body or default to response statusText
             }
-            console.log(resdata.data.status);
+            debugger;
+            //   console.log(resdata.data.status);
+            this.alert = true;
           })
           .catch((error) => {
             this.errorMessage = error;
             console.error("There was an error!", error);
           });
       }
+    },*/
+  }, 
+  watch: {
+    alert(new_val) {
+      if (new_val) {
+        setTimeout(() => {
+          this.alert = false;
+        }, 3000);
+      }
     },
-    close: function () {
-      console.log("Payment closed");
-    },
-    makeDonation() {},
   },
 };
 </script>
