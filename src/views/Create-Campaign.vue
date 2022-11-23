@@ -51,7 +51,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-col md="3" sm="12">
-              <v-select :items="categoryItems" label="Category" outlined dense :rules="categoryRules"></v-select>
+              <v-select :items="categoryItems" label="Category" outlined dense :rules="categoryRules" v-model="categoryItem"></v-select>
             </v-col>
           </v-row>
 
@@ -137,6 +137,7 @@ export default {
       supportFiles: [],
       categoryItems: ['Medical & Health', 'Memorials & Funerals', 'NonProfit/Charity', 'Schools & Education', 'Pets & Animals', 'Disaster Relief', 'Clubs & Community', 'Sports & Teams', 'Creative Projects', 'Events', 'Kids & Family', 'LGBT'],
       categoryRules: [(v) => !!v || "Please select Category"],
+      categoryItem: "",
       campaignName: "",
       campaignNameRules: [(v) => !!v || "Campaign Name required"],
       date: [new Date().toISOString().substr(0, 10)],
@@ -178,6 +179,7 @@ export default {
           province: this.province,
           goal: this.goal,
           createdBy: localStorage.getItem("user_token"),
+          category: this.categoryItems.indexOf(this.categoryItem) + 1
         });
 
         var requestOptions = {

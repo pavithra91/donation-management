@@ -36,7 +36,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ medical.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-         <router-link :to="{ name: 'Search', params: { category: 1 }}"><label>Medical & Health</label></router-link> 
+         <router-link :to="{ name: 'Search', params: { category: 1, categoryName: 'Medical & Health' }}"><label>Medical & Health</label></router-link> 
         </v-col>
 
         <v-col>
@@ -45,7 +45,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ memorial.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <router-link :to="{ path: '/Search?category='+'2'}"><label>Memorials & Funerals</label></router-link>
+          <router-link :to="{ name: 'Search', params: { category: 2, categoryName: 'Memorials & Funerals' }}"><label>Memorials & Funerals</label></router-link>
         </v-col>
 
         <v-col>
@@ -54,7 +54,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ NP.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label>NonProfit/Charity</label>
+          <router-link :to="{ name: 'Search', params: { category: 3, categoryName: 'NonProfit/Charity' }}"><label>NonProfit/Charity</label></router-link>
         </v-col>
 
         <v-col>
@@ -63,7 +63,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ medical.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label> Schools & Education</label>
+          <router-link :to="{ name: 'Search', params: { category: 4, categoryName: 'Schools & Education' }}"><label>Schools & Education</label></router-link>
         </v-col>
       </v-row>
     </v-layout>
@@ -76,7 +76,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ pets.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-3">Pets & Animals</label>
+          <router-link :to="{ name: 'Search', params: { category: 5, categoryName: 'Pets & Animals' }}"><label class="mx-3">Pets & Animals</label></router-link>
         </v-col>
 
         <v-col>
@@ -85,7 +85,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ disaster.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-7">Disaster Relief</label>
+          <router-link :to="{ name: 'Search', params: { category: 6, categoryName: 'Disaster Relief' }}"><label class="mx-7">Disaster Relief</label></router-link>
         </v-col>
 
         <v-col>
@@ -94,7 +94,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_club.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label>Clubs & Community</label>
+          <router-link :to="{ name: 'Search', params: { category: 7, categoryName: 'Clubs & Community' }}"><label>Clubs & Community</label></router-link>
         </v-col>
 
         <v-col>
@@ -103,7 +103,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ sport.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-5">Sports & Teams</label>
+          <router-link :to="{ name: 'Search', params: { category: 8, categoryName: 'Sports & Teams' }}"><label class="mx-5">Sports & Teams</label></router-link>
         </v-col>
       </v-row>  
     </v-layout>
@@ -116,7 +116,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ creative.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-3">Creative Projects</label>
+          <router-link :to="{ name: 'Search', params: { category: 9, categoryName: 'Creative Projects' }}"><label class="mx-3">Creative Projects</label></router-link>
         </v-col>
 
         <v-col>
@@ -125,7 +125,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ fun.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-13">Events</label>
+          <router-link :to="{ name: 'Search', params: { category: 10, categoryName: 'Events' }}"><label class="mx-13">Events</label></router-link>
         </v-col>
 
         <v-col>
@@ -134,7 +134,7 @@
               <v-img :src="require('../assets/img/icons/icon_vertical_ kids.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-8">Kids & Family</label>
+          <router-link :to="{ name: 'Search', params: { category: 11, categoryName: 'Kids & Family' }}"><label class="mx-8">Kids & Family</label></router-link>
         </v-col>
 
         <v-col>
@@ -143,7 +143,7 @@
                <v-img :src="require('../assets/img/icons/icon_vertical_ LGBT.svg')" width="100" height="100" />
             </v-col>
           </v-row>
-          <label class="mx-14">LGBT</label>
+          <router-link :to="{ name: 'Search', params: { category: 12, categoryName: 'LGBT' }}"><label class="mx-14">LGBT</label></router-link>
         </v-col>
       </v-row>  
     </v-layout>
@@ -163,7 +163,7 @@ export default {
     }
   },
   mounted(){
-    fetch('http://localhost:3000/api/campaign/getTopFundRaisers')
+    fetch(process.env.API_URL + 'campaign/getTopFundRaisers')
       .then(async (response) => {
         const resdata = await response.json()
         this.campaignList = resdata.data
@@ -175,24 +175,6 @@ export default {
 </script>
 
 <style scoped>
-.topfund {
-  background: #f8fcff;
-}
-
-.topfund-container {
-  padding-top: 100px;
-}
-
-.category-container {
-  background: #c1dad5;
-  padding-bottom: 80px;
-}
-
-.category-icon-div {
-  padding-top: 50px;
-}
-
-
 *{
   margin: 0;
   padding: 0;

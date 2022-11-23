@@ -2,14 +2,7 @@
   <v-container>
     <v-row>
       <v-col md="10" lg="8" offset-md="1" offset-lg="2">
-        <v-alert
-          prominent
-          type="success"
-          v-if="
-            (role == 'Administrator' || role == 'Staff') &&
-            campaign.campaignStatus == 'Request'
-          "
-        >
+        <v-alert prominent type="success" v-if="(role == 'Administrator' || role == 'Staff') && campaign.campaignStatus == 'Request'">
           <v-row>
             <v-col class="grow my-4">
               Approve campaign for {{ campaign.campaignName }}
@@ -32,16 +25,8 @@
                   <v-card-text>
                     <v-row class="my-5">
                       <v-col>
-                        <v-textarea
-                          counter
-                          outlined
-                          v-model="comment"
-                          :rules="commentRules"
-                          name="input-7-1"
-                          label="Comment"
-                          value=""
-                          hint="Approve or Reject Comment"
-                        >
+                        <v-textarea counter outlined v-model="comment" :rules="commentRules" name="input-7-1"
+                          label="Comment" value="" hint="Approve or Reject Comment">
                         </v-textarea>
                       </v-col>
                     </v-row>
@@ -74,7 +59,7 @@
         <v-row>
           <v-col>
             <label v-if="campaign" class="text-h3 font-weight-bold">{{
-              campaign.campaignName
+                campaign.campaignName
             }}</label>
             <label v-else class="text-h3">Campaign Title</label>
           </v-col>
@@ -82,13 +67,7 @@
 
         <v-row>
           <v-col md="6">
-            <v-img
-              :src="campaign.mainImg"
-              width="100%"
-              height="30rem"
-              contain
-              v-if="campaign"
-            >
+            <v-img :src="campaign.mainImg" width="100%" height="30rem" contain v-if="campaign">
             </v-img>
           </v-col>
 
@@ -98,24 +77,17 @@
                 <v-row>
                   <v-col md="8">
                     <label class="Title" v-if="campaign">{{
-                      campaign.raiedAmount
+                        campaign.raiedAmount
                     }}</label>
-                    <label class="ml-2 font-weight-bold text-h6"
-                      >(LKR) RAISED
+                    <label class="ml-2 font-weight-bold text-h6">(LKR) RAISED
                     </label>
                   </v-col>
                 </v-row>
 
                 <v-row>
                   <v-col md="8">
-                    <label
-                      v-if="campaign"
-                      class="font-weight-bold text-h3 d-block"
-                      >{{ campaign.noOfDonations }}</label
-                    >
-                    <label class="font-weight-bold text-h6 d-block"
-                      >DONORS</label
-                    >
+                    <label v-if="campaign" class="font-weight-bold text-h3 d-block">{{ campaign.noOfDonations }}</label>
+                    <label class="font-weight-bold text-h6 d-block">DONORS</label>
                     <v-chip class="ma-2" color="teal" text-color="white">
                       <v-avatar left>
                         <v-icon> mdi-shield-check</v-icon>
@@ -126,48 +98,25 @@
                 </v-row>
                 <v-row>
                   <v-col md="9" class="pa-3">
-                    <v-progress-linear
-                      :value="calccampaignProgress"
-                      height="8"
-                      color="#09cc7f"
-                    >
+                    <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                     </v-progress-linear>
                     <label class="font-weight-bold text-h6">Goal: </label>
-                    <label class="text-h6" v-if="campaign"
-                      >LKR {{ campaign.goalAmount.toLocaleString() }}</label
-                    >
+                    <label class="text-h6" v-if="campaign">LKR {{ campaign.goalAmount.toLocaleString() }}</label>
                   </v-col>
                 </v-row>
 
                 <v-row>
                   <v-col md="6" lg="6">
-                    <v-btn
-                      x-large
-                      color="success"
-                      dark
-                      width="410px"
-                      @click="makeDonation"
-                      >Donate
+                    <v-btn x-large color="success" dark width="410px" @click="makeDonation">Donate
                     </v-btn>
                   </v-col>
                 </v-row>
 
                 <v-row>
                   <v-col md="6" lg="6">
-                    <v-btn
-                      outlined
-                      x-large
-                      @click="addToWatchlist(!alreadyInWatchlist)"
-                    >
-                      <v-icon
-                        v-if="alreadyInWatchlist"
-                        style="margin-right: 10px"
-                        color="red"
-                        >mdi-heart</v-icon
-                      >
-                      <v-icon v-else style="margin-right: 10px" color="grey"
-                        >mdi-heart</v-icon
-                      >
+                    <v-btn outlined x-large @click="addToWatchlist(!alreadyInWatchlist)">
+                      <v-icon v-if="alreadyInWatchlist" style="margin-right: 10px" color="red">mdi-heart</v-icon>
+                      <v-icon v-else style="margin-right: 10px" color="grey">mdi-heart</v-icon>
                       Watchlist
                     </v-btn>
                   </v-col>
@@ -186,58 +135,36 @@
                           <div style="margin: 10px">Help by sharing</div>
                         </v-card-title>
 
-                        <v-card-text
-                          style="
-                            margin-left: 10px;
-                            margin-right: 10px;
-                            margin-bottom: 10px;
-                          "
-                        >
+                        <v-card-text style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px;">
                           Fundraisers shared on social networks raise up to 5x
                           more.
                         </v-card-text>
 
-                        <v-divider
-                          style="margin-left: 20px; margin-right: 20px"
-                        ></v-divider>
+                        <v-divider style="margin-left: 20px; margin-right: 20px"></v-divider>
 
                         <v-card-text style="margin: 10px">
                           <v-row>
                             <v-col>
-                              <ShareNetwork
-                                network="facebook"
-                                url="https://news.vuejs.org/issues/180"
-                                :title="campaign.campaignName"
-                                description=""
-                                quote=""
-                                hashtags="vuejs,vite"
-                              >
+                              <ShareNetwork network="facebook" url="https://news.vuejs.org/issues/180"
+                                :title="campaign.campaignName" description="" quote="" hashtags="vuejs,vite">
                                 <i class="fab fah fa-lg fa-facebook-f"></i>
                                 <span style="margin-left: 5px">Facebook</span>
                               </ShareNetwork>
                             </v-col>
                             <v-col>
-                              <ShareNetwork
-                                network="twitter"
-                                url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="twitter" url="https://news.vuejs.org/issues/180"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You"
-                                hashtags="vuejs,vite"
-                              >
+                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
                                 <i class="fab fah fa-lg fa-twitter"></i>
                                 <span style="margin-left: 5px">Twitter</span>
                               </ShareNetwork>
                             </v-col>
                             <v-col>
-                              <ShareNetwork
-                                network="email"
-                                url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="email" url="https://news.vuejs.org/issues/180"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You"
-                                hashtags="vuejs,vite"
-                              >
+                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
                                 <i class="fab fah fa-lg fa-envelope"></i>
                                 <span style="margin-left: 5px">Email</span>
                               </ShareNetwork>
@@ -246,14 +173,10 @@
 
                           <v-row>
                             <v-col>
-                              <ShareNetwork
-                                network="whatsapp"
-                                url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="whatsapp" url="https://news.vuejs.org/issues/180"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You"
-                                hashtags="vuejs,vite"
-                              >
+                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
                                 <i class="fab fah fa-lg fa-whatsapp"></i>
                                 <span style="margin-left: 5px">Whatsapp</span>
                               </ShareNetwork>
@@ -263,48 +186,27 @@
                           </v-row>
                         </v-card-text>
 
-                        <v-divider
-                          style="margin-left: 20px; margin-right: 20px"
-                        ></v-divider>
+                        <v-divider style="margin-left: 20px; margin-right: 20px"></v-divider>
 
                         <v-row>
-                          <v-col
-                            style="
+                          <v-col style="
                               margin-left: 30px;
                               margin-right: 10px;
                               margin-top: 30px;
-                            "
-                          >
-                            <v-text-field
-                              v-model="currenturl"
-                              outlined
-                              label="Copy link"
-                              :value="currenturl"
-                            >
+                            ">
+                            <v-text-field v-model="currenturl" outlined label="Copy link" :value="currenturl">
                             </v-text-field>
                           </v-col>
-                          <v-col
-                            cols="2"
-                            style="margin-right: 30px; margin-top: 40px"
-                          >
-                            <v-btn color="success" @click="copyText"
-                              >Copy</v-btn
-                            >
+                          <v-col cols="2" style="margin-right: 30px; margin-top: 40px">
+                            <v-btn color="success" @click="copyText">Copy</v-btn>
                           </v-col>
                         </v-row>
 
-                        <v-divider
-                          style="margin-left: 20px; margin-right: 20px"
-                        ></v-divider>
+                        <v-divider style="margin-left: 20px; margin-right: 20px"></v-divider>
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn
-                            color="primary"
-                            text
-                            @click="dialog = false"
-                            style="margin-top: 10px"
-                          >
+                          <v-btn color="primary" text @click="dialog = false" style="margin-top: 10px">
                             Close
                           </v-btn>
                         </v-card-actions>
@@ -319,12 +221,7 @@
 
         <v-row>
           <v-col md="7" lg="8">
-            <v-tabs
-              v-model="tab"
-              background-color="transparent"
-              color="basil"
-              grow
-            >
+            <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
               <v-tab href="#Story"> Story </v-tab>
               <v-tab href="#FAQ"> FAQ </v-tab>
               <v-tab href="#Updates"> Updates </v-tab>
@@ -342,15 +239,7 @@
                     <v-col>
                       <v-dialog v-model="editCampaignStoryDialog" width="850">
                         <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            class="float-right"
-                            x-small
-                            fab
-                            outlined
-                            color="teal"
-                          >
+                          <v-btn v-bind="attrs" v-on="on" class="float-right" x-small fab outlined color="teal">
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                         </template>
@@ -360,44 +249,27 @@
                             <div style="margin: 10px">Edit Campaign Story</div>
                           </v-card-title>
 
-                          <v-divider
-                            style="margin-left: 20px; margin-right: 20px"
-                          >
+                          <v-divider style="margin-left: 20px; margin-right: 20px">
                           </v-divider>
 
                           <v-card-text style="margin: 10px">
                             <v-row>
-                              <vue-editor
-                                id="editor"
-                                useCustomImageHandler
-                                @image-added="handleImageAdded"
-                                v-model="campaign.campaignDescription"
-                              >
+                              <vue-editor id="editor" useCustomImageHandler @image-added="handleImageAdded"
+                                v-model="campaign.campaignDescription">
                               </vue-editor>
                             </v-row>
                           </v-card-text>
 
-                          <v-divider
-                            style="margin-left: 20px; margin-right: 20px"
-                          >
+                          <v-divider style="margin-left: 20px; margin-right: 20px">
                           </v-divider>
 
                           <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn
-                              color="primary"
-                              text
-                              @click="updateStory"
-                              style="margin-top: 10px"
-                            >
+                            <v-btn color="primary" text @click="updateStory" style="margin-top: 10px">
                               Save
                             </v-btn>
-                            <v-btn
-                              color="primary"
-                              text
-                              @click="editCampaignStoryDialog = false"
-                              style="margin-top: 10px"
-                            >
+                            <v-btn color="primary" text @click="editCampaignStoryDialog = false"
+                              style="margin-top: 10px">
                               Close
                             </v-btn>
                           </v-card-actions>
@@ -414,7 +286,7 @@
                   <v-expansion-panels multiple style="margin-top: 20px">
                     <v-expansion-panel v-for="faqitem in FAQ" :key="faqitem.id">
                       <v-expansion-panel-header>{{
-                        faqitem.quesqtion
+                          faqitem.quesqtion
                       }}</v-expansion-panel-header>
                       <v-expansion-panel-content>
                         {{ faqitem.answer }}
@@ -428,23 +300,11 @@
                         <v-row>
                           <v-row>
                             <v-col cols="12" style="margin: 0; padding: 10px">
-                              <v-text-field
-                                v-model="question"
-                                :rules="questionRules"
-                                label="Question"
-                                required
-                                dense
-                                outlined
-                              ></v-text-field>
+                              <v-text-field v-model="question" :rules="questionRules" label="Question" required dense
+                                outlined></v-text-field>
                             </v-col>
                             <v-col cols="12" style="margin: 0; padding: 10px">
-                              <v-textarea
-                                dense
-                                outlined
-                                name="input-7-4"
-                                label="Answer"
-                                value=""
-                              ></v-textarea>
+                              <v-textarea dense outlined name="input-7-4" label="Answer" value=""></v-textarea>
                             </v-col>
                           </v-row>
                         </v-row>
@@ -471,11 +331,7 @@
                         <v-row>
                           <v-col cols="2">
                             <div v-if="updates">
-                              <v-img
-                                :src="item.profileImg"
-                                width="50"
-                                height="50"
-                              >
+                              <v-img :src="item.profileImg" width="50" height="50">
                               </v-img>
                             </div>
                           </v-col>
@@ -494,12 +350,8 @@
                       <v-card-text style="margin: 5px">
                         <v-row>
                           <v-col>
-                            <vue-editor
-                              id="UpdateEditor"
-                              useCustomImageHandler
-                              @image-added="handleImageAdded"
-                              v-model="NewUpdate"
-                            >
+                            <vue-editor id="UpdateEditor" useCustomImageHandler @image-added="handleImageAdded"
+                              v-model="NewUpdate">
                             </vue-editor>
                           </v-col>
                         </v-row>
@@ -524,11 +376,7 @@
                     <v-row>
                       <v-col cols="2">
                         <div v-if="comments">
-                          <v-img
-                            :src="comment.profileImg"
-                            width="50"
-                            height="50"
-                          >
+                          <v-img :src="comment.profileImg" width="50" height="50">
                           </v-img>
                         </div>
                       </v-col>
@@ -544,18 +392,10 @@
                 <div class="my-5">
                   <v-row>
                     <v-col md="10">
-                      <emoji-picker
-                        @emoji:picked="handleEmojiPicked"
-                        :data="data"
-                        class="textarea-emoji-picker mx-0 my-13"
-                      />
+                      <emoji-picker @emoji:picked="handleEmojiPicked" :data="data"
+                        class="textarea-emoji-picker mx-0 my-13" />
 
-                      <v-textarea
-                        v-model="commentbox"
-                        outlined
-                        name="input-7-4"
-                        label="Comment"
-                      >
+                      <v-textarea v-model="commentbox" outlined name="input-7-4" label="Comment">
                       </v-textarea>
                     </v-col>
                     <v-col md="2">
@@ -573,11 +413,7 @@
             <v-card>
               <v-row>
                 <v-col offset-xl="1" md="5" lg="3" v-if="organizer">
-                  <v-img
-                    :src="organizer.profileImg"
-                    width="100"
-                    height="100"
-                  ></v-img>
+                  <v-img :src="organizer.profileImg" width="100" height="100"></v-img>
                 </v-col>
                 <v-col>
                   <v-row>
@@ -585,8 +421,7 @@
                       <label v-if="organizer">
                         <router-link :to="{ path: '/Profile/' + organizerId }">
                           {{ organizer.firstName }}
-                          {{ organizer.lastName }}</router-link
-                        >
+                          {{ organizer.lastName }}</router-link>
                       </label>
                     </v-col>
                     <v-col>
@@ -597,20 +432,13 @@
                         </template>
 
                         <v-card>
-                          <v-card-title
-                            class="text-h5 grey lighten-2"
-                            v-if="organizer"
-                          >
+                          <v-card-title class="text-h5 grey lighten-2" v-if="organizer">
                             Contact {{ organizer.firstName }}
                             {{ organizer.lastName }}
                           </v-card-title>
 
                           <v-card-text>
-                            <v-textarea
-                              class="pa-3 my-5"
-                              outlined
-                              label="Message"
-                            >
+                            <v-textarea class="pa-3 my-5" outlined label="Message">
                             </v-textarea>
                           </v-card-text>
 
@@ -621,11 +449,7 @@
                             <v-btn color="primary" text @click="sendEmail">
                               Send
                             </v-btn>
-                            <v-btn
-                              color="primary"
-                              text
-                              @click="dialogs = false"
-                            >
+                            <v-btn color="primary" text @click="dialogs = false">
                               Cancel
                             </v-btn>
                           </v-card-actions>
@@ -636,6 +460,24 @@
                 </v-col>
               </v-row>
             </v-card>
+
+            <v-card style="margin-top: 8%;">
+              <v-card-title>
+                Supporting Documents
+              </v-card-title>
+              <LightGallery :images="images" :index="index" :disable-scroll="true" @close="index = null" />
+
+              <v-row>
+                <v-col cols="4" v-for="(thumb, thumbIndex) in images" :key="thumbIndex" @click="index = thumbIndex">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <img :src="thumb" width="100" height="100">
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+                <v-spacer></v-spacer>
+              </v-row>
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -644,12 +486,15 @@
 </template>
 
 <script>
+
 import data from "@zaichaopan/emoji-picker/data/emojis.json";
+import { LightGallery } from 'vue-light-gallery';
 import { VueEditor } from "vue2-editor";
 export default {
   name: "About",
   components: {
     VueEditor,
+    LightGallery,
   },
   props: ["id"],
   data() {
@@ -684,6 +529,8 @@ export default {
       question: "",
       questionRules: [(v) => !!v || "Question is required"],
       alreadyInWatchlist: false,
+      images: [],
+      index: null,
     };
   },
   created() {
@@ -701,6 +548,7 @@ export default {
 
           this.campaign = resdata.data;
           this.longDescription = resdata.data.campaignDescription;
+          this.images = resdata.data.documentList;
 
           this.organizerId = resdata.data.createdBy;
           //console.log("Organizer Name " + this.organizerName)
@@ -858,6 +706,7 @@ export default {
         id: this.id,
         reqStatus: status,
         reqComment: this.comment,
+        creator: this.campaign.createdBy,
       });
 
       var requestOptions = {
@@ -936,7 +785,7 @@ export default {
       // NOTE: Your key could be different such as:
       // formData.append('file', file)
     },
-    updateStory() {},
+    updateStory() { },
     postUpdate() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -974,7 +823,7 @@ export default {
 
       window.location.reload();
     },
-    sendEmail() {},
+    sendEmail() { },
   },
   computed: {
     calccampaignProgress() {
@@ -986,6 +835,13 @@ export default {
 </script>
 
 <style scoped>
+.test {
+  padding: 50px;
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 5%;
+}
+
 .main-title {
   font-size: 50px;
   font-weight: bold;

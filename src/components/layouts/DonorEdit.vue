@@ -186,7 +186,7 @@ export default {
         }
     },
     mounted() {
-        let loginId = this.$session.get('user_token');//localStorage.getItem("user_token");
+        let loginId = this.$session.get('user_token');
 
      if(loginId == this.id){
       this.accessLevel = "Edit"
@@ -198,7 +198,7 @@ export default {
     methods: {
         save() {
 
-            let id = this.$session.get('user_token'); //localStorage.getItem("user_token");
+            let id = this.$session.get('user_token');
 
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
@@ -230,7 +230,7 @@ export default {
                     }
                     this.$emit('message', "Profile Update Successfully");
 
-                    this.dialogbox = false
+                    this.dialogbox = false;
                 })
                 .catch((error) => {
                     this.errorMessage = error;

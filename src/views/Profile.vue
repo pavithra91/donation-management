@@ -5,16 +5,80 @@
     </v-alert>
     <v-row class="my-5">
       <v-col md="3">
-        <v-img height="300" width="300" :src=imgSrc @click="$refs.fileInput.click()"></v-img>
+        <v-img height="300" width="320" :src=imgSrc @click="$refs.fileInput.click()"></v-img>
         <input type="file" @change="onFileSelected" ref="fileInput" style="display: none;" />
+
+        <v-col md="9" class="pa-0 my-8">
+          <v-card>
+            <v-row>
+              <v-col cols="8">
+                <v-card-title>Bio</v-card-title>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col>
+                <v-dialog v-model="dialogbox" width="800">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" class="my-3 mx-2" x-small fab outlined color="teal" v-if="accessLevel=='Edit'">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-title class="text-h5">
+                      <label>Edit Bio</label>
+                    </v-card-title>
+
+                    <v-card-text>
+
+                      <v-form ref="form" v-model="valid" lazy-validation>
+
+                        <v-divider></v-divider>
+                        <v-row class="my-2">
+
+                          <v-col>
+                            <div class="text-center">
+                              <v-textarea v-model="profile.bio" outlined counter label="Enteri Bio" :rules="bioRules">
+                              </v-textarea>
+                            </div>
+                          </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                      </v-form>
+
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn color="primary" text @click="dialogbox = false">
+                        Close
+                      </v-btn>
+                      <v-btn color="primary" :disabled="!valid" text @click="updateBio">
+                        Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+
+
+                </v-dialog>
+
+              </v-col>
+            </v-row>
+
+
+            <v-divider></v-divider>
+            <v-card-subtitle>{{ profile.bio }}</v-card-subtitle>
+          </v-card>
+        </v-col>
       </v-col>
+
       <v-col md="9">
-        <v-col><label class="text-h4">{{profile.firstName}} {{profile.lastName}}</label>
+        <v-col><label class="text-h4">{{ profile.firstName }} {{ profile.lastName }}</label>
         </v-col>
 
         <v-col>
           <v-icon>fa-solid fa-location-dot</v-icon>
-          <label class="pa-3">{{profile.city}}</label>
+          <label class="pa-3">{{ profile.city }}</label>
         </v-col>
         <v-col md="10">
           <label class="pa-3">{{ donationLevel }}</label>
@@ -54,46 +118,55 @@
             </v-chip>
           </v-col>
 
+          <v-col md="6" class="mx-4">
+            <v-row>
+              <v-col cols="4">
+                <v-dialog v-model="dialog" width="500">
+                  <template v-slot:activator="{ on, attr }">
 
-          <v-col md="6">
-            <v-dialog v-model="dialog" width="500">
-              <template v-slot:activator="{ on, attr }">
+                    <v-chip color="#216dc2" text-color="white" v-bind="attr" v-on="on">
+                      <v-avatar left>
+                        <v-icon> mdi-email-plus-outline</v-icon>
+                      </v-avatar> Contact
+                    </v-chip>
+                  </template>
 
-                <v-icon>fa-solid fa-envelope</v-icon>
-                <v-btn text v-bind="attr" v-on="on">
-                  Contact
-                </v-btn>
-              </template>
+                  <v-card>
+                    <v-card-title class="text-h5 grey lighten-2">
+                      Contact
+                    </v-card-title>
+                    <v-card-text class="my-5">
+                      <v-text-field v-model="senderName" outlined label="Name">
+                      </v-text-field>
+                      <v-text-field v-model="senderEmail" outlined label="Email">
+                      </v-text-field>
+                      <v-textarea v-model="senderMessage" outlined label="Message">
+                      </v-textarea>
+                    </v-card-text>
 
-              <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
-                  Contact
-                </v-card-title>
-                <v-card-text class="my-5">
-                  <v-text-field v-model="senderName" outlined label="Name">
-                  </v-text-field>
-                  <v-text-field v-model="senderEmail" outlined label="Email">
-                  </v-text-field>
-                  <v-textarea v-model="senderMessage" outlined label="Message">
-                  </v-textarea>
-                </v-card-text>
+                    <v-divider></v-divider>
 
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="dialog = false">
-                    Back
-                  </v-btn>
-                  <v-btn color="primary" text @click="sendEmail">
-                    Send
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <!-- <v-btn class="float-right">Report User</v-btn>-->
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="dialog = false">
+                        Back
+                      </v-btn>
+                      <v-btn color="primary" text @click="sendEmail">
+                        Send
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-col>
+              <v-col cols="6" class="mx-3">
+                <v-chip color="red" text-color="white" v-if="role != 'Administrator'" @click="reportAccount">
+                  <v-avatar left>
+                    <v-icon> mdi-alert</v-icon>
+                  </v-avatar> Report Account
+                </v-chip>
+              </v-col>
+            </v-row>
           </v-col>
-
 
 
           <v-col md="12">
@@ -144,48 +217,34 @@
                     </v-col>
                   </v-row>
 
-                  <v-row>
+                  <v-row v-for="campaign in campaigns" :key="campaign.id">
                     <v-col class="d-block">
                       <v-card>
-                        <v-card-title>Donation to SOS Village</v-card-title>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col class="d-block">
-                      <v-card>
-                        <v-card-title>Donation to SOS Village</v-card-title>
+                        <v-card-title @click="goToCampaign(campaign.id)">{{ campaign.campaignName }}</v-card-title>
                       </v-card>
                     </v-col>
                   </v-row>
 
                 </v-tab-item>
                 <v-tab-item :key="3" value="About">
-                  <DonorEdit :profile="profile" :id="id"  @message="getResponse" />
+                  <DonorEdit :profile="profile" :id="id" @message="getResponse" />
                 </v-tab-item>
               </v-tabs-items>
             </v-col>
-
-
           </v-col>
         </v-col>
       </v-col>
       <v-col>
       </v-col>
     </v-row>
+    <v-row>
+
+    </v-row>
 
     <v-row>
-      <Chat
-        iconColorProp="#e6e6e6"
-        messageOutColorProp="#4d9e93"
-        messageInColorProp="#f1f0f0"
-        messageBackgroundColorProp="#ffffff"
-        :messageListProp="messageList"
-        :initOpenProp="initOpen"
-        @onToggleOpen="handleToggleOpen"
-        @onMessageWasSent="handleMessageReceived"
-      />
+      <Chat iconColorProp="#e6e6e6" messageOutColorProp="#4d9e93" messageInColorProp="#f1f0f0"
+        messageBackgroundColorProp="#ffffff" :messageListProp="messageList" :initOpenProp="initOpen"
+        @onToggleOpen="handleToggleOpen" @onMessageWasSent="handleMessageReceived" />
     </v-row>
   </v-container>
 </template>
@@ -194,8 +253,7 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from '@/firebase'
 import DonorEdit from "@/components/layouts/DonorEdit.vue";
-import {Chat} from 'vue-chat-widget'
-import incomingMessageSound from '../assets/notification.mp3' // pick an audio file for chat response
+import { Chat } from 'vue-chat-widget'
 
 export default {
   name: "profile",
@@ -215,18 +273,17 @@ export default {
       senderMessage: "",
       valid: true,
       dialog: false,
-     // id: id,
+      dialogbox: false,
       role: "",
       accStatus: "",
       donationLevel: "",
-
       badges: [],
-
-      minPoints: 1500,
-      maxPoints: 2000,
+      campaigns: [],
+      minPoints: 0,
+      maxPoints: 0,
       userPoints: 75,
       imgSrc: "https://flyclipart.com/thumb2/person-icon-165630.png",
-
+      bioRules: [v => v.length <= 500 || 'Max 500 characters'],
       msg: "",
       messageList: [],
       initOpen: false,
@@ -234,51 +291,64 @@ export default {
     }
   },
   mounted() {
+    let loginId = this.$session.get('user_token');
+
+    if (loginId == this.id) {
+      this.accessLevel = "Edit"
+    }
+    else {
+      this.accessLevel = "View"
+    }
+
     this.messageList.push({ body: 'Welcome to the chat, I\'m David!', author: 'them' })
 
 
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-      var raw = JSON.stringify({
-        id: this.id,
+    var raw = JSON.stringify({
+      id: this.id,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:3000/api/user/getUser", requestOptions)
+      .then(async (response) => {
+        const resdata = await response.json();
+
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response statusText
+        }
+        console.log(resdata.data.accStatus);
+        this.role = resdata.data.role;
+        this.accStatus = resdata.data.accStatus;
+        this.donationLevel = resdata.data.donationLevel;
+        this.imgSrc = resdata.data.profileImg;
+
+        this.profile = resdata.data;
+      })
+      .catch((error) => {
+        this.errorMessage = error;
+        console.error("There was an error!", error);
       });
-
-      var requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch("http://localhost:3000/api/user/getUser", requestOptions)
-        .then(async (response) => {
-          const resdata = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response statusText
-          }
-          console.log(resdata.data.accStatus);
-          this.role = resdata.data.role;
-          this.accStatus = resdata.data.accStatus;
-          this.donationLevel = resdata.data.donationLevel;
-          this.imgSrc = resdata.data.profileImg;
-
-          this.profile = resdata.data;
-        })
-        .catch((error) => {
-          this.errorMessage = error;
-          console.error("There was an error!", error);
-        });
 
 
 
     fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=' + this.id)
       .then(async (response) => {
         const resdata = await response.json()
-        this.badges = resdata.data
+        this.badges = resdata.data[0];
+        this.campaigns = resdata.data[1];
+        this.minPoints = resdata.data[2][0].minPoints;
+        this.maxPoints = resdata.data[2][0].maxPoints;
+        console.log(resdata.data[2]);
 
       })
       .catch(err => console.log(err.message))
@@ -286,7 +356,6 @@ export default {
   },
 
   methods: {
-
     getResponse(value) {
       this.alert = true;
       this.alertMessage = value;
@@ -296,8 +365,6 @@ export default {
     },
     sendEmail() {
       try {
-        console.log("Message coming");
-
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -401,7 +468,7 @@ export default {
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        id: "lqblyRwIeylJjL6V8Chj",
+        id: this.id,
         msg: message,
         sender: "you",
       });
@@ -431,21 +498,21 @@ export default {
     // Chat toggled open event emitted
     handleToggleOpen(close) {
 
-        if(this.toggledOpen.name == "open"){
-            this.toggledOpen = close;
-            this.toggledOpen = false;
-            this.messageList = [];
-            return;
-        }
-        else{
-            this.toggledOpen = open
-        }
+      if (this.toggledOpen.name == "open") {
+        this.toggledOpen = close;
+        this.toggledOpen = false;
+        this.messageList = [];
+        return;
+      }
+      else {
+        this.toggledOpen = open
+      }
 
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        id: "lqblyRwIeylJjL6V8Chj",
+        id: this.id,
       });
 
       var requestOptions = {
@@ -467,11 +534,11 @@ export default {
           console.log(resdata.data);
 
           resdata.data.forEach(element => {
-            if(element.sender =="you"){
-                this.messageList.push({ body: element.msg.body, author: 'you' })
+            if (element.sender == "you") {
+              this.messageList.push({ body: element.msg.body, author: 'you' })
             }
-            else{
-                this.messageList.push({ body: element.msg.body, author: 'them' })
+            else {
+              this.messageList.push({ body: element.msg.body, author: 'them' })
             }
           });
 
@@ -480,12 +547,49 @@ export default {
           this.errorMessage = error;
           console.error("There was an error!", error);
         });
-
     },
+    updateBio() {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: this.id,
+        bio: this.profile.bio,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch("http://localhost:3000/api/user/updateBio", requestOptions)
+        .then(async (response) => {
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response statusText
+          }
+
+          this.dialogbox = false
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+    },
+    goToCampaign(id) {
+      this.$router.push("/Campaign/" + id);
+    },
+    reportAccount() {
+      console.log("test");
+    }
   },
   computed: {
     calccampaignProgress() {
-      return this.prgoessVal = (this.profile.donationPoints / this.profile.goalAmount) * 100;
+      return this.prgoessVal = (this.profile.donationPoints / this.maxPoints) * 100;
     },
   },
 };
