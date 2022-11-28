@@ -2,7 +2,8 @@
   <v-container>
     <v-row>
       <v-col md="10" lg="8" offset-md="1" offset-lg="2">
-        <v-alert prominent type="success" v-if="(role == 'Administrator' || role == 'Staff') && campaign.campaignStatus == 'Request'">
+        <v-alert prominent type="success"
+          v-if="(role == 'Administrator' || role == 'Staff') && campaign.campaignStatus == 'Request'">
           <v-row>
             <v-col class="grow my-4">
               Approve campaign for {{ campaign.campaignName }}
@@ -94,6 +95,12 @@
                       </v-avatar>
                       Verified Campaign
                     </v-chip>
+                    <v-chip v-if="displayBadge" class="ma-2" color="red" text-color="white" >
+                      <v-avatar left>
+                        <v-icon> mdi-shield-check</v-icon>
+                      </v-avatar>
+                      {{goalRechedText}}
+                    </v-chip>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -107,7 +114,9 @@
 
                 <v-row>
                   <v-col md="6" lg="6">
-                    <v-btn x-large color="success" dark width="410px" @click="makeDonation">Donate
+                    <v-btn v-if="goalReched" x-large color="grey" dark width="410px">Donate
+                    </v-btn>
+                    <v-btn v-else x-large color="success" dark width="410px" @click="makeDonation">Donate
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -145,26 +154,28 @@
                         <v-card-text style="margin: 10px">
                           <v-row>
                             <v-col>
-                              <ShareNetwork network="facebook" url="https://news.vuejs.org/issues/180"
-                                :title="campaign.campaignName" description="" quote="" hashtags="vuejs,vite">
+                              <ShareNetwork network="facebook" url="http://localhost:8080/Campaign/xtM2nVtWxsE1Zj6mx0uC"
+                                :title="campaign.campaignName" description="" quote="" hashtags="Donaate,Charity">
                                 <i class="fab fah fa-lg fa-facebook-f"></i>
                                 <span style="margin-left: 5px">Facebook</span>
                               </ShareNetwork>
                             </v-col>
                             <v-col>
-                              <ShareNetwork network="twitter" url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="twitter" url="http://localhost:8080/Campaign/xtM2nVtWxsE1Zj6mx0uC"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
+                                quote="The hot reload is so fast it\'s near instant. - Evan You"
+                                hashtags="Donaate,Charity">
                                 <i class="fab fah fa-lg fa-twitter"></i>
                                 <span style="margin-left: 5px">Twitter</span>
                               </ShareNetwork>
                             </v-col>
                             <v-col>
-                              <ShareNetwork network="email" url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="email" url="http://localhost:8080/Campaign/xtM2nVtWxsE1Zj6mx0uC"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
+                                quote="The hot reload is so fast it\'s near instant. - Evan You"
+                                hashtags="Donaate,Charity">
                                 <i class="fab fah fa-lg fa-envelope"></i>
                                 <span style="margin-left: 5px">Email</span>
                               </ShareNetwork>
@@ -173,10 +184,11 @@
 
                           <v-row>
                             <v-col>
-                              <ShareNetwork network="whatsapp" url="https://news.vuejs.org/issues/180"
+                              <ShareNetwork network="whatsapp" url="http://localhost:8080/Campaign/xtM2nVtWxsE1Zj6mx0uC"
                                 :title="campaign.campaignName"
                                 description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
-                                quote="The hot reload is so fast it\'s near instant. - Evan You" hashtags="vuejs,vite">
+                                quote="The hot reload is so fast it\'s near instant. - Evan You"
+                                hashtags="Donaate,Charity">
                                 <i class="fab fah fa-lg fa-whatsapp"></i>
                                 <span style="margin-left: 5px">Whatsapp</span>
                               </ShareNetwork>
@@ -499,6 +511,9 @@ export default {
   props: ["id"],
   data() {
     return {
+      goalReched: false,
+      goalRechedText: "",
+      displayBadge: false,
       userId: "",
       commentbox: "",
       data: data,
@@ -538,17 +553,37 @@ export default {
   },
   methods: {
     initialize() {
+
       this.role = this.$session.get("role");
       this.createdby = this.$session.get("user_token");
       this.currenturl =
         window.location.origin + this.$router.currentRoute.fullPath;
-      fetch("http://localhost:3000/api/campaign/getCampaign?id=" + this.id)
+      fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaign?id=" + this.id)
         .then(async (response) => {
           const resdata = await response.json();
-
+          debugger;
           this.campaign = resdata.data;
           this.longDescription = resdata.data.campaignDescription;
           this.images = resdata.data.documentList;
+
+          debugger;
+          if (this.campaign.raiedAmount >= this.campaign.goalAmount) {
+            this.goalReched = true;
+            if(this.campaign.goalType == "Fixed Goal"){
+              this.goalRechedText = "Goal Reched";
+              this.displayBadge = true;
+            }
+            else
+            {
+              this.displayBadge = true;
+              this.goalRechedText = "Goal Reach but Keep Donating";
+              this.goalReched = false;
+            }
+          }
+          else {
+            this.displayBadge = false;
+            this.goalReched = false;
+          }
 
           this.organizerId = resdata.data.createdBy;
           //console.log("Organizer Name " + this.organizerName)
@@ -568,7 +603,7 @@ export default {
             redirect: "follow",
           };
 
-          fetch("http://localhost:3000/api/user/getUser", requestOptions)
+          fetch(process.env.VUE_APP_API_URL + "/user/getUser", requestOptions)
             .then(async (response) => {
               const resdata = await response.json();
 
@@ -588,7 +623,7 @@ export default {
         .catch((err) => console.log(err.message));
 
       fetch(
-        "http://localhost:3000/api/campaign/getCampaignDetails?id=" + this.id
+        process.env.VUE_APP_API_URL + "/campaign/getCampaignDetails?id=" + this.id
       )
         .then(async (response) => {
           const resdata = await response.json();
@@ -626,7 +661,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/campaign/getWatchlist", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/campaign/getWatchlist", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -669,7 +704,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/campaign/" + metohd, requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/campaign/" + metohd, requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
           this.campaign = resdata.data;
@@ -717,8 +752,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch(
-        "http://localhost:3000/api/campaign/UpdateCampaignStatus",
+      fetch(process.env.VUE_APP_API_URL + "/campaign/UpdateCampaignStatus",
         requestOptions
       )
         .then(async (response) => {
@@ -763,7 +797,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/misc/postComment", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/postComment", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -785,7 +819,39 @@ export default {
       // NOTE: Your key could be different such as:
       // formData.append('file', file)
     },
-    updateStory() { },
+    updateStory() {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        campaignId: this.id,
+        update: this.campaign.campaignDescription,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(process.env.VUE_APP_API_URL + "/misc/updateCampaignStory", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            console.log("Error");
+          }
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+
+      window.location.reload();
+    },
     postUpdate() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -807,7 +873,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/misc/postCampaignUpdate", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/postCampaignUpdate", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -823,13 +889,23 @@ export default {
 
       window.location.reload();
     },
-    sendEmail() { },
+    sendEmail() {
+
+    },
   },
   computed: {
     calccampaignProgress() {
       return (this.prgoessVal =
         (this.campaign.raiedAmount / this.campaign.goalAmount) * 100);
     },
+    calculateGoalReached() {
+      if (this.campaign.raiedAmount >= this.campaign.goalAmount) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
   },
 };
 </script>

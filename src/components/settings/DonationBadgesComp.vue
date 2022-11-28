@@ -1,5 +1,11 @@
 <template>
-  <v-card flat>
+  <v-container>
+    <v-row>
+            <v-col>
+                <h2>Donation Badge Management</h2>
+            </v-col>
+        </v-row>
+        <v-card flat>
     <v-layout row wrap class="pa-3" style="margin-top: 40px">
       <v-flex xs12 md8>
         <template>
@@ -130,6 +136,7 @@
       </v-flex>
     </v-layout>
   </v-card>
+  </v-container>
 </template>
 
 <script>

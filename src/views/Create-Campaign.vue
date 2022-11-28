@@ -65,6 +65,18 @@
           </v-row>
 
           <v-row>
+            <v-col cols="6">
+              <v-radio-group v-model="radioGroup" mandatory>
+                  <v-radio label="Fixed Goal" value="Fixed Goal"></v-radio>
+                  <v-radio label="Dynamic Goal" value="Dynamic Goal"
+                  ></v-radio>
+                </v-radio-group>
+            </v-col>
+            <v-col cols="6">
+            </v-col>
+          </v-row>
+
+          <v-row>
             <v-col cols="12">
               <v-textarea counter outlined v-model="shortDescription" :rules="shortDescriptionRules" name="input-7-1"
                 label="Short Description" value="" hint="Short Description about the Campaign"></v-textarea>
@@ -131,6 +143,7 @@ export default {
   },
   data() {
     return {
+      radioGroup: null,
       valid: true,
       modal: false,
       files: [],
@@ -168,7 +181,6 @@ export default {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-
         var raw = JSON.stringify({
           campaignName: this.campaignName,
           campaignStartDate: this.date[0],
@@ -178,7 +190,8 @@ export default {
           city: this.city,
           province: this.province,
           goal: this.goal,
-          createdBy: localStorage.getItem("user_token"),
+          createdBy: this.$session.get("user_token"),
+          goalType: this.radioGroup,
           category: this.categoryItems.indexOf(this.categoryItem) + 1
         });
 
@@ -190,7 +203,7 @@ export default {
           redirect: "follow",
         };
 
-        fetch("http://localhost:3000/api/campaign/create", requestOptions)
+        fetch(process.env.VUE_APP_API_URL + "/campaign/create", requestOptions)
           .then(async (response) => {
 
             const resdata = await response.json();
@@ -230,7 +243,7 @@ export default {
                   body: raw,
                   redirect: "follow",
                 };
-                fetch("http://localhost:3000/api/campaign/updateCampaignImage", requestOptions)
+                fetch(process.env.VUE_APP_API_URL + "/campaign/updateCampaignImage", requestOptions)
                   .then(async (response) => {
                     const resdata = await response.json();
                     console.log(resdata)
@@ -310,16 +323,16 @@ export default {
               body: raw,
               redirect: "follow",
             };
-            fetch("http://localhost:3000/api/campaign/updateDocumentList", requestOptions)
+            fetch(process.env.VUE_APP_API_URL + "/campaign/updateDocumentList", requestOptions)
               .then(async (response) => {
                 const resdata = await response.json();
                 console.log(resdata)
                 // check for error response
                 if (!response.ok) {
-                  console.log("Ok")
+                  console.log("Document Update Successfully")
                 }
                 else {
-                  console.log("Not Ok")
+                  console.log("Document Update Failed")
                 }
               });
           });

@@ -163,7 +163,7 @@ export default {
     }
   },
   mounted(){
-    fetch(process.env.API_URL + 'campaign/getTopFundRaisers')
+    fetch(process.env.VUE_APP_API_URL + '/campaign/getTopFundRaisers')
       .then(async (response) => {
         const resdata = await response.json()
         this.campaignList = resdata.data

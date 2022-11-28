@@ -1,6 +1,14 @@
 <template>
   <v-container>
-    {{ campaign.id }}
+    <v-row class="my-15"></v-row>
+    <v-row class="my-15">
+      <v-col cols="5">
+      </v-col>
+      <v-col align-self="center">
+        <h1 class="mx-2"><label>Thanks for the Donation</label></h1> <br />
+        <label>World will be much better place with people like you</label>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
  
@@ -42,7 +50,7 @@ export default {
           redirect: "follow",
         };
         debugger;
-        fetch("http://localhost:3000/api/payment/donate", requestOptions)
+        fetch(process.env.VUE_APP_API_URL + "/payment/donate", requestOptions)
           .then(async (response) => {
             const resdata = await response.json();
 

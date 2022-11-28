@@ -118,7 +118,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/user/resetPassword", requestOptions).then(
+      fetch(process.env.VUE_APP_API_URL + "/user/resetPassword", requestOptions).then(
         async (response) => {
           const resdata = await response.json();
           this.showMsg = true;

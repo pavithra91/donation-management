@@ -14,11 +14,11 @@
                         <v-card>
                             <v-card-title>Filter</v-card-title>
 
-                            <v-divider></v-divider>
+                            <v-divider style="padding-bottom: 10px;"></v-divider>
 
-                            <v-col class="px-3" style="padding-bottom: 0;">
+                        <!--    <v-col class="px-3" style="padding-bottom: 0;">
                                 <v-text-field label="Search" dense outlined></v-text-field>
-                            </v-col>
+                            </v-col> -->
 
                             <v-col class="px-3" style="padding-top: 0; padding-bottom: 0;">
                                 <v-select :items="categoryItems" label="Category" v-model="categoryVal" outlined dense @change="categoryChange($event)"></v-select>
@@ -84,7 +84,7 @@ export default {
                 redirect: "follow",
             };
 
-            fetch("http://localhost:3000/api/campaign/getCampaignByCategory", requestOptions)
+            fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaignByCategory", requestOptions)
                 .then(async (response) => {
                     const resdata = await response.json();
 
@@ -114,7 +114,7 @@ export default {
                 redirect: "follow",
             };
 
-            fetch("http://localhost:3000/api/campaign/getCampaignByCategory", requestOptions)
+            fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaignByCategory", requestOptions)
                 .then(async (response) => {
                     const resdata = await response.json();
 
@@ -151,7 +151,7 @@ export default {
                 redirect: "follow",
             };
 
-            fetch("http://localhost:3000/api/campaign/getCampaignByProvince", requestOptions)
+            fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaignByProvince", requestOptions)
                 .then(async (response) => {
                     const resdata = await response.json();
 

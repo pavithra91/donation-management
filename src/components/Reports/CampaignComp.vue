@@ -190,7 +190,7 @@ export default {
         fromDate: (new Date(firstDay - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10), 
         toDate: (new Date(lastDay - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) }),
       };
-      fetch("http://localhost:3000/api/user/getAllUsers", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/user/getAllUsers", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -228,7 +228,7 @@ export default {
          fromDate: this.pikerFromDate, 
          toDate: this.pikerToDate }),
       };
-      fetch("http://localhost:3000/api/campaign/getAllCampaigns", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/campaign/getAllCampaigns", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 

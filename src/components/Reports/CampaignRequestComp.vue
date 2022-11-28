@@ -103,7 +103,7 @@ export default {
   methods: {
     initialize() {
       fetch(
-        "http://localhost:3000/api/campaign/getCampaignRequests?status=" +
+        process.env.VUE_APP_API_URL + "/campaign/getCampaignRequests?status=" +
           this.campaignStatusValue
       )
         .then(async (response) => {
@@ -126,7 +126,7 @@ export default {
     },
     filter() {
       fetch(
-        "http://localhost:3000/api/campaign/getCampaignRequests?status=" +
+        process.env.VUE_APP_API_URL + "/campaign/getCampaignRequests?status=" +
           this.campaignStatusValue
       )
         .then(async (response) => {

@@ -62,12 +62,12 @@
             <v-list-item-title class="sub-title">User Report</v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="toggleComponentFive">
+        <!--  <v-list-item @click="toggleComponentFive">
             <v-list-item-icon>
               <i class="fa fa-book fa-2x"></i>
             </v-list-item-icon>
             <v-list-item-title class="sub-title">Systems Logs</v-list-item-title>
-          </v-list-item>
+          </v-list-item>-->
 
           <v-divider class="my-5"></v-divider>
 
@@ -126,13 +126,11 @@ export default {
   },
   methods: {
     toggleComponentOne() {
-      this.showCampaignOrganizerRequestComp =
-        !this.showCampaignOrganizerRequestComp;
+      this.showCampaignOrganizerRequestComp = !this.showCampaignOrganizerRequestComp;
       this.showCampaignRequestComp = false;
       this.showCampaignComp = false;
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
-
       this.showDashboardComp = false;
     },
     toggleComponentTwo() {
@@ -141,15 +139,14 @@ export default {
       this.showCampaignComp = false;
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
-
       this.showDashboardComp = false;
     },
     toggleComponentThree() {
       this.showCampaignComp = !this.showCampaignComp;
+      this.showCampaignRequestComp = false;
       this.showCampaignOrganizerRequestComp = false;
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
-
       this.showDashboardComp = false;
     },
     toggleComponentFour() {

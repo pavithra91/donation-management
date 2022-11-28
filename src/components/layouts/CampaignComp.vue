@@ -89,8 +89,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch(
-        "http://localhost:3000/api/campaign/removeFromWatchlist",
+      fetch(process.env.VUE_APP_API_URL + "/campaign/removeFromWatchlist",
         requestOptions
       )
         .then(async (response) => {

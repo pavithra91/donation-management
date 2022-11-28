@@ -87,7 +87,7 @@ export default {
                     redirect: "follow",
                 };
 
-                fetch("http://localhost:3000/api/user/resetPasswordSendLink", requestOptions)
+                fetch(process.env.VUE_APP_API_URL + "/user/resetPasswordSendLink", requestOptions)
                     .then(async (response) => {
                         const resdata = await response.json();
 

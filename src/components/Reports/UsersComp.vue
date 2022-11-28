@@ -231,7 +231,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: "All", status: "All" }),
       };
-      fetch("http://localhost:3000/api/user/getAllUsers", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/user/getAllUsers", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -264,7 +264,7 @@ export default {
           status: this.accountStatusValue,
         }),
       };
-      fetch("http://localhost:3000/api/user/getAllUsers", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/user/getAllUsers", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 

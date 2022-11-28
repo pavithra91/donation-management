@@ -163,7 +163,7 @@ export default {
         body: JSON.stringify({ fromDate: (new Date(firstDay - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10), toDate: (new Date(lastDay - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10) })
       };
       fetch(
-        "http://localhost:3000/api/payment/getAllPaymentDetails", requestOptions)
+        process.env.VUE_APP_API_URL + "/payment/getAllPaymentDetails", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -197,7 +197,7 @@ export default {
         body: JSON.stringify({ fromDate: this.pikerFromDate, toDate: this.pikerToDate })
       };
       fetch(
-        "http://localhost:3000/api/payment/getAllPaymentDetails", requestOptions)
+        process.env.VUE_APP_API_URL + "/payment/getAllPaymentDetails", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 

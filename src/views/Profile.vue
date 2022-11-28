@@ -318,7 +318,7 @@ export default {
       redirect: "follow",
     };
 
-    fetch("http://localhost:3000/api/user/getUser", requestOptions)
+    fetch(process.env.VUE_APP_API_URL + "/user/getUser", requestOptions)
       .then(async (response) => {
         const resdata = await response.json();
 
@@ -341,7 +341,7 @@ export default {
 
 
 
-    fetch('http://localhost:3000/api/user/getUserBadgeDetails?id=' + this.id)
+    fetch(process.env.VUE_APP_API_URL + '/user/getUserBadgeDetails?id=' + this.id)
       .then(async (response) => {
         const resdata = await response.json()
         this.badges = resdata.data[0];
@@ -384,7 +384,7 @@ export default {
           redirect: "follow",
         };
 
-        fetch("http://localhost:3000/api/misc/sendEmail", requestOptions)
+        fetch(process.env.VUE_APP_API_URL + "/misc/sendEmail", requestOptions)
           .then(async (response) => {
             const resdata = await response.json();
 
@@ -447,7 +447,7 @@ export default {
               redirect: "follow",
             };
 
-            fetch("http://localhost:3000/api/user/updateUserProfileImage", requestOptions)
+            fetch(process.env.VUE_APP_API_URL + "/user/updateUserProfileImage", requestOptions)
               .then(async (response) => {
                 const resdata = await response.json();
 
@@ -481,7 +481,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/misc/sendChatMessage", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/sendChatMessage", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -523,7 +523,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/misc/getUserChat", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/getUserChat", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -565,7 +565,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://localhost:3000/api/user/updateBio", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/user/updateBio", requestOptions)
         .then(async (response) => {
 
           // check for error response

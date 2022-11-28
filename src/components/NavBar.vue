@@ -18,13 +18,16 @@
                 <v-btn text>About</v-btn>
             </v-toolbar-items>
             <v-toolbar-items v-if="this.$session.get('role')=='Donor'">
-                <v-btn text>Latest Causes</v-btn>
+                <v-btn text><router-link :to="{ name: 'Search', params: { category: 1, categoryName: 'Medical & Health' }}">Latest Causes</router-link> </v-btn>
             </v-toolbar-items>
                         <v-toolbar-items v-if="this.$session.get('role')=='Campaign Manager'">
                 <v-btn text><router-link :to="{ name: 'Create-Campaign' }">Create Campaign</router-link></v-btn>
             </v-toolbar-items>
                         <v-toolbar-items v-if="this.$session.get('role')=='Campaign Manager' || this.$session.get('role')=='Administrator'">
-                <v-btn text><router-link :to="{ name: 'Reports' }">Dashboard</router-link></v-btn>
+                <v-btn text><router-link :to="{ name: 'Reports' }">Reports</router-link></v-btn>
+            </v-toolbar-items>
+            <v-toolbar-items v-if="this.$session.get('role')=='Campaign Manager' || this.$session.get('role')=='Administrator'">
+                <v-btn text><router-link :to="{ name: 'Campaign-Dashboard' }">Dashboard</router-link></v-btn>
             </v-toolbar-items>
             <v-toolbar-items v-if="userName">
                 <v-menu offset-y>
@@ -46,7 +49,7 @@
                 </v-btn>
             </v-toolbar-items>
             <v-toolbar-items v-if="this.$session.get('user_token') != 'Administrator'">
-                <v-btn x-large color="success" dark>Donate</v-btn>
+                <v-btn x-large color="success" dark @click="gotoSearch()">Donate</v-btn>
             </v-toolbar-items>
         </v-toolbar>
     </nav>
@@ -92,6 +95,9 @@ export default {
                 this.$router.go('/SignIn');
             }
 
+        },
+        gotoSearch(){
+            this.$router.push({name: 'Search', params: {category: 1, categoryName: 'Medical & Health'}})
         }
     }
 }

@@ -126,7 +126,7 @@ cssClasses: {
         datasets: [
           {
             backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [10,2,5, 1]
+            data: [2,0,3, 1]
           }
         ]
       },
@@ -142,7 +142,7 @@ this.initialize();
   methods:{
     initialize() {
               fetch(
-        "http://localhost:3000/api/misc/getAdminDashboardDetails")
+                process.env.VUE_APP_API_URL + "/misc/getAdminDashboardDetails")
         .then(async (response) => {
           const resdata = await response.json();
 

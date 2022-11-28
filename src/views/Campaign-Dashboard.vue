@@ -7,6 +7,9 @@
     </v-row>
     <v-layout row justify-center>
       <v-row>
+        <v-col cols="1">
+
+        </v-col>
         <v-col>
           <CampaignComp :campaign="campaign" :watchlist="watchlist" />
         </v-col>
@@ -33,11 +36,7 @@ export default {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    if (localStorage.getItem("user_name") == "undefined") {
-      this.$router.push("/SignIn");
-    } else if (localStorage.getItem("user_name") != "") {
-      this.id = localStorage.getItem("user_token");
-    }
+    this.id = this.$session.get("user_token");
 
     var raw = JSON.stringify({
       id: this.id,
@@ -53,7 +52,7 @@ export default {
 
     // var campaignlist = []
 
-    fetch("http://localhost:3000/api/campaign/getCampaigns", requestOptions)
+    fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaigns", requestOptions)
       .then(async (response) => {
         const resdata = await response.json();
         this.campaign = resdata.data;

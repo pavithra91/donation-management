@@ -1,6 +1,11 @@
 <template>
-
-  <v-card flat>
+<v-container>
+  <v-row>
+            <v-col>
+                <h2>System Log Report</h2>
+            </v-col>
+        </v-row>
+        <v-card flat>
     <v-row>
       <v-col md="2">
         <v-select
@@ -91,6 +96,7 @@
       </v-flex>
     </v-layout>
   </v-card>
+</v-container>
 </template>
 
 
@@ -169,7 +175,7 @@ export default {
           toDate: (new Date(lastDay - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
         }),
       };
-      fetch("http://localhost:3000/api/misc/getUserLog", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/getUserLog", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 
@@ -201,7 +207,7 @@ export default {
           toDate: this.pikerToDate
         }),
       };
-      fetch("http://localhost:3000/api/misc/getUserLog", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/misc/getUserLog", requestOptions)
         .then(async (response) => {
           const resdata = await response.json();
 

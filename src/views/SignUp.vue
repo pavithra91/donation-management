@@ -174,7 +174,7 @@ export default {
           redirect: "follow",
         };
 
-        fetch("http://localhost:3000/api/user/addUser", requestOptions).then(
+        fetch(process.env.VUE_APP_API_URL + "/user/addUser", requestOptions).then(
           async (response) => {
             const resdata = await response.json();
 

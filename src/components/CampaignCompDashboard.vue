@@ -68,7 +68,7 @@ var requestOptions = {
 
      // var campaignlist = []
 
-      fetch("http://localhost:3000/api/campaign/getCampaigns", requestOptions)
+      fetch(process.env.VUE_APP_API_URL + "/campaign/getCampaigns", requestOptions)
       .then(async (response) => {
           const resdata = await response.json()
 
