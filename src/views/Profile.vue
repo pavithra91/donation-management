@@ -159,11 +159,57 @@
                 </v-dialog>
               </v-col>
               <v-col cols="6" class="mx-3">
-                <v-chip color="red" text-color="white" v-if="role != 'Administrator'" @click="reportAccount">
+                <v-dialog v-model="reportDialog" width="500">
+                  <template v-slot:activator="{ on, attr }">
+
+                    <v-chip color="red" text-color="white" v-if="role != 'Administrator'" v-bind="attr" v-on="on">
+                      <v-avatar left>
+                        <v-icon> mdi-alert</v-icon>
+                      </v-avatar> Report Account
+                    </v-chip>
+                  </template>
+
+                  <v-card>
+                    <v-card-title class="text-h5 grey lighten-2">
+                      Report Account
+                    </v-card-title>
+                    <v-card-text class="my-5">
+                    <v-select :items="reasonItems" label="Reporting Reason" outlined dense :rules="reasonRules" v-model="reasonItem">
+                    </v-select>
+                      <v-textarea v-model="comment" outlined label="Comment">
+                      </v-textarea>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="reportDialog = false">
+                        Close
+                      </v-btn>
+                      <v-btn color="primary" text @click="reportAccount">
+                        Report
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
+
+
+
+
+
+
+
+
+
+
+              <!--  <v-chip color="red" text-color="white" v-if="role != 'Administrator'" @click="reportAccount">
                   <v-avatar left>
                     <v-icon> mdi-alert</v-icon>
                   </v-avatar> Report Account
                 </v-chip>
+                -->
               </v-col>
             </v-row>
           </v-col>
@@ -273,6 +319,7 @@ export default {
       senderMessage: "",
       valid: true,
       dialog: false,
+      reportDialog: false,
       dialogbox: false,
       role: "",
       accStatus: "",
@@ -287,7 +334,10 @@ export default {
       msg: "",
       messageList: [],
       initOpen: false,
-      toggledOpen: false
+      toggledOpen: false,
+      reasonItems: ['Scammer', 'Publish false information', 'Hate Speech'],
+      resonRules: [(v) => !!v || "Please select Reporting Reason"],
+      reasonItem: ""
     }
   },
   mounted() {

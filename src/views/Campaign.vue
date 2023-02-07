@@ -114,7 +114,7 @@
 
                 <v-row>
                   <v-col md="6" lg="6">
-                    <v-btn v-if="goalReched" x-large color="grey" dark width="410px">Donate
+                    <v-btn v-if="goalReched" x-large color="grey"  disabled width="410px">Donate
                     </v-btn>
                     <v-btn v-else x-large color="success" dark width="410px" @click="makeDonation">Donate
                     </v-btn>
