@@ -33,6 +33,14 @@
               >Campaign Request</v-list-item-title
             >
           </v-list-item>
+          <v-list-item @click="toggleComponentSix">
+            <v-list-item-icon>
+              <i class="fa fa-list fa-2x"></i>
+            </v-list-item-icon>
+            <v-list-item-title class="sub-title"
+              >Reported Campaign</v-list-item-title
+            >
+          </v-list-item>
           <v-divider class="my-2"></v-divider>
           <v-list-item class="my-5">
             <v-list-item-title style="font-size: xx-large; font-weight: bold"
@@ -90,6 +98,7 @@
         <CampaignComp v-if="showCampaignComp" />
         <DonationTransactionComp v-if="showDonationTransactionComp" />
         <UsersComp v-if="showUsersComp" />
+        <ReportedCampaignsComp v-if="showReportedCampaignsComp" />
       </v-container>
     </v-container>
   </v-container>
@@ -103,6 +112,7 @@ import CampaignRequestComp from "@/components/Reports/CampaignRequestComp.vue";
 import CampaignComp from "@/components/Reports/CampaignComp.vue";
 import DonationTransactionComp from "@/components/Reports/DonationTransactionComp.vue";
 import UsersComp from "@/components/Reports/UsersComp.vue";
+import ReportedCampaignsComp from "@/components/Reports/ReportedCampaignsComp.vue";
 export default {
   name: "Settings",
   components: {
@@ -112,6 +122,7 @@ export default {
     CampaignComp,
     DonationTransactionComp,
     UsersComp,
+    ReportedCampaignsComp,
   },
 
   data() {
@@ -122,6 +133,7 @@ export default {
       showCampaignComp: false,
       showDonationTransactionComp: false,
       showUsersComp: false,
+      showReportedCampaignsComp: false,
     };
   },
   methods: {
@@ -132,6 +144,7 @@ export default {
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
       this.showDashboardComp = false;
+      this.showReportedCampaignsComp = false;
     },
     toggleComponentTwo() {
       this.showCampaignRequestComp = !this.showCampaignRequestComp;
@@ -140,6 +153,7 @@ export default {
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
       this.showDashboardComp = false;
+      this.showReportedCampaignsComp = false;
     },
     toggleComponentThree() {
       this.showCampaignComp = !this.showCampaignComp;
@@ -148,6 +162,7 @@ export default {
       this.showDonationTransactionComp = false;
       this.showUsersComp = false;
       this.showDashboardComp = false;
+      this.showReportedCampaignsComp = false;
     },
     toggleComponentFour() {
       this.showDonationTransactionComp = !this.showDonationTransactionComp;
@@ -157,6 +172,7 @@ export default {
       this.showUsersComp = false;
 
       this.showDashboardComp = false;
+      this.showReportedCampaignsComp = false;
     },
     toggleComponentFive() {
       this.showUsersComp = !this.showUsersComp;
@@ -166,7 +182,18 @@ export default {
       this.showDonationTransactionComp = false;
 
       this.showDashboardComp = false;
+      this.showReportedCampaignsComp = false;
     },
+    toggleComponentSix(){
+      this.showReportedCampaignsComp = !this.showReportedCampaignsComp;
+      this.showCampaignOrganizerRequestComp = false;
+      this.showCampaignRequestComp = false;
+      this.showCampaignComp = false;
+      this.showDonationTransactionComp = false;
+
+      this.showDashboardComp = false;
+      this.showUsersComp = false;
+    }
   },
 };
 </script>

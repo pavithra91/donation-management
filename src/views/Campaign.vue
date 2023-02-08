@@ -104,6 +104,47 @@
                   </v-col>
                 </v-row>
                 <v-row>
+                  <v-col md="8" class="mx-2">
+                    <v-dialog v-model="reportDialog" width="500">
+                  <template v-slot:activator="{ on, attr }">
+
+                    <v-chip color="red" text-color="white" v-bind="attr" v-on="on">
+                      <v-avatar left>
+                        <v-icon> mdi-shield-check</v-icon>
+                      </v-avatar>
+                      Report Campaign
+                    </v-chip>
+                  </template>
+
+                  <v-card>
+                    <v-card-title class="text-h5 grey lighten-2">
+                      Report Campaign
+                    </v-card-title>
+                    <v-card-text class="my-5">
+                      <v-select :items="reportReasons" v-model="reportingReason" outlined dense label="Reporting Reason" :rules="reportingRules">
+              </v-select>
+                      <v-textarea v-model="reportingComment" outlined label="Comment">
+                      </v-textarea>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="primary" text @click="reportDialog = false">
+                        Back
+                      </v-btn>
+                      <v-btn color="primary" text @click="reportCampaign">
+                        Report
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+
+
+                  </v-col>
+                </v-row>
+                <v-row>
                   <v-col md="9" class="pa-3">
                     <v-progress-linear :value="calccampaignProgress" height="8" color="#09cc7f">
                     </v-progress-linear>
@@ -201,11 +242,7 @@
                         <v-divider style="margin-left: 20px; margin-right: 20px"></v-divider>
 
                         <v-row>
-                          <v-col style="
-                              margin-left: 30px;
-                              margin-right: 10px;
-                              margin-top: 30px;
-                            ">
+                          <v-col style="margin-left: 30px; margin-right: 10px; margin-top: 30px;">
                             <v-text-field v-model="currenturl" outlined label="Copy link" :value="currenturl">
                             </v-text-field>
                           </v-col>
@@ -523,10 +560,15 @@ export default {
       editCampaignStoryDialog: false,
       dialogs: false,
       rejectDialog: false,
+      reportDialog: false,
       campaign: null,
       prgoessVal: 0,
       organizerId: "",
       campaignDate: "2022-07-22",
+      reportingComment: '',
+      reportingReason: "",
+      reportReasons: ['Scam', 'Provide False Information'],
+      reportingRules: [(v) => !!v || "Please select Reporting Reason"],
       tags: ["Medical"],
       tab: null,
       comments: [],
@@ -892,6 +934,39 @@ export default {
     sendEmail() {
 
     },
+    reportCampaign(){
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        id: this.$session.get("user_token"),
+        campaignId: this.id,
+        reportingReason: this.reportingReason,
+        reportingComment: this.reportingComment,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(process.env.VUE_APP_API_URL + "/campaign/reportCampaign", requestOptions)
+        .then(async (response) => {
+          const resdata = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            console.log("Error");
+          }
+        })
+        .catch((error) => {
+          this.errorMessage = error;
+          console.error("There was an error!", error);
+        });
+    }
   },
   computed: {
     calccampaignProgress() {
