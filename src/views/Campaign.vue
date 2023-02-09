@@ -110,7 +110,7 @@
 
                     <v-chip color="red" text-color="white" v-bind="attr" v-on="on">
                       <v-avatar left>
-                        <v-icon> mdi-shield-check</v-icon>
+                        <v-icon> mdi-alert-octagon</v-icon>
                       </v-avatar>
                       Report Campaign
                     </v-chip>

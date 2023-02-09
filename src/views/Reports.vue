@@ -35,7 +35,7 @@
           </v-list-item>
           <v-list-item @click="toggleComponentSix">
             <v-list-item-icon>
-              <i class="fa fa-list fa-2x"></i>
+              <i class="fa fa-flag fa-2x"></i>
             </v-list-item-icon>
             <v-list-item-title class="sub-title"
               >Reported Campaign</v-list-item-title
